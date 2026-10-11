@@ -1,0 +1,266 @@
+[
+  {
+    "id": "F-01",
+    "category": "Financial",
+    "file": "Trial balance - last 3 months plus prior fiscal year end",
+    "notes": null
+  },
+  {
+    "id": "F-02",
+    "category": "Financial",
+    "file": "Chart of accounts export with activity",
+    "notes": "Include account type and current-year activity",
+    "coveredByPreworkId": "PW-D03",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-03",
+    "category": "Financial",
+    "file": "AR aging, current",
+    "notes": null
+  },
+  {
+    "id": "F-04",
+    "category": "Financial",
+    "file": "AP aging, current",
+    "notes": null
+  },
+  {
+    "id": "F-05",
+    "category": "Financial",
+    "file": "Inventory valuation report, current, by location",
+    "notes": null
+  },
+  {
+    "id": "F-06",
+    "category": "Financial",
+    "file": "Last close checklist and that close's working papers",
+    "notes": "Even if informal",
+    "coveredByPreworkId": "PW-D06",
+    "coverage": "partial",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-07",
+    "category": "Financial",
+    "file": "Monthly reporting package as delivered to leadership",
+    "notes": null,
+    "coveredByPreworkId": "PW-D05",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-08",
+    "category": "Financial",
+    "file": "Bank statements - one full recent month, all accounts",
+    "notes": null
+  },
+  {
+    "id": "F-09",
+    "category": "Financial",
+    "file": "Payment processor settlement reports - one full recent month",
+    "notes": null
+  },
+  {
+    "id": "F-10",
+    "category": "Financial",
+    "file": "Marketplace settlement reports - one full recent month, per marketplace",
+    "notes": null
+  },
+  {
+    "id": "F-11",
+    "category": "Financial",
+    "file": "Corporate card statements - one full recent month",
+    "notes": null
+  },
+  {
+    "id": "F-12",
+    "category": "Master data",
+    "file": "Item / SKU export, all fields",
+    "notes": null,
+    "coveredByPreworkId": "PW-D09",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-13",
+    "category": "Master data",
+    "file": "Packaging hierarchy and GTIN / UPC list",
+    "notes": "Each, inner, case, pallet",
+    "coveredByPreworkId": "PW-D11",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-14",
+    "category": "Master data",
+    "file": "Customer export with ship-to and bill-to",
+    "notes": null,
+    "coveredByPreworkId": "PW-D12",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-15",
+    "category": "Master data",
+    "file": "Vendor export with terms and remit-to",
+    "notes": null,
+    "coveredByPreworkId": "PW-D13",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-16",
+    "category": "Master data",
+    "file": "Price lists by channel and customer",
+    "notes": null,
+    "coveredByPreworkId": "PW-D15",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-17",
+    "category": "Master data",
+    "file": "Subscription plan and pricing list",
+    "notes": null
+  },
+  {
+    "id": "F-18",
+    "category": "Master data",
+    "file": "Bills of material or recipes - all of them",
+    "notes": null,
+    "coveredByPreworkId": "PW-D10",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-19",
+    "category": "Master data",
+    "file": "Ingredient and packaging specifications",
+    "notes": null,
+    "coveredByPreworkId": "PW-D16",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-20",
+    "category": "Master data",
+    "file": "Approved supplier list",
+    "notes": null,
+    "coveredByPreworkId": "PW-D16",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-21",
+    "category": "Master data",
+    "file": "Employee list for anyone who will need system access",
+    "notes": null,
+    "coveredByPreworkId": "PW-D17",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-22",
+    "category": "Samples",
+    "file": "Purchase order - 5 examples in the format actually sent",
+    "notes": "Include one that went wrong"
+  },
+  {
+    "id": "F-23",
+    "category": "Samples",
+    "file": "Vendor invoice - 5 examples",
+    "notes": "Include one that went wrong"
+  },
+  {
+    "id": "F-24",
+    "category": "Samples",
+    "file": "Receiving document - 5 examples",
+    "notes": "Include one that went wrong"
+  },
+  {
+    "id": "F-25",
+    "category": "Samples",
+    "file": "Customer order - 5 examples, one per channel",
+    "notes": null
+  },
+  {
+    "id": "F-26",
+    "category": "Samples",
+    "file": "Pick list / packing slip - 5 examples",
+    "notes": null
+  },
+  {
+    "id": "F-27",
+    "category": "Samples",
+    "file": "Customer invoice - 5 examples",
+    "notes": null
+  },
+  {
+    "id": "F-28",
+    "category": "Samples",
+    "file": "Bill of lading and matching carrier invoice - 5 examples",
+    "notes": null
+  },
+  {
+    "id": "F-29",
+    "category": "Samples",
+    "file": "Production record - 5 examples",
+    "notes": "Whatever form it takes, even a paper log photo"
+  },
+  {
+    "id": "F-30",
+    "category": "Samples",
+    "file": "Certificate of analysis - 5 examples",
+    "notes": "Inbound from a vendor, outbound to a customer, or both"
+  },
+  {
+    "id": "F-31",
+    "category": "Operational",
+    "file": "3PL and co-manufacturer reporting files, as received",
+    "notes": null
+  },
+  {
+    "id": "F-32",
+    "category": "Operational",
+    "file": "TMS exports - whatever it produces",
+    "notes": null
+  },
+  {
+    "id": "F-33",
+    "category": "Operational",
+    "file": "A/P platform vendor and bill export",
+    "notes": null,
+    "coveredByPreworkId": "PW-D13",
+    "coverage": "partial",
+    "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-34",
+    "category": "Operational",
+    "file": "Demand forecast export, in its native format",
+    "notes": null
+  },
+  {
+    "id": "F-35",
+    "category": "Operational",
+    "file": "EDI specs and customer routing guides",
+    "notes": null
+  },
+  {
+    "id": "F-36",
+    "category": "Operational",
+    "file": "Certification and audit documentation that constrains process",
+    "notes": "Organic, food safety, or similar"
+  },
+  {
+    "id": "F-37",
+    "category": "Operational",
+    "file": "Most recent mock recall or traceability exercise report",
+    "notes": null,
+    "coveredByPreworkId": "PW-D24",
+    "coverage": "full",
+    "mappedBy": "heuristic"
+  }
+]

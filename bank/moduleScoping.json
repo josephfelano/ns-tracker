@@ -1,0 +1,196 @@
+[
+  {
+    "id": "M-01",
+    "ask": "Which SuiteSuccess edition is being quoted, and exactly which modules does it include?",
+    "drivenByQuestionIds": [],
+    "drivenByAllTier1": true,
+    "drivenByRaw": "All Tier 1",
+    "why": "The edition sets the baseline. Everything below is either in it or an add-on."
+  },
+  {
+    "id": "M-02",
+    "ask": "Is OneWorld included, and what does adding a subsidiary later cost?",
+    "drivenByQuestionIds": [
+      "FIN-1a",
+      "FIN-6"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "FIN-1a, FIN-6",
+    "why": "Retrofitting OneWorld is a migration. Price the option now even if not exercised."
+  },
+  {
+    "id": "M-03",
+    "ask": "Advanced Revenue Management: in scope or not?",
+    "drivenByQuestionIds": [
+      "FIN-5a",
+      "O2C-5a",
+      "O2C-5c"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "FIN-5a, O2C-5a, O2C-5c",
+    "why": "Expensive, one-way. Prepaid plans and gift cards usually force it; charge-on-ship may not."
+  },
+  {
+    "id": "M-04",
+    "ask": "Which manufacturing tier: Work Orders only, WIP & Routings, or Advanced Manufacturing?",
+    "drivenByQuestionIds": [
+      "ITM-6a",
+      "ITM-6g"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "ITM-6a, ITM-6g",
+    "why": "Determines costing depth and shop-floor capability."
+  },
+  {
+    "id": "M-05",
+    "ask": "Advanced Receiving / Landed Cost: included?",
+    "drivenByQuestionIds": [
+      "FIN-4c",
+      "P2P-5f",
+      "P2P-9",
+      "P2P-10"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "P2P-5f, FIN-4c, P2P-9, P2P-10",
+    "why": "Sets when costing posts and whether freight and duty reach item cost."
+  },
+  {
+    "id": "M-06",
+    "ask": "SuiteTax or legacy Advanced Taxes, and is a tax partner (Avalara etc.) needed?",
+    "drivenByQuestionIds": [
+      "FIN-3c"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "FIN-3c",
+    "why": "One-way, and it touches every sales transaction."
+  },
+  {
+    "id": "M-07",
+    "ask": "Quality Management SuiteApp: needed, and what does it cost?",
+    "drivenByQuestionIds": [
+      "QLT-1",
+      "QLT-2",
+      "QLT-3"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "QLT-1, QLT-2, QLT-3",
+    "why": "Only if formal inspection records are required. Inventory Status alone may be enough."
+  },
+  {
+    "id": "M-08",
+    "ask": "Fixed Assets Management: needed?",
+    "drivenByQuestionIds": [
+      "FIN-5c"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "FIN-5c",
+    "why": "Separately licensed."
+  },
+  {
+    "id": "M-09",
+    "ask": "Demand Planning: can it come off the quote if the forecast stays external?",
+    "drivenByQuestionIds": [
+      "FIN-7b"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "FIN-7b",
+    "why": "Likely a straight removal if the external forecast tool is staying."
+  },
+  {
+    "id": "M-10",
+    "ask": "NetSuite Planning & Budgeting vs native budgets?",
+    "drivenByQuestionIds": [
+      "FIN-7a"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "FIN-7a",
+    "why": "Native budgets are included and cover most budget-vs-actual needs."
+  },
+  {
+    "id": "M-11",
+    "ask": "WMS or a third-party scanning solution: needed for receiving, picking, and lot capture?",
+    "drivenByQuestionIds": [
+      "ITM-3a",
+      "ITM-3f",
+      "QLT-2",
+      "ORG-7"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "ITM-3a, ITM-3f, QLT-2, ORG-7",
+    "why": "Drives whether floor staff need licenses and whether lot capture is realistic."
+  },
+  {
+    "id": "M-12",
+    "ask": "Catch weight: what is the supported approach and what does it cost?",
+    "drivenByQuestionIds": [
+      "ITM-2b"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "ITM-2b",
+    "why": "No native support. If yes, this must be priced before signature."
+  },
+  {
+    "id": "M-13",
+    "ask": "Minimum remaining shelf life enforcement: native, SuiteApp, or custom?",
+    "drivenByQuestionIds": [
+      "ITM-4b"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "ITM-4b",
+    "why": "Not native. If customers mandate it, it is unscoped work."
+  },
+  {
+    "id": "M-14",
+    "ask": "How many full user licenses vs Employee / Customer / Vendor Center, and what does each cost?",
+    "drivenByQuestionIds": [
+      "SYS-5",
+      "ORG-7"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "ORG-7, SYS-5",
+    "why": "Licensing is per unique login by role. This is a recurring cost that compounds."
+  },
+  {
+    "id": "M-15",
+    "ask": "Which sandbox tier is included, and what does a Premium sandbox cost?",
+    "drivenByQuestionIds": [
+      "SYS-5",
+      "ORG-6"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "SYS-5, ORG-6",
+    "why": "Roughly 10% of subscription for standard, ~20% for premium. Needed for item-load dry runs."
+  },
+  {
+    "id": "M-16",
+    "ask": "Integration approach: native connectors, an iPaaS, or custom - and who builds each?",
+    "drivenByQuestionIds": [
+      "SYS-4",
+      "SYS-6",
+      "O2C-5e",
+      "O2C-6b",
+      "O2C-7"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "SYS-4, SYS-6, O2C-5e, O2C-6b, O2C-7",
+    "why": "Usually the largest variable line in the whole implementation cost."
+  },
+  {
+    "id": "M-17",
+    "ask": "How much history is being migrated, and is that priced?",
+    "drivenByQuestionIds": [
+      "SYS-7"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "SYS-7",
+    "why": "Migration scope is a cost driver that is easy to leave vague until it is expensive."
+  },
+  {
+    "id": "M-18",
+    "ask": "What is the annual uplift cap at renewal?",
+    "drivenByQuestionIds": [],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "-",
+    "why": "Not a discovery question, but the one most often left unasked before signature."
+  }
+]

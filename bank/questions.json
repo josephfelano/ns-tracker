@@ -1,0 +1,1872 @@
+[
+  {
+    "id": "SYS-1",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "Fill in Table 1 on the Systems tab: every system, tool, portal and shared spreadsheet used to run the business.",
+    "why": "The foundation for everything else. Please include named spreadsheets, not just software."
+  },
+  {
+    "id": "SYS-2",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "Fill in Table 2 on the Systems tab: for each type of data, which single place is authoritative today.",
+    "why": "Where two systems disagree, we need to know which one wins and who decides."
+  },
+  {
+    "id": "SYS-3",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "Fill in Table 3 on the Systems tab: the ten spreadsheets you could least afford to lose.",
+    "why": "Business logic hidden inside formulas is the most commonly missed requirement in a project like this."
+  },
+  {
+    "id": "SYS-4",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "Fill in Table 4 on the Systems tab: every place data moves between two systems, including manual exports.",
+    "why": "A person moving a CSV between two systems is an interface, and it needs replacing too."
+  },
+  {
+    "id": "SYS-5",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": true,
+    "text": "Rough monthly volumes: purchase orders, receipts, vendor bills, sales orders by channel, shipments, customer invoices, production runs, inventory adjustments. Plus counts of active SKUs, customers and vendors. Note a peak month if seasonal.",
+    "why": "Estimates are fine. This sizes the license count, the integration design and the cutover, and it is needed before we can be quoted accurately."
+  },
+  {
+    "id": "SYS-6",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "For each interface in Table 4: who built it, who maintains it, and is it a native connector, an integration platform (Celigo, Boomi, Workato) or custom code? Does an integration platform already exist here, and who administers it?",
+    "why": "This is what sets integration cost, and whether we extend something you already pay for or buy something new."
+  },
+  {
+    "id": "SYS-7",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": true,
+    "text": "For each system in Table 1: after go-live does it get turned off, kept read-only, or kept running? How many years of history does anyone genuinely need to look up, who looks it up, and for what?",
+    "why": "Drives how much history we migrate versus archive, which is one of the larger cost and risk variables in the project."
+  },
+  {
+    "id": "SYS-8",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "For the item, customer and vendor lists: roughly how many duplicates, inactive records or incomplete rows? Who owns cleaning each one, and by when?",
+    "why": "Cleanup with no named owner gets done badly the week before go-live. Naming the owner now is what prevents that."
+  },
+  {
+    "id": "SYS-9",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "Where do actual documents live? Signed POs, vendor invoices, bills of lading, certificates of analysis, lot documentation, co-man batch records, customer contracts.",
+    "why": "Auditors ask for documents, not report rows. We need to know where they are before we design around them."
+  },
+  {
+    "id": "SYS-10",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "For each system in Table 1: who holds administrator credentials, and are there any systems only one person can log into?",
+    "why": "Single-person access becomes an emergency at exactly the wrong moment."
+  },
+  {
+    "id": "FIN-1a",
+    "parentId": "FIN-1",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Entity",
+    "tier1": true,
+    "text": "List every legal entity, which ones need their own financial statements, and how they relate to each other.",
+    "why": "Determines the underlying account structure. This is a purchasing decision as much as a design one, and it is very difficult to change later."
+  },
+  {
+    "id": "FIN-1b",
+    "parentId": "FIN-1",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Entity",
+    "tier1": false,
+    "text": "Does activity happen between entities? What kind, and how is it eliminated today?",
+    "why": null
+  },
+  {
+    "id": "FIN-1c",
+    "parentId": "FIN-1",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Entity",
+    "tier1": true,
+    "text": "Which currencies do you transact in, and which do you report in?",
+    "why": "Multi-currency is permanent once switched on, so we only enable it if it is genuinely needed."
+  },
+  {
+    "id": "FIN-2a",
+    "parentId": "FIN-2",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Fiscal calendar",
+    "tier1": true,
+    "text": "Fiscal year end date.",
+    "why": null
+  },
+  {
+    "id": "FIN-2b",
+    "parentId": "FIN-2",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Fiscal calendar",
+    "tier1": true,
+    "text": "Is your calendar 12 calendar months, 4-4-5, or 13 periods? Are there year-end adjustment periods?",
+    "why": "Set once, and it constrains every period report from then on."
+  },
+  {
+    "id": "FIN-2c",
+    "parentId": "FIN-2",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Fiscal calendar",
+    "tier1": false,
+    "text": "Has the fiscal year end ever changed, leaving a short or stub period in the history?",
+    "why": null
+  },
+  {
+    "id": "FIN-3a",
+    "parentId": "FIN-3",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "External",
+    "tier1": false,
+    "text": "Audit status: audited, reviewed, or neither? Which firm, and when is fieldwork?",
+    "why": null
+  },
+  {
+    "id": "FIN-3b",
+    "parentId": "FIN-3",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "External",
+    "tier1": false,
+    "text": "Any debt covenants, lender packages or investor reporting with a fixed format and deadline? Attach examples.",
+    "why": null
+  },
+  {
+    "id": "FIN-3c",
+    "parentId": "FIN-3",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "External",
+    "tier1": true,
+    "text": "Where do you have sales tax obligations, who prepares the filings, and what data do they need?",
+    "why": "Determines which tax engine we enable, which is a permanent choice."
+  },
+  {
+    "id": "FIN-3d",
+    "parentId": "FIN-3",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "External",
+    "tier1": false,
+    "text": "Any certifications that constrain how you work - organic, kosher, non-GMO, SQF, BRC or another GFSI scheme? What evidence does the auditor ask for?",
+    "why": "Traceability requirements drive item setup decisions that cannot be reversed once made."
+  },
+  {
+    "id": "FIN-3e",
+    "parentId": "FIN-3",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "External",
+    "tier1": false,
+    "text": "FSMA 204: the compliance date is 20 July 2028. Are any of your products on the Food Traceability List, and has anyone assessed what the rule will require of you?",
+    "why": "If yes, this is the concrete driver behind the traceability scope questions in the Traceability section."
+  },
+  {
+    "id": "FIN-4a",
+    "parentId": "FIN-4",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Costing",
+    "tier1": true,
+    "text": "How is inventory valued today, per item category? Standard cost, average, FIFO, or whatever the spreadsheet does?",
+    "why": "Valuation method locks per item once the item exists. Changing it means creating a new item and losing history continuity. This is the single most consequential answer in the packet."
+  },
+  {
+    "id": "FIN-4b",
+    "parentId": "FIN-4",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Costing",
+    "tier1": false,
+    "text": "If you use standard cost: who sets the standards, how often, and how are variances reviewed?",
+    "why": null
+  },
+  {
+    "id": "FIN-4c",
+    "parentId": "FIN-4",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Costing",
+    "tier1": true,
+    "text": "Are freight, duty, brokerage, storage and pallet charges included in inventory value or expensed? If included, at what point, and how are they allocated?",
+    "why": null
+  },
+  {
+    "id": "FIN-4d",
+    "parentId": "FIN-4",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Costing",
+    "tier1": false,
+    "text": "Scrap, shrink, obsolescence and reserve policies.",
+    "why": null
+  },
+  {
+    "id": "FIN-5a",
+    "parentId": "FIN-5",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Revenue",
+    "tier1": true,
+    "text": "When is revenue recognized - at ship, at delivery, over time? Any subscription, prepaid or deferred revenue?",
+    "why": "Determines whether revenue scheduling is needed. That is both a permanent setting and a significant line on the quote."
+  },
+  {
+    "id": "FIN-5b",
+    "parentId": "FIN-5",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Revenue",
+    "tier1": false,
+    "text": "How are trade spend, promotions, discounts, chargebacks and deductions accounted for?",
+    "why": null
+  },
+  {
+    "id": "FIN-5c",
+    "parentId": "FIN-5",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Assets",
+    "tier1": false,
+    "text": "Is there a fixed asset register and depreciation schedule? Attach it.",
+    "why": "Fixed asset management is a separately licensed module, so this affects the quote."
+  },
+  {
+    "id": "FIN-6",
+    "parentId": null,
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Entity",
+    "tier1": true,
+    "text": "Any new legal entity, new country, new brand or acquisition contemplated in the next 24 months?",
+    "why": "Provisioning for multiple entities at the start is a purchasing decision. Retrofitting it later is a migration."
+  },
+  {
+    "id": "FIN-7a",
+    "parentId": "FIN-7",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Planning",
+    "tier1": true,
+    "text": "Does budget-versus-actual need to appear in the new system's financial reports? Who builds the budget, at what level of detail, and on what cycle?",
+    "why": "Basic budget reporting is included. Full planning and budgeting is a separate product, so we need to know which you actually need."
+  },
+  {
+    "id": "FIN-7b",
+    "parentId": "FIN-7",
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Planning",
+    "tier1": true,
+    "text": "Where does the demand forecast live, who owns it, and is it staying there? If it stays: does it need actuals fed back from the new system, in what format and how often?",
+    "why": "If the forecast stays external it becomes an interface, and it is the demand signal behind purchasing. Both need designing."
+  },
+  {
+    "id": "FIN-8",
+    "parentId": null,
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Entity",
+    "tier1": false,
+    "text": "Only if there is more than one entity: if inventory or services move between entities, at what price, and who sets it?",
+    "why": "Transfers at cost are simple. Transfers above cost create profit sitting in inventory that has to be stripped out every single close."
+  },
+  {
+    "id": "DIM-1",
+    "parentId": null,
+    "prefix": "DIM",
+    "part": "P1",
+    "section": "Dimensions",
+    "tier1": false,
+    "text": "Attach a chart of accounts export with account type and current-year activity. Flag which accounts are actively used and which are legacy.",
+    "why": null
+  },
+  {
+    "id": "DIM-2",
+    "parentId": null,
+    "prefix": "DIM",
+    "part": "P1",
+    "section": "Dimensions",
+    "tier1": false,
+    "text": "List every account whose name encodes something other than the account type - anything shaped like \"Salaries - Ops - Chicago\" or \"Freight - DTC\".",
+    "why": "These are several pieces of information packed into one field. The new system handles them separately, which is a real improvement, but we need the full list to design it."
+  },
+  {
+    "id": "DIM-3",
+    "parentId": null,
+    "prefix": "DIM",
+    "part": "P1",
+    "section": "Dimensions",
+    "tier1": false,
+    "text": "What does management actually slice results by? Channel, brand, product line, plant, cost center, customer, region? List in priority order, and say who asks for each.",
+    "why": "Every axis you might ever want has to be designed in now. Adding one later cannot tag past history with it."
+  },
+  {
+    "id": "DIM-4",
+    "parentId": null,
+    "prefix": "DIM",
+    "part": "P1",
+    "section": "Dimensions",
+    "tier1": false,
+    "text": "Which reporting views today require someone to rebuild them in Excel because the accounting system can't produce them?",
+    "why": "These are the highest-value things to fix, and the easiest to forget to mention."
+  },
+  {
+    "id": "DIM-5",
+    "parentId": null,
+    "prefix": "DIM",
+    "part": "P1",
+    "section": "Dimensions",
+    "tier1": false,
+    "text": "Anything leadership has asked to see that nobody has been able to produce. Speculative is fine.",
+    "why": "Far cheaper to design in now than to retrofit later."
+  },
+  {
+    "id": "DIM-6",
+    "parentId": null,
+    "prefix": "DIM",
+    "part": "P1",
+    "section": "Dimensions",
+    "tier1": true,
+    "text": "Does anyone report cost per pound, revenue per case, units or cases shipped, pounds produced, or per-headcount figures? Where do those denominators come from today, and who maintains them?",
+    "why": "Per-unit metrics need the quantity to live alongside the dollars. That requires a specific feature which is far cheaper to enable at the start."
+  },
+  {
+    "id": "DIM-7",
+    "parentId": null,
+    "prefix": "DIM",
+    "part": "P1",
+    "section": "Dimensions",
+    "tier1": false,
+    "text": "Who can create a new account, department, class or location today? Is there an approval, and is there a naming convention?",
+    "why": "Ungoverned account creation is how a clean chart of accounts becomes the one you are migrating away from."
+  },
+  {
+    "id": "DIM-8",
+    "parentId": null,
+    "prefix": "DIM",
+    "part": "P1",
+    "section": "Dimensions",
+    "tier1": false,
+    "text": "Is there spend or activity that legitimately has no department, channel or product line - corporate overhead, insurance, interest?",
+    "why": "Decides whether each reporting axis is mandatory or optional. Mandatory gives clean reports and forces guessing; optional gives honest blanks and messier reports."
+  },
+  {
+    "id": "ITM-1a",
+    "parentId": "ITM-1",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "Attach a full item / SKU export with every field currently tracked.",
+    "why": null
+  },
+  {
+    "id": "ITM-1b",
+    "parentId": "ITM-1",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "How are items categorized, and does the categorization drive any reporting?",
+    "why": null
+  },
+  {
+    "id": "ITM-1c",
+    "parentId": "ITM-1",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "Which items are purchased finished, which are produced, and which are assembled or kitted?",
+    "why": "This determines the item type for each SKU, which governs what transactions it can appear on."
+  },
+  {
+    "id": "ITM-1d",
+    "parentId": "ITM-1",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "Who can create a new item, what is the approval, and what is the naming convention?",
+    "why": null
+  },
+  {
+    "id": "ITM-2a",
+    "parentId": "ITM-2",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": true,
+    "text": "Is anything bought in one unit and used or sold in another? Where does the conversion live, who maintains it, and is it always a fixed ratio?",
+    "why": "Variable conversions need entirely different handling than fixed ones, so please flag any that move."
+  },
+  {
+    "id": "ITM-2b",
+    "parentId": "ITM-2",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": true,
+    "text": "Is anything sold by catch weight - a case nominally 10 lb that actually weighs 9.7 or 10.4, with the customer invoiced on actual weight?",
+    "why": "Catch weight cannot be handled by standard unit conversion. If the answer is yes it has to be designed for deliberately, and it changes the quote."
+  },
+  {
+    "id": "ITM-3a",
+    "parentId": "ITM-3",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Traceability",
+    "tier1": true,
+    "text": "Which items are lot or batch tracked today?",
+    "why": "Important: lot tracking cascades up the bill of materials. One tracked ingredient forces every product containing it to be tracked too, and this is set permanently when an item is created."
+  },
+  {
+    "id": "ITM-3b",
+    "parentId": "ITM-3",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Traceability",
+    "tier1": false,
+    "text": "What drives the requirement - regulation, certification, customer mandate, recall readiness?",
+    "why": null
+  },
+  {
+    "id": "ITM-3c",
+    "parentId": "ITM-3",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Traceability",
+    "tier1": false,
+    "text": "Where is lot information captured today, and where does it go afterward?",
+    "why": null
+  },
+  {
+    "id": "ITM-3d",
+    "parentId": "ITM-3",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Traceability",
+    "tier1": true,
+    "text": "For anything you produce: are the inputs lot tracked? Are the outputs?",
+    "why": "This is what determines how far the tracking cascade reaches."
+  },
+  {
+    "id": "ITM-3e",
+    "parentId": "ITM-3",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Traceability",
+    "tier1": false,
+    "text": "Could traceability plausibly extend to more items over the next few years?",
+    "why": "Cheap to design for now, expensive to retrofit."
+  },
+  {
+    "id": "ITM-3f",
+    "parentId": "ITM-3",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Traceability",
+    "tier1": true,
+    "text": "For every 3PL and co-manufacturer: can they report which lots shipped to which customer on which shipment - not just what they hold on hand? In what format, and how quickly?",
+    "why": "Many third parties ship lot-controlled product without reliably reporting lot-to-shipment detail. Balances stay right and traceability quietly breaks, at exactly the point a recall needs it. A no here is one of the most important answers in this packet."
+  },
+  {
+    "id": "ITM-4a",
+    "parentId": "ITM-4",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "Expiration handling, first-expiry-first-out practice, and minimum remaining shelf life on outbound shipments.",
+    "why": null
+  },
+  {
+    "id": "ITM-4b",
+    "parentId": "ITM-4",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "Do any customers mandate a minimum remaining shelf life, as a percentage or a day count? Which customers, and what is the requirement?",
+    "why": "Enforcing this automatically is real work that has to be scoped rather than assumed."
+  },
+  {
+    "id": "ITM-5a",
+    "parentId": "ITM-5",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Inventory",
+    "tier1": true,
+    "text": "Every physical place inventory sits: own facilities, 3PLs, co-manufacturers, in transit, consignment at customer, marketplace fulfillment centers.",
+    "why": "Whether inventory is tracked by location is a permanent setting, and it has to be switched on before the first period we open."
+  },
+  {
+    "id": "ITM-5b",
+    "parentId": "ITM-5",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Inventory",
+    "tier1": true,
+    "text": "Which of those hold inventory you own and report on the balance sheet?",
+    "why": null
+  },
+  {
+    "id": "ITM-5c",
+    "parentId": "ITM-5",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Inventory",
+    "tier1": false,
+    "text": "How do you know on-hand quantity at each location, and how often is it refreshed?",
+    "why": null
+  },
+  {
+    "id": "ITM-5d",
+    "parentId": "ITM-5",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Inventory",
+    "tier1": false,
+    "text": "Cycle counting or physical count practice, frequency, and typical variance.",
+    "why": null
+  },
+  {
+    "id": "ITM-5e",
+    "parentId": "ITM-5",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Inventory",
+    "tier1": false,
+    "text": "Transfers between locations: how initiated, how tracked, how valued, and how long in transit?",
+    "why": null
+  },
+  {
+    "id": "ITM-6a",
+    "parentId": "ITM-6",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Production",
+    "tier1": true,
+    "text": "Is production in-house, co-manufactured, or both? Describe the split.",
+    "why": "This shapes a large part of the build and determines which manufacturing features we license. Detail is welcome."
+  },
+  {
+    "id": "ITM-6b",
+    "parentId": "ITM-6",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Production",
+    "tier1": false,
+    "text": "Where do recipes or bills of material live, who owns them, and how are changes controlled and versioned? Attach them.",
+    "why": null
+  },
+  {
+    "id": "ITM-6c",
+    "parentId": "ITM-6",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Production",
+    "tier1": false,
+    "text": "How does actual consumption compare to the recipe? Is yield or loss tracked?",
+    "why": "An honest answer here is worth more than an optimistic one - recipe accuracy drives cost accuracy."
+  },
+  {
+    "id": "ITM-6d",
+    "parentId": "ITM-6",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Production",
+    "tier1": false,
+    "text": "How is a production run initiated, and against what demand signal?",
+    "why": null
+  },
+  {
+    "id": "ITM-6e",
+    "parentId": "ITM-6",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Production",
+    "tier1": false,
+    "text": "What gets recorded during a run - materials issued, labor, machine time, output, scrap?",
+    "why": null
+  },
+  {
+    "id": "ITM-6f",
+    "parentId": "ITM-6",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Production",
+    "tier1": false,
+    "text": "Is labor or overhead included in product cost, and how is the rate set?",
+    "why": null
+  },
+  {
+    "id": "ITM-6g",
+    "parentId": "ITM-6",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Production",
+    "tier1": true,
+    "text": "Is there an intermediate or work-in-process stage, or does raw material go straight to finished good?",
+    "why": "Determines how deep the manufacturing configuration needs to go, which is a licensing decision."
+  },
+  {
+    "id": "ITM-6h",
+    "parentId": "ITM-6",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Production",
+    "tier1": false,
+    "text": "For co-manufacturing: who owns the material at each stage, what document starts production, what comes back, and how is the co-man's charge structured and reconciled?",
+    "why": null
+  },
+  {
+    "id": "ITM-7a",
+    "parentId": "ITM-7",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Costing",
+    "tier1": false,
+    "text": "How is finished goods cost calculated today, step by step? Attach the model.",
+    "why": null
+  },
+  {
+    "id": "ITM-7b",
+    "parentId": "ITM-7",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Costing",
+    "tier1": false,
+    "text": "How often is it refreshed, by whom, and what triggers a refresh?",
+    "why": null
+  },
+  {
+    "id": "ITM-7c",
+    "parentId": "ITM-7",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Costing",
+    "tier1": false,
+    "text": "Is inbound freight, duty, storage and handling included? At what point?",
+    "why": null
+  },
+  {
+    "id": "ITM-7d",
+    "parentId": "ITM-7",
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Costing",
+    "tier1": false,
+    "text": "How is the gap between calculated cost and actual spend surfaced and explained?",
+    "why": null
+  },
+  {
+    "id": "ITM-8",
+    "parentId": null,
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "For each sellable item: the each / inner / case / pallet configuration, and the GTIN, UPC, case code or SSCC at each level. Who assigns them and where are they maintained?",
+    "why": "Retail customers require these, and case and pallet data drives shipping notices and pallet labels. Wrong data here shows up later as chargebacks."
+  },
+  {
+    "id": "ITM-9",
+    "parentId": null,
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "How many new SKUs launch in a typical year? Are there seasonal or limited-time items? How is a discontinued SKU retired?",
+    "why": "Determines whether item creation needs to be a fast governed workflow or an occasional careful one, and how much dead weight is in the migration."
+  },
+  {
+    "id": "ITM-10",
+    "parentId": null,
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "Allergens, organic certification status, kosher status, non-GMO, country of origin, nutritional data. Where do these live today and who maintains them?",
+    "why": "These have to exist on the item record before items are loaded, and organic status per item is what makes a mass balance exercise possible at audit."
+  },
+  {
+    "id": "ITM-11",
+    "parentId": null,
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "Does product get reworked, repacked or relabeled into a different SKU? Does anything get downgraded to a secondary grade, sold as B-stock, or donated?",
+    "why": null
+  },
+  {
+    "id": "QLT-1",
+    "parentId": null,
+    "prefix": "QLT",
+    "part": "P1",
+    "section": "Quality",
+    "tier1": false,
+    "text": "What is inspected when material arrives, and against what specification? Is a certificate of analysis required from the vendor? Who reviews it and who releases the material?",
+    "why": null
+  },
+  {
+    "id": "QLT-2",
+    "parentId": null,
+    "prefix": "QLT",
+    "part": "P1",
+    "section": "Quality",
+    "tier1": true,
+    "text": "Is finished product held pending lab, micro or other test results before it can ship? How long is a typical hold, where does held product sit, who releases it, and what happens when something fails?",
+    "why": "Inventory that exists but cannot be sold has to be modeled as exactly that. If it is not, the system will promise product to a customer that legally cannot ship. This is a feature decision."
+  },
+  {
+    "id": "QLT-3",
+    "parentId": null,
+    "prefix": "QLT",
+    "part": "P1",
+    "section": "Quality",
+    "tier1": false,
+    "text": "What is checked during a production run, where is it recorded, and does a failure stop the run or get dispositioned afterward?",
+    "why": null
+  },
+  {
+    "id": "QLT-4",
+    "parentId": null,
+    "prefix": "QLT",
+    "part": "P1",
+    "section": "Quality",
+    "tier1": false,
+    "text": "Non-conforming product: rework, downgrade, hold or destroy - who decides, how is the decision recorded, and what happens to the cost of the material?",
+    "why": null
+  },
+  {
+    "id": "QLT-5",
+    "parentId": null,
+    "prefix": "QLT",
+    "part": "P1",
+    "section": "Quality",
+    "tier1": false,
+    "text": "Is there an approved supplier list and a specification per ingredient or packaging component? Where do they live, who maintains them, and are certificates of analysis required by item?",
+    "why": null
+  },
+  {
+    "id": "QLT-6",
+    "parentId": null,
+    "prefix": "QLT",
+    "part": "P1",
+    "section": "Quality",
+    "tier1": false,
+    "text": "Have you run a mock recall? How long did it take, and what systems, files and people did you have to touch? What does your certifier or customer require, including a mass balance or in/out exercise if you are organic certified?",
+    "why": "This is the best description of what traceability costs you today, and it is the test the new system will have to pass."
+  },
+  {
+    "id": "CLS-1",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Write down the close checklist as it actually exists. For each step: who does it, what system or file it touches, what it depends on, and how long it takes.",
+    "why": "The most valuable single document in this packet. A screen-share walkthrough plus the working files would be ideal."
+  },
+  {
+    "id": "CLS-2",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Target days to close versus actual, for the last three months.",
+    "why": null
+  },
+  {
+    "id": "CLS-3",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Which steps hold everything else up, and why? Please separate \"no system could do this\" from \"nobody ever automated it.\"",
+    "why": "Different problems with different fixes, so the distinction matters."
+  },
+  {
+    "id": "CLS-4",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Which numbers come from outside the accounting system - inventory valuation, accruals, freight, allocations, revenue cutoff? Where does each come from, and who produces it?",
+    "why": null
+  },
+  {
+    "id": "CLS-5",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Which accruals are estimated rather than calculated, and how is each estimate derived?",
+    "why": null
+  },
+  {
+    "id": "CLS-6",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "What gets reconciled, against what, by whom, and how long does each take? Bank, AR, AP, inventory, payment processors, marketplaces, 3PL, between entities.",
+    "why": null
+  },
+  {
+    "id": "CLS-7",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "In the last year: any restatements, plugs, unexplained variances, or things corrected after the fact?",
+    "why": "This is diagnostic, not a criticism. Recurring problems point straight at gaps worth designing around."
+  },
+  {
+    "id": "CLS-8",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Which reports must exist on day one of the new system, in what format, and for whom? Attach current versions.",
+    "why": null
+  },
+  {
+    "id": "CLS-9",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Which close steps wait on something arriving from outside - 3PL inventory files, co-man invoices, processor or marketplace settlement, broker statements, carrier invoices? What day of the month does each actually arrive, versus when it is supposed to?",
+    "why": "The close can never be faster than its slowest external input, and no amount of configuration changes when someone else sends their invoice."
+  },
+  {
+    "id": "CLS-10",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Does anyone post to a closed period today? Who can, how often does it happen, and what triggers it?",
+    "why": "Period locking is a real control with teeth. We need to know the current habit before designing it."
+  },
+  {
+    "id": "CLS-11",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Only if there is more than one entity: where does consolidation happen today, who performs it, and is it a spreadsheet?",
+    "why": null
+  },
+  {
+    "id": "P2P-0",
+    "parentId": null,
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Procurement",
+    "tier1": false,
+    "text": "Which vendor categories have genuinely different processes? For example raw materials, packaging, co-manufacturing, freight, indirect and office, services.",
+    "why": "Answer the rest of this section per category wherever they differ. Combining them hides the exceptions, and the exceptions are usually the hard part."
+  },
+  {
+    "id": "P2P-1a",
+    "parentId": "P2P-1",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "How is it decided what to buy and when? Forecast, min/max, reorder point, someone's judgment?",
+    "why": null
+  },
+  {
+    "id": "P2P-1b",
+    "parentId": "P2P-1",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "Where does that calculation live, and who runs it? Attach it.",
+    "why": null
+  },
+  {
+    "id": "P2P-1c",
+    "parentId": "P2P-1",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "Are lead times tracked per vendor and item? Where?",
+    "why": null
+  },
+  {
+    "id": "P2P-1d",
+    "parentId": "P2P-1",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "Safety stock policy, if there is one.",
+    "why": null
+  },
+  {
+    "id": "P2P-1e",
+    "parentId": "P2P-1",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "How far ahead are commitments made? Any blanket POs, contracted volumes, or take-or-pay arrangements?",
+    "why": null
+  },
+  {
+    "id": "P2P-2a",
+    "parentId": "P2P-2",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "What document goes out to each vendor category? Attach a real example of each.",
+    "why": "Real documents tell us far more than a description of them."
+  },
+  {
+    "id": "P2P-2b",
+    "parentId": "P2P-2",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "Who creates it, who approves it, and at what threshold? Attach the written policy if one exists.",
+    "why": null
+  },
+  {
+    "id": "P2P-2c",
+    "parentId": "P2P-2",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "What format and channel does it go out in - PDF by email, EDI, vendor portal, spreadsheet, phone?",
+    "why": null
+  },
+  {
+    "id": "P2P-2d",
+    "parentId": "P2P-2",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "Who receives it at the vendor: a named person, or a role?",
+    "why": null
+  },
+  {
+    "id": "P2P-3",
+    "parentId": null,
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "How is vendor pricing established, and where is it stored? Contract, price list, last price paid, negotiated per order? Who can override it?",
+    "why": null
+  },
+  {
+    "id": "P2P-4",
+    "parentId": null,
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "Any vendors on consignment, vendor-managed inventory, drop ship, tolling, or bill-and-hold?",
+    "why": "These change who owns inventory and when, which affects the balance sheet directly."
+  },
+  {
+    "id": "P2P-5a",
+    "parentId": "P2P-5",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Receiving",
+    "tier1": false,
+    "text": "Who physically receives goods, and where? Own warehouse, 3PL, co-man, direct to customer?",
+    "why": null
+  },
+  {
+    "id": "P2P-5b",
+    "parentId": "P2P-5",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Receiving",
+    "tier1": false,
+    "text": "What document proves receipt? Attach an example.",
+    "why": null
+  },
+  {
+    "id": "P2P-5c",
+    "parentId": "P2P-5",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Receiving",
+    "tier1": false,
+    "text": "How does receipt information reach the person doing accounting, and how quickly?",
+    "why": null
+  },
+  {
+    "id": "P2P-5d",
+    "parentId": "P2P-5",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Receiving",
+    "tier1": false,
+    "text": "How are short shipments, overages, damages and rejections handled and recorded?",
+    "why": null
+  },
+  {
+    "id": "P2P-5e",
+    "parentId": "P2P-5",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Receiving",
+    "tier1": false,
+    "text": "Is lot or batch information captured at the point of receipt?",
+    "why": null
+  },
+  {
+    "id": "P2P-5f",
+    "parentId": "P2P-5",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Receiving",
+    "tier1": true,
+    "text": "Are receipts recorded when goods physically arrive, or reconstructed later from paperwork?",
+    "why": "Determines whether receiving is a distinct step from the vendor bill, which sets when inventory cost posts and whether a genuine three-way match is possible. This is a permanent setting."
+  },
+  {
+    "id": "P2P-6a",
+    "parentId": "P2P-6",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "How do vendor invoices arrive - email, portal, mail, EDI? Where do they land, and where does your A/P automation platform fit into the chain?",
+    "why": null
+  },
+  {
+    "id": "P2P-6b",
+    "parentId": "P2P-6",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Is anything matched against the purchase order and the receipt today? By whom?",
+    "why": null
+  },
+  {
+    "id": "P2P-6c",
+    "parentId": "P2P-6",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "What variance on price and quantity is acceptable before someone investigates?",
+    "why": null
+  },
+  {
+    "id": "P2P-6d",
+    "parentId": "P2P-6",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Who codes the invoice to an account, and how do they know what to pick?",
+    "why": null
+  },
+  {
+    "id": "P2P-6e",
+    "parentId": "P2P-6",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Approval routing and thresholds. Attach the policy if it is written down.",
+    "why": null
+  },
+  {
+    "id": "P2P-6f",
+    "parentId": "P2P-6",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Roughly what proportion of total spend has no purchase order at all?",
+    "why": "This number determines how much control the new system can realistically enforce. A rough estimate is much better than nothing."
+  },
+  {
+    "id": "P2P-7a",
+    "parentId": "P2P-7",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Payment methods in use and the rough split: ACH, check, wire, card, virtual card.",
+    "why": null
+  },
+  {
+    "id": "P2P-7b",
+    "parentId": "P2P-7",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Payment run cadence, and who approves a run.",
+    "why": null
+  },
+  {
+    "id": "P2P-7c",
+    "parentId": "P2P-7",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Which payments originate in the A/P platform, which in a bank portal, and which somewhere else?",
+    "why": null
+  },
+  {
+    "id": "P2P-7d",
+    "parentId": "P2P-7",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "How do payment records get back into the accounting system today?",
+    "why": null
+  },
+  {
+    "id": "P2P-7e",
+    "parentId": "P2P-7",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Terms by vendor. Are early-payment discounts actively taken?",
+    "why": null
+  },
+  {
+    "id": "P2P-7f",
+    "parentId": "P2P-7",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Vendor credits, returns and rebates: how are they tracked and applied?",
+    "why": null
+  },
+  {
+    "id": "P2P-8a",
+    "parentId": "P2P-8",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "A/P platform",
+    "tier1": false,
+    "text": "Which platform do you use for A/P automation? If none, describe how bills get approved today and skip the rest of this group.",
+    "why": null
+  },
+  {
+    "id": "P2P-8b",
+    "parentId": "P2P-8",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "A/P platform",
+    "tier1": false,
+    "text": "Which functions are actually used: bill capture, approval routing, payment execution, vendor network, spend cards?",
+    "why": null
+  },
+  {
+    "id": "P2P-8c",
+    "parentId": "P2P-8",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "A/P platform",
+    "tier1": false,
+    "text": "Is the bill entered there and pushed to accounting, or the other way around?",
+    "why": null
+  },
+  {
+    "id": "P2P-8d",
+    "parentId": "P2P-8",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "A/P platform",
+    "tier1": false,
+    "text": "What is it the only record of?",
+    "why": "Approval history and remittance detail are the usual answers, but please check."
+  },
+  {
+    "id": "P2P-8e",
+    "parentId": "P2P-8",
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "A/P platform",
+    "tier1": false,
+    "text": "Attach a vendor list export.",
+    "why": "So duplicates and inconsistent naming can be cleaned up before anything syncs."
+  },
+  {
+    "id": "P2P-9",
+    "parentId": null,
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "FOB origin or FOB destination, by vendor? Who books and pays inbound freight? At what point does title transfer, and is goods-in-transit inventory tracked and counted?",
+    "why": "Determines when inventory becomes yours. If title transfers at origin, goods on the water are on your balance sheet and have to be counted."
+  },
+  {
+    "id": "P2P-10",
+    "parentId": null,
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Purchasing",
+    "tier1": false,
+    "text": "Only if anything is imported: who files customs entries, which broker, what duty applies, and how do duty and brokerage invoices arrive and get matched back to a receipt?",
+    "why": "These arrive weeks after the goods, from a party that is not the vendor, and they still have to reach landed cost."
+  },
+  {
+    "id": "P2P-11",
+    "parentId": null,
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "How does a new vendor get set up and approved? Who collects W-9s, and who produces 1099s at year end?",
+    "why": null
+  },
+  {
+    "id": "P2P-12",
+    "parentId": null,
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "Receiving",
+    "tier1": false,
+    "text": "Does rejected or damaged material physically go back to the vendor? Who arranges it, does the vendor issue an RMA, and how is the credit matched to the original receipt? If it does not go back, say what happens instead.",
+    "why": "Material that is rejected but never physically leaves is usually still sitting on the balance sheet at full value."
+  },
+  {
+    "id": "P2P-13",
+    "parentId": null,
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "How do employees submit expenses, who approves them, and how are they reimbursed? Are there corporate or virtual cards, who holds them, and how does that spend get coded?",
+    "why": "Card spend is usually a meaningful share of the spend that has no purchase order behind it."
+  },
+  {
+    "id": "O2C-1a",
+    "parentId": "O2C-1",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "List your sales channels with order volume and revenue share.",
+    "why": null
+  },
+  {
+    "id": "O2C-1b",
+    "parentId": "O2C-1",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "How do orders arrive in each channel - platform, EDI, email, portal, phone?",
+    "why": null
+  },
+  {
+    "id": "O2C-1c",
+    "parentId": "O2C-1",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "What does the customer expect back? Order acknowledgement, advance ship notice, specific invoice format, packing list requirements.",
+    "why": null
+  },
+  {
+    "id": "O2C-1d",
+    "parentId": "O2C-1",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "Pricing mechanism per channel, and where it is stored.",
+    "why": null
+  },
+  {
+    "id": "O2C-1e",
+    "parentId": "O2C-1",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "Payment terms and method per channel.",
+    "why": null
+  },
+  {
+    "id": "O2C-1f",
+    "parentId": "O2C-1",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "Customer-specific compliance requirements: labeling, routing guides, chargeback schedules. Attach them.",
+    "why": null
+  },
+  {
+    "id": "O2C-2a",
+    "parentId": "O2C-2",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Fulfillment",
+    "tier1": false,
+    "text": "Who picks and ships at each location?",
+    "why": null
+  },
+  {
+    "id": "O2C-2b",
+    "parentId": "O2C-2",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Fulfillment",
+    "tier1": false,
+    "text": "How is the warehouse or 3PL told what to ship, and in what format?",
+    "why": null
+  },
+  {
+    "id": "O2C-2c",
+    "parentId": "O2C-2",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Fulfillment",
+    "tier1": false,
+    "text": "What comes back, and how fast? Confirmation, tracking, actual quantity shipped.",
+    "why": null
+  },
+  {
+    "id": "O2C-2d",
+    "parentId": "O2C-2",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Fulfillment",
+    "tier1": false,
+    "text": "How are partial shipments, substitutions and backorders handled?",
+    "why": null
+  },
+  {
+    "id": "O2C-3a",
+    "parentId": "O2C-3",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "TMS",
+    "tier1": false,
+    "text": "What tool do you use to book, tender and track outbound freight? If none, describe how it is managed today.",
+    "why": null
+  },
+  {
+    "id": "O2C-3b",
+    "parentId": "O2C-3",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "TMS",
+    "tier1": false,
+    "text": "What triggers a shipment record, and what data goes in?",
+    "why": null
+  },
+  {
+    "id": "O2C-3c",
+    "parentId": "O2C-3",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "TMS",
+    "tier1": false,
+    "text": "What comes back out, in what format, and to whom? Attach a sample export.",
+    "why": null
+  },
+  {
+    "id": "O2C-3d",
+    "parentId": "O2C-3",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "TMS",
+    "tier1": false,
+    "text": "Who reconciles freight cost against the carrier invoice, and how?",
+    "why": null
+  },
+  {
+    "id": "O2C-3e",
+    "parentId": "O2C-3",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "TMS",
+    "tier1": false,
+    "text": "What is it the only record of?",
+    "why": null
+  },
+  {
+    "id": "O2C-3f",
+    "parentId": "O2C-3",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "TMS",
+    "tier1": false,
+    "text": "How is freight cost estimated before the carrier invoice arrives?",
+    "why": "This is your freight accrual methodology, and it has to be rebuilt in the new system."
+  },
+  {
+    "id": "O2C-4a",
+    "parentId": "O2C-4",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "AR",
+    "tier1": false,
+    "text": "Who creates the customer invoice, and what triggers it - order, shipment, delivery?",
+    "why": null
+  },
+  {
+    "id": "O2C-4b",
+    "parentId": "O2C-4",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "AR",
+    "tier1": false,
+    "text": "Invoice delivery method by customer.",
+    "why": null
+  },
+  {
+    "id": "O2C-4c",
+    "parentId": "O2C-4",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "AR",
+    "tier1": false,
+    "text": "How is cash applied, and how is remittance detail obtained?",
+    "why": null
+  },
+  {
+    "id": "O2C-4d",
+    "parentId": "O2C-4",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "AR",
+    "tier1": false,
+    "text": "Deductions, chargebacks and short-pays: volume, causes, who researches them, and how they are recorded.",
+    "why": null
+  },
+  {
+    "id": "O2C-4e",
+    "parentId": "O2C-4",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "AR",
+    "tier1": false,
+    "text": "Credit memos, returns and refunds.",
+    "why": null
+  },
+  {
+    "id": "O2C-4f",
+    "parentId": "O2C-4",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "AR",
+    "tier1": false,
+    "text": "AR aging and collections practice.",
+    "why": null
+  },
+  {
+    "id": "O2C-5a",
+    "parentId": "O2C-5",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Subscription",
+    "tier1": true,
+    "text": "If any revenue is recurring or prepaid: how does a subscription work end to end? What triggers a charge, and on what cadence?",
+    "why": "Whether revenue is prepaid or charged at shipment determines whether deferred revenue scheduling is needed at all. That is a permanent setting and a significant line on the quote."
+  },
+  {
+    "id": "O2C-5b",
+    "parentId": "O2C-5",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Subscription",
+    "tier1": true,
+    "text": "Pause, skip, reschedule, plan change, cancellation and reactivation - how does each work?",
+    "why": null
+  },
+  {
+    "id": "O2C-5c",
+    "parentId": "O2C-5",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Subscription",
+    "tier1": true,
+    "text": "Prepaid plans, gift cards, store credit, referral credits. How are they sold, redeemed and tracked?",
+    "why": "These create genuine deferred revenue and a liability that has to be carried and reported."
+  },
+  {
+    "id": "O2C-5d",
+    "parentId": "O2C-5",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Subscription",
+    "tier1": false,
+    "text": "Promotional pricing on a first order, and how it unwinds afterward.",
+    "why": null
+  },
+  {
+    "id": "O2C-5e",
+    "parentId": "O2C-5",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Subscription",
+    "tier1": true,
+    "text": "What system holds the subscription state, and is it the sole record of it?",
+    "why": "Determines whether the new system holds subscriptions or simply receives the orders they generate. That is one of the larger architecture decisions in the build."
+  },
+  {
+    "id": "O2C-5f",
+    "parentId": "O2C-5",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Subscription",
+    "tier1": false,
+    "text": "Churn: how is it measured, and by whom?",
+    "why": null
+  },
+  {
+    "id": "O2C-6a",
+    "parentId": "O2C-6",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Marketplace",
+    "tier1": true,
+    "text": "Which marketplaces do you sell through - Amazon, Walmart, Faire, Instacart, others?",
+    "why": null
+  },
+  {
+    "id": "O2C-6b",
+    "parentId": "O2C-6",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Marketplace",
+    "tier1": true,
+    "text": "For Amazon specifically: Seller Central or Vendor Central?",
+    "why": "These are entirely different businesses wearing the same logo. Vendor Central means Amazon buys from you wholesale over EDI. Seller Central means you still own inventory sitting in their warehouses, settled net of fees. Different accounting, different integration."
+  },
+  {
+    "id": "O2C-6c",
+    "parentId": "O2C-6",
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Marketplace",
+    "tier1": false,
+    "text": "For each marketplace: how orders arrive, who owns the inventory, how settlement works, what fees are deducted, and where returns and chargebacks land.",
+    "why": null
+  },
+  {
+    "id": "O2C-7",
+    "parentId": null,
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "EDI",
+    "tier1": false,
+    "text": "Which trading partners, and which transaction sets - 850, 855, 856, 810, 852, 820? Who is the EDI provider or VAN? Attach routing guides, chargeback schedules and any GS1 or SSCC labeling requirements.",
+    "why": null
+  },
+  {
+    "id": "O2C-8",
+    "parentId": null,
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "How does a new wholesale customer get set up? Are there credit limits, who approves terms, and does anything go on credit hold today?",
+    "why": null
+  },
+  {
+    "id": "O2C-9",
+    "parentId": null,
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Fulfillment",
+    "tier1": false,
+    "text": "Does product physically come back? Where does it go, who inspects it, and can it be resold or is it destroyed? How is the disposal recorded?",
+    "why": "For perishable product this is usually a write-off with a GL consequence, not just a credit memo."
+  },
+  {
+    "id": "O2C-10",
+    "parentId": null,
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "AR",
+    "tier1": false,
+    "text": "Is there a tool for invoice delivery, dunning, cash application or collections? If so, what is it the only record of?",
+    "why": null
+  },
+  {
+    "id": "CSH-1",
+    "parentId": null,
+    "prefix": "CSH",
+    "part": "P2",
+    "section": "Cash",
+    "tier1": false,
+    "text": "Every bank account, what flows through it, and who has access.",
+    "why": null
+  },
+  {
+    "id": "CSH-2",
+    "parentId": null,
+    "prefix": "CSH",
+    "part": "P2",
+    "section": "Cash",
+    "tier1": false,
+    "text": "Every payment processor and gateway, with settlement timing and fee structure. Does money arrive gross or net of fees? Daily, or in batches?",
+    "why": null
+  },
+  {
+    "id": "CSH-3",
+    "parentId": null,
+    "prefix": "CSH",
+    "part": "P2",
+    "section": "Cash",
+    "tier1": false,
+    "text": "How are processor payouts matched to the underlying orders today? Describe it step by step and attach a recent example.",
+    "why": "One payout covers many orders, and the mechanics of that match are the central problem to solve here."
+  },
+  {
+    "id": "CSH-4",
+    "parentId": null,
+    "prefix": "CSH",
+    "part": "P2",
+    "section": "Cash",
+    "tier1": false,
+    "text": "Where are fees, refunds, disputes and chargebacks recorded?",
+    "why": null
+  },
+  {
+    "id": "CSH-5",
+    "parentId": null,
+    "prefix": "CSH",
+    "part": "P2",
+    "section": "Cash",
+    "tier1": false,
+    "text": "Bank reconciliation: who does it, how often, in what tool, and how long does it take?",
+    "why": null
+  },
+  {
+    "id": "CSH-6",
+    "parentId": null,
+    "prefix": "CSH",
+    "part": "P2",
+    "section": "Cash",
+    "tier1": false,
+    "text": "Any cash movement that touches no system at all and lives only in a spreadsheet or a bank portal?",
+    "why": null
+  },
+  {
+    "id": "ORG-1",
+    "parentId": null,
+    "prefix": "ORG",
+    "part": "P2",
+    "section": "People",
+    "tier1": false,
+    "text": "Org chart for anyone who touches a transaction, with role and location. Attach it.",
+    "why": null
+  },
+  {
+    "id": "ORG-2",
+    "parentId": null,
+    "prefix": "ORG",
+    "part": "P2",
+    "section": "People",
+    "tier1": false,
+    "text": "Who approves what, at what dollar threshold, and where is that written down?",
+    "why": null
+  },
+  {
+    "id": "ORG-3",
+    "parentId": null,
+    "prefix": "ORG",
+    "part": "P2",
+    "section": "People",
+    "tier1": false,
+    "text": "Any segregation of duties requirement, from audit, a lender, or internal policy?",
+    "why": null
+  },
+  {
+    "id": "ORG-4",
+    "parentId": null,
+    "prefix": "ORG",
+    "part": "P2",
+    "section": "People",
+    "tier1": false,
+    "text": "Comfort level with systems, by team. Where will adoption be hardest, and who is likely to resist?",
+    "why": "Knowing this early lets us design around it rather than discover it during training."
+  },
+  {
+    "id": "ORG-5",
+    "parentId": null,
+    "prefix": "ORG",
+    "part": "P2",
+    "section": "People",
+    "tier1": false,
+    "text": "Who are the two or three people whose buy-in determines whether this succeeds?",
+    "why": null
+  },
+  {
+    "id": "ORG-6",
+    "parentId": null,
+    "prefix": "ORG",
+    "part": "P2",
+    "section": "People",
+    "tier1": false,
+    "text": "Who has capacity to be a real project participant, and how many hours per week?",
+    "why": "Please answer honestly. This is the number that most often turns out to be optimistic, and it is far better to know now than in month three."
+  },
+  {
+    "id": "ORG-7",
+    "parentId": null,
+    "prefix": "ORG",
+    "part": "P2",
+    "section": "People",
+    "tier1": true,
+    "text": "For each group who needs access, what kind do they actually need? Full transactional users; employee-only access for expenses, time and purchase requests; customer access for order status and invoices; vendor access for POs and invoices; warehouse or production floor scanning. And do 3PL, co-man or broker staff log in at all, or interact only through a file or integration?",
+    "why": "Full licenses, limited-access roles and no-login integrations cost very different amounts and imply very different designs. This is needed before we can be quoted."
+  },
+  {
+    "id": "RPT-1",
+    "parentId": null,
+    "prefix": "RPT",
+    "part": "P3",
+    "section": "Reports",
+    "tier1": false,
+    "text": "Fill in the Reports tab: every recurring report produced today, including anything assembled by hand.",
+    "why": null
+  },
+  {
+    "id": "RPT-2",
+    "parentId": null,
+    "prefix": "RPT",
+    "part": "P3",
+    "section": "Reports",
+    "tier1": false,
+    "text": "Attach current copies of the ten most important.",
+    "why": null
+  },
+  {
+    "id": "RPT-3",
+    "parentId": null,
+    "prefix": "RPT",
+    "part": "P3",
+    "section": "Reports",
+    "tier1": false,
+    "text": "Which metrics does leadership actually manage by, and how is each calculated today?",
+    "why": null
+  },
+  {
+    "id": "CAL-1",
+    "parentId": null,
+    "prefix": "CAL",
+    "part": "P3",
+    "section": "Business calendar",
+    "tier1": false,
+    "text": "Peak season, and the weeks where a system change would be reckless.",
+    "why": null
+  },
+  {
+    "id": "CAL-2",
+    "parentId": null,
+    "prefix": "CAL",
+    "part": "P3",
+    "section": "Business calendar",
+    "tier1": false,
+    "text": "Audit fieldwork dates, physical inventory dates, budget cycle, board meetings.",
+    "why": null
+  },
+  {
+    "id": "CAL-3",
+    "parentId": null,
+    "prefix": "CAL",
+    "part": "P3",
+    "section": "Business calendar",
+    "tier1": false,
+    "text": "Any known upcoming change: new facility, new channel, new co-manufacturer, a key person leaving, a financing event.",
+    "why": null
+  },
+  {
+    "id": "ART-1",
+    "parentId": null,
+    "prefix": "ART",
+    "part": "P3",
+    "section": "Files",
+    "tier1": false,
+    "text": "Work through the File Checklist tab and populate the shared folder.",
+    "why": "The single request that pays off fastest. Real files answer questions we haven't thought to ask yet."
+  }
+]

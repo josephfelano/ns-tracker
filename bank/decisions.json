@@ -1,0 +1,1231 @@
+[
+  {
+    "id": "D-001",
+    "questionIds": [
+      "FIN-1a"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Entity",
+    "decides": "Whether this is OneWorld and how many subsidiaries exist",
+    "nsSetting": "Subsidiaries; OneWorld provisioning",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "Everything. COA, items, every transaction."
+  },
+  {
+    "id": "D-002",
+    "questionIds": [
+      "FIN-1c"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Entity",
+    "decides": "Whether Multiple Currencies gets enabled",
+    "nsSetting": "Enable Features > Multiple Currencies",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "Item pricing, customer/vendor records, consolidation"
+  },
+  {
+    "id": "D-003",
+    "questionIds": [
+      "FIN-6"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Entity",
+    "decides": "Whether to provision OneWorld now for entities that do not exist yet",
+    "nsSetting": "OneWorld provisioning",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "Retrofitting OneWorld later is a migration, not a setting change"
+  },
+  {
+    "id": "D-004",
+    "questionIds": [
+      "FIN-2b"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Calendar",
+    "decides": "Fiscal calendar shape: 12-month, 4-4-5, or 13-period",
+    "nsSetting": "Fiscal Calendars; Manage Accounting Periods",
+    "reversibility": "Costly",
+    "layer": "L0",
+    "notes": "Every period-based report; close checklist"
+  },
+  {
+    "id": "D-005",
+    "questionIds": [
+      "ITM-5a"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Inventory",
+    "decides": "Whether inventory is tracked by location",
+    "nsSetting": "Enable Features > Multi-Location Inventory",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "SEQUENCING: enable BEFORE loading items and BEFORE the first period you intend to open. No inventory transaction can be dated earlier than the enable date."
+  },
+  {
+    "id": "D-006",
+    "questionIds": [
+      "ITM-3a"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Inventory",
+    "decides": "Which items need lot or serial traceability",
+    "nsSetting": "Enable Features > Lot Tracking / Serialized Inventory",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "Item type per SKU; assembly structure; recall + cert reporting"
+  },
+  {
+    "id": "D-007",
+    "questionIds": [
+      "ITM-2a"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Items",
+    "decides": "Whether buy/stock/sell units differ",
+    "nsSetting": "Enable Features > Multiple Units of Measure",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "Item records; PO and SO entry; inventory reporting. NOTE: MUOM is the PREREQUISITE for Statistical Accounts, not the reverse."
+  },
+  {
+    "id": "D-008",
+    "questionIds": [
+      "ITM-2b"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Items",
+    "decides": "Whether any product is sold by catch weight",
+    "nsSetting": "No native support - SuiteApp or custom design",
+    "reversibility": "Costly",
+    "layer": "L0",
+    "notes": "Cannot be modelled with standard UOM conversion. Must be scoped before item build."
+  },
+  {
+    "id": "D-009",
+    "questionIds": [
+      "ITM-6a"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Production",
+    "decides": "Production tier: assembly builds, work orders, or WIP + routings",
+    "nsSetting": "Enable Features > Work Orders / WIP & Routings / Advanced BOM",
+    "reversibility": "Costly",
+    "layer": "L0",
+    "notes": "Item setup, costing depth, shop-floor process, close tasks"
+  },
+  {
+    "id": "D-010",
+    "questionIds": [
+      "ITM-6g"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Production",
+    "decides": "Whether an intermediate/WIP stage exists",
+    "nsSetting": "Enable Features > Work In Process",
+    "reversibility": "Costly",
+    "layer": "L0",
+    "notes": "Costing depth; whether WIP items are needed"
+  },
+  {
+    "id": "D-011",
+    "questionIds": [
+      "QLT-2"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Quality",
+    "decides": "Whether inventory can exist but be unavailable to sell",
+    "nsSetting": "Enable Features > Inventory Status (+ statuses, Make Inventory Available for Commitment)",
+    "reversibility": "Costly",
+    "layer": "L0",
+    "notes": "Availability logic; whether the system can promise product that cannot legally ship"
+  },
+  {
+    "id": "D-012",
+    "questionIds": [
+      "QLT-1",
+      "QLT-3"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Quality",
+    "decides": "Whether formal inspection records are needed",
+    "nsSetting": "Quality Management SuiteApp (separately licensed)",
+    "reversibility": "Easy",
+    "layer": "L0",
+    "notes": "Module scoping; receiving and shop-floor process"
+  },
+  {
+    "id": "D-013",
+    "questionIds": [
+      "FIN-4c"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Costing",
+    "decides": "Whether freight/duty/handling capitalize into inventory",
+    "nsSetting": "Enable Features > Landed Cost",
+    "reversibility": "Costly",
+    "layer": "L0",
+    "notes": "Item cost accuracy; margin reporting; close"
+  },
+  {
+    "id": "D-014",
+    "questionIds": [
+      "P2P-5f"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Procurement",
+    "decides": "Whether receipt is a separate transaction from the bill",
+    "nsSetting": "Enable Features > Advanced Receiving",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "3-way match integrity; WHEN costing posts (receipt vs bill)"
+  },
+  {
+    "id": "D-015",
+    "questionIds": [
+      "FIN-5a",
+      "O2C-5a"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Revenue",
+    "decides": "Whether deferred/subscription revenue needs scheduling",
+    "nsSetting": "Enable Features > Advanced Revenue Management",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "Revenue reporting; item revenue config. Expensive module - do not enable speculatively."
+  },
+  {
+    "id": "D-016",
+    "questionIds": [
+      "FIN-3c"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Tax",
+    "decides": "Sales tax engine and nexus handling",
+    "nsSetting": "Enable Features > Advanced Taxes / SuiteTax",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "Every sales transaction; filing"
+  },
+  {
+    "id": "D-017",
+    "questionIds": [
+      "DIM-6"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Reporting",
+    "decides": "Whether per-unit and non-financial metrics are needed",
+    "nsSetting": "Enable Features > Statistical Accounts (auto-enables Multiple UOM)",
+    "reversibility": "One-way",
+    "layer": "L0",
+    "notes": "Cost per lb, revenue per case, per-headcount reporting. Cannot be disabled once used."
+  },
+  {
+    "id": "D-018",
+    "questionIds": [
+      "FIN-5c"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Assets",
+    "decides": "Whether a fixed asset register is needed in NS",
+    "nsSetting": "Fixed Assets Management SuiteApp (separately licensed)",
+    "reversibility": "Easy",
+    "layer": "L0",
+    "notes": "Module scoping; depreciation posting"
+  },
+  {
+    "id": "D-019",
+    "questionIds": [
+      "FIN-7a"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Planning",
+    "decides": "Whether budget-vs-actual is needed in NS financials",
+    "nsSetting": "Native Budgets (no cost) vs NetSuite Planning & Budgeting (separate product)",
+    "reversibility": "Easy",
+    "layer": "L0",
+    "notes": "Module scoping. Native budgets cover most needs."
+  },
+  {
+    "id": "D-020",
+    "questionIds": [
+      "FIN-7b"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Planning",
+    "decides": "Whether demand forecast stays external",
+    "nsSetting": "Demand Planning module (likely NOT needed) + inbound/outbound interface",
+    "reversibility": "Easy",
+    "layer": "L0",
+    "notes": "If forecast stays external, Demand Planning comes OFF the quote and an interface goes ON."
+  },
+  {
+    "id": "D-021",
+    "questionIds": [
+      "SYS-5"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Licensing",
+    "decides": "Transaction volume and record counts",
+    "nsSetting": "Account sizing; integration throughput; cutover duration",
+    "reversibility": "Easy",
+    "layer": "L0",
+    "notes": "License tier; whether integrations need batching"
+  },
+  {
+    "id": "D-022",
+    "questionIds": [
+      "ORG-7"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Licensing",
+    "decides": "Full users vs Employee / Customer / Vendor Center vs no-login integration",
+    "nsSetting": "User licenses; Center-based roles",
+    "reversibility": "Easy",
+    "layer": "L0",
+    "notes": "License count and cost. External partners: portal access or integration?"
+  },
+  {
+    "id": "D-023",
+    "questionIds": [
+      "SYS-7"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Migration",
+    "decides": "How many years of history migrate vs archive",
+    "nsSetting": "Data migration scope; legacy read-only retention",
+    "reversibility": "Costly",
+    "layer": "L0",
+    "notes": "Migration cost and duration; audit lookup capability"
+  },
+  {
+    "id": "D-024",
+    "questionIds": [
+      "DIM-1"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "GL",
+    "decides": "Which accounts exist and which legacy ones get dropped",
+    "nsSetting": "Chart of Accounts",
+    "reversibility": "Costly",
+    "layer": "L1",
+    "notes": "Every transaction; financial statement layouts. NOTE: enabling Inventory and MLI auto-creates accounts - expect them."
+  },
+  {
+    "id": "D-025",
+    "questionIds": [
+      "DIM-2"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "GL",
+    "decides": "Which 'accounts' are really dimensions in disguise and get collapsed",
+    "nsSetting": "Chart of Accounts + Dept/Class/Location",
+    "reversibility": "Costly",
+    "layer": "L1",
+    "notes": "COA size; close speed; report flexibility"
+  },
+  {
+    "id": "D-026",
+    "questionIds": [
+      "DIM-3"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Reporting",
+    "decides": "Every axis the business slices by",
+    "nsSetting": "Department, Class, Location, Custom Segments",
+    "reversibility": "Costly",
+    "layer": "L1",
+    "notes": "All reporting. Adding an axis later cannot retro-tag history."
+  },
+  {
+    "id": "D-027",
+    "questionIds": [
+      "DIM-4"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Reporting",
+    "decides": "Reporting cuts done manually in Excel today",
+    "nsSetting": "Custom Segments; saved search design",
+    "reversibility": "Costly",
+    "layer": "L1",
+    "notes": "Whether the manual Excel work actually goes away"
+  },
+  {
+    "id": "D-028",
+    "questionIds": [
+      "DIM-5"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Reporting",
+    "decides": "Axes leadership wants but has never had",
+    "nsSetting": "Custom Segments",
+    "reversibility": "Costly",
+    "layer": "L1",
+    "notes": "Same as DIM-3 - cheapest to add now"
+  },
+  {
+    "id": "D-029",
+    "questionIds": [
+      "DIM-7"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Governance",
+    "decides": "Who can create accounts and dimension values",
+    "nsSetting": "Roles and Permissions; naming convention",
+    "reversibility": "Easy",
+    "layer": "L1",
+    "notes": "Whether the new COA stays clean"
+  },
+  {
+    "id": "D-030",
+    "questionIds": [
+      "DIM-8"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Reporting",
+    "decides": "Whether each segment is mandatory or optional on transactions",
+    "nsSetting": "Custom Segment / Dept / Class settings",
+    "reversibility": "Easy",
+    "layer": "L1",
+    "notes": "Report completeness vs honest blanks"
+  },
+  {
+    "id": "D-031",
+    "questionIds": [
+      "FIN-4a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Costing",
+    "decides": "Default costing method for the account",
+    "nsSetting": "Accounting Preferences > Default Inventory Costing Method",
+    "reversibility": "Easy",
+    "layer": "L1",
+    "notes": "Default inherited by new item records"
+  },
+  {
+    "id": "D-032",
+    "questionIds": [
+      "ITM-5a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Inventory",
+    "decides": "Location records and which hold owned inventory",
+    "nsSetting": "Location records; Make Inventory Available",
+    "reversibility": "Easy",
+    "layer": "L1",
+    "notes": "Inventory reporting; fulfillment routing; MLI distribution"
+  },
+  {
+    "id": "D-033",
+    "questionIds": [
+      "FIN-1a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Entity",
+    "decides": "Base currency and consolidation rates",
+    "nsSetting": "Subsidiary records; Consolidated Exchange Rates",
+    "reversibility": "Costly",
+    "layer": "L1",
+    "notes": "Consolidated reporting"
+  },
+  {
+    "id": "D-034",
+    "questionIds": [
+      "FIN-8"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Entity",
+    "decides": "Intercompany transfer pricing policy",
+    "nsSetting": "Intercompany preferences; transfer price on transfer orders",
+    "reversibility": "Costly",
+    "layer": "L1",
+    "notes": "At cost = no elimination. Above cost = profit-in-inventory stripped every close."
+  },
+  {
+    "id": "D-035",
+    "questionIds": [
+      "CLS-10"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Controls",
+    "decides": "Period locking and who may post to a closed period",
+    "nsSetting": "Manage Accounting Periods; period close checklist",
+    "reversibility": "Easy",
+    "layer": "L1",
+    "notes": "Close integrity vs practical flexibility"
+  },
+  {
+    "id": "D-036",
+    "questionIds": [
+      "FIN-4a",
+      "ITM-1a"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Costing",
+    "decides": "Costing method PER ITEM",
+    "nsSetting": "Item record > Costing Method",
+    "reversibility": "One-way",
+    "layer": "L2",
+    "notes": "Cannot be changed after the item record is saved. New item required."
+  },
+  {
+    "id": "D-037",
+    "questionIds": [
+      "ITM-1c"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Items",
+    "decides": "Item type per SKU: inventory, assembly, kit, non-inventory, service",
+    "nsSetting": "Item records",
+    "reversibility": "Costly",
+    "layer": "L2",
+    "notes": "What transactions the item can appear on"
+  },
+  {
+    "id": "D-038",
+    "questionIds": [
+      "ITM-3a",
+      "ITM-3d"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Items",
+    "decides": "Lot/serial designation per item AND per assembly parent",
+    "nsSetting": "Lot Numbered Inventory / Lot Numbered Assembly item types",
+    "reversibility": "One-way",
+    "layer": "L2",
+    "notes": "A lot-tracked component forces a lot-tracked assembly parent. Cascades up the whole BOM."
+  },
+  {
+    "id": "D-039",
+    "questionIds": [
+      "ITM-3f"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Traceability",
+    "decides": "Whether 3PL/co-man can transmit lot-to-shipment detail",
+    "nsSetting": "Integration design; lot capture at fulfillment",
+    "reversibility": "Costly",
+    "layer": "L2",
+    "notes": "If they cannot, lot traceability breaks at the outbound handoff regardless of NS config."
+  },
+  {
+    "id": "D-040",
+    "questionIds": [
+      "ITM-6b"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Production",
+    "decides": "BOM structure, versioning, and revision control",
+    "nsSetting": "Advanced Bill of Materials; BOM Revisions",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "Work order explosion; standard cost rollup"
+  },
+  {
+    "id": "D-041",
+    "questionIds": [
+      "ITM-7a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Costing",
+    "decides": "Standard cost values and rollup, if standard costing",
+    "nsSetting": "Cost Categories; Standard Cost Versions; Cost Rollup",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "Variance reporting; margin"
+  },
+  {
+    "id": "D-042",
+    "questionIds": [
+      "ITM-4a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Items",
+    "decides": "Shelf life and expiration handling",
+    "nsSetting": "Item record shelf-life fields; FEFO preference",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "Allocation logic; customer compliance"
+  },
+  {
+    "id": "D-043",
+    "questionIds": [
+      "ITM-4b"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Items",
+    "decides": "Minimum remaining shelf life on outbound",
+    "nsSetting": "NOT native - customization or WMS",
+    "reversibility": "Costly",
+    "layer": "L2",
+    "notes": "If customers mandate it, this is unscoped work. Confirm early."
+  },
+  {
+    "id": "D-044",
+    "questionIds": [
+      "ITM-8"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Items",
+    "decides": "Packaging hierarchy and GTIN/UPC/SSCC per level",
+    "nsSetting": "Item record fields; UOM; ASN and label data",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "EDI 856 accuracy; pallet labels; retailer chargebacks"
+  },
+  {
+    "id": "D-045",
+    "questionIds": [
+      "ITM-10"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Items",
+    "decides": "Regulatory attributes per item (allergen, organic, kosher, COO)",
+    "nsSetting": "Custom item fields",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "Cert reporting; mass balance; label compliance"
+  },
+  {
+    "id": "D-046",
+    "questionIds": [
+      "SYS-2",
+      "SYS-8"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Master data",
+    "decides": "Vendor and customer master, deduped and standardized",
+    "nsSetting": "Vendor / Customer records",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "A/P platform sync quality; AP/AR aging accuracy"
+  },
+  {
+    "id": "D-047",
+    "questionIds": [
+      "P2P-3"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Procurement",
+    "decides": "How vendor pricing is stored",
+    "nsSetting": "Vendor record pricing; Purchase Price levels; Purchase Contracts",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "PO defaulting; price variance"
+  },
+  {
+    "id": "D-048",
+    "questionIds": [
+      "O2C-1d"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Sales",
+    "decides": "Customer and channel pricing structure",
+    "nsSetting": "Price Levels; Pricing Matrix; Customer records",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "SO defaulting; margin reporting"
+  },
+  {
+    "id": "D-049",
+    "questionIds": [
+      "O2C-8"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Sales",
+    "decides": "Credit limits and hold behaviour",
+    "nsSetting": "Customer record credit fields; order hold",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "Order release; AR exposure"
+  },
+  {
+    "id": "D-050",
+    "questionIds": [
+      "ORG-1"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Access",
+    "decides": "Who exists in the system and as what",
+    "nsSetting": "Employee records; Roles",
+    "reversibility": "Easy",
+    "layer": "L2",
+    "notes": "Permissions; approval routing"
+  },
+  {
+    "id": "D-051",
+    "questionIds": [
+      "P2P-1a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Procurement",
+    "decides": "How buying demand is generated",
+    "nsSetting": "Reorder points; Requisitions; external forecast feed",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Purchasing workload; stockouts"
+  },
+  {
+    "id": "D-052",
+    "questionIds": [
+      "P2P-2a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Procurement",
+    "decides": "PO document format, content, and delivery channel",
+    "nsSetting": "Transaction forms; Advanced PDF/HTML templates; email templates",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Vendor experience; adoption"
+  },
+  {
+    "id": "D-053",
+    "questionIds": [
+      "P2P-4"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Procurement",
+    "decides": "Consignment, VMI, drop ship, tolling, bill-and-hold",
+    "nsSetting": "Drop Ship & Special Orders; ownership modelling",
+    "reversibility": "Costly",
+    "layer": "L3",
+    "notes": "Inventory ownership on the balance sheet"
+  },
+  {
+    "id": "D-054",
+    "questionIds": [
+      "P2P-5a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Procurement",
+    "decides": "Receiving process incl. quality hold",
+    "nsSetting": "Item Receipt; Inventory Status or hold location",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Inventory availability timing; costing timing"
+  },
+  {
+    "id": "D-055",
+    "questionIds": [
+      "P2P-9"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Procurement",
+    "decides": "FOB terms and goods-in-transit ownership",
+    "nsSetting": "In-Transit inventory; ownership at title transfer",
+    "reversibility": "Costly",
+    "layer": "L3",
+    "notes": "Whether goods on the water sit on your balance sheet"
+  },
+  {
+    "id": "D-056",
+    "questionIds": [
+      "P2P-10"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Procurement",
+    "decides": "Duty and brokerage cost capture",
+    "nsSetting": "Landed Cost categories; separate vendor bills",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Landed cost accuracy; unexplained inventory variance"
+  },
+  {
+    "id": "D-057",
+    "questionIds": [
+      "P2P-6c"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "AP",
+    "decides": "Match tolerance and exception handling",
+    "nsSetting": "3 Way Match Vendor Bill Approval Workflow; bill variance",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "AP control; how much manual review remains"
+  },
+  {
+    "id": "D-058",
+    "questionIds": [
+      "P2P-7a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "AP",
+    "decides": "Payment execution path",
+    "nsSetting": "Bill Payments; Electronic Bank Payments",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Whether payment lives in NS or the A/P platform"
+  },
+  {
+    "id": "D-059",
+    "questionIds": [
+      "P2P-11"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "AP",
+    "decides": "Vendor onboarding and 1099 production",
+    "nsSetting": "Vendor record 1099 fields; 1099 SuiteApp or third party",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Year-end hard deadline"
+  },
+  {
+    "id": "D-060",
+    "questionIds": [
+      "P2P-12"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Procurement",
+    "decides": "Vendor return / rejected material flow",
+    "nsSetting": "Vendor Return Authorization; Item Receipt reversal",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Whether rejected stock stays on the balance sheet at full value"
+  },
+  {
+    "id": "D-061",
+    "questionIds": [
+      "P2P-13"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "AP",
+    "decides": "Employee expense and card spend",
+    "nsSetting": "Expense Reports; Employee Center; card feed",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Non-PO spend control; Employee Center license need"
+  },
+  {
+    "id": "D-062",
+    "questionIds": [
+      "O2C-2a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Fulfillment",
+    "decides": "Pick / pack / ship process and 3PL handoff",
+    "nsSetting": "Item Fulfillment; Advanced Shipping",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Revenue timing; customer service"
+  },
+  {
+    "id": "D-063",
+    "questionIds": [
+      "O2C-9"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Fulfillment",
+    "decides": "Customer returns and disposal",
+    "nsSetting": "Return Authorization; write-off on non-resaleable",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Inventory accuracy; COGS vs scrap"
+  },
+  {
+    "id": "D-064",
+    "questionIds": [
+      "ITM-6d"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Production",
+    "decides": "Work order to build flow, backflush vs issue",
+    "nsSetting": "Work Order; Assembly Build; WIP preferences",
+    "reversibility": "Costly",
+    "layer": "L3",
+    "notes": "Inventory accuracy; cost capture"
+  },
+  {
+    "id": "D-065",
+    "questionIds": [
+      "ITM-11"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Production",
+    "decides": "Rework, repack, downgrade",
+    "nsSetting": "Assembly Unbuild; new SKU; inventory adjustment",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Cost treatment of reworked material"
+  },
+  {
+    "id": "D-066",
+    "questionIds": [
+      "QLT-4"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Quality",
+    "decides": "Non-conforming disposition",
+    "nsSetting": "Inventory Status change; write-off; rework order",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Where the cost of failed material lands"
+  },
+  {
+    "id": "D-067",
+    "questionIds": [
+      "ITM-5e"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Inventory",
+    "decides": "Transfers, adjustments, and counts",
+    "nsSetting": "Transfer Orders; Inventory Adjustment; Count",
+    "reversibility": "Easy",
+    "layer": "L3",
+    "notes": "Inventory accuracy; close tasks"
+  },
+  {
+    "id": "D-068",
+    "questionIds": [
+      "ORG-2"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Controls",
+    "decides": "Approval thresholds and routing",
+    "nsSetting": "Approval Routing; SuiteFlow",
+    "reversibility": "Easy",
+    "layer": "L4",
+    "notes": "Speed vs control; audit trail"
+  },
+  {
+    "id": "D-069",
+    "questionIds": [
+      "ORG-3"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Controls",
+    "decides": "Segregation of duties",
+    "nsSetting": "Roles and Permissions",
+    "reversibility": "Easy",
+    "layer": "L4",
+    "notes": "Audit findings"
+  },
+  {
+    "id": "D-070",
+    "questionIds": [
+      "CLS-3",
+      "CLS-9"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Close",
+    "decides": "Early-warning searches so close prep runs all month",
+    "nsSetting": "Saved Searches: negative inventory, date/period mismatch, unbilled receipts, missing external files",
+    "reversibility": "Easy",
+    "layer": "L4",
+    "notes": "Days to close"
+  },
+  {
+    "id": "D-071",
+    "questionIds": [
+      "P2P-8a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Integration",
+    "decides": "A/P platform direction of travel and system of record",
+    "nsSetting": "A/P platform SuiteApp; vendor + COA sync",
+    "reversibility": "Easy",
+    "layer": "L5",
+    "notes": "Double entry; AP aging tie-out"
+  },
+  {
+    "id": "D-072",
+    "questionIds": [
+      "O2C-3a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Integration",
+    "decides": "TMS scope: orders out, freight cost and status back",
+    "nsSetting": "TMS connector; GL-coded freight allocation",
+    "reversibility": "Easy",
+    "layer": "L5",
+    "notes": "Freight accrual; landed cost; close"
+  },
+  {
+    "id": "D-073",
+    "questionIds": [
+      "O2C-5e"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Integration",
+    "decides": "Whether NS holds subscription state or only receives resulting orders",
+    "nsSetting": "Subscription platform vs NS; order import",
+    "reversibility": "Costly",
+    "layer": "L5",
+    "notes": "One of the largest architecture forks in the build"
+  },
+  {
+    "id": "D-074",
+    "questionIds": [
+      "O2C-6b"
+    ],
+    "pseudoRefs": [],
+    "tier1": true,
+    "area": "Integration",
+    "decides": "Marketplace model per channel (Seller vs Vendor Central etc.)",
+    "nsSetting": "Marketplace connector; owned inventory at 3P locations; settlement import",
+    "reversibility": "Costly",
+    "layer": "L5",
+    "notes": "Who owns the inventory, and how settlement reconciles"
+  },
+  {
+    "id": "D-075",
+    "questionIds": [
+      "O2C-7"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Integration",
+    "decides": "EDI trading partners and transaction sets",
+    "nsSetting": "EDI provider; 850/855/856/810/852/820 mapping",
+    "reversibility": "Easy",
+    "layer": "L5",
+    "notes": "Order accuracy; chargebacks"
+  },
+  {
+    "id": "D-076",
+    "questionIds": [
+      "CSH-2",
+      "CSH-3"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Integration",
+    "decides": "Payment processor payout reconciliation model",
+    "nsSetting": "Undeposited Funds -> payout record -> Make Deposit",
+    "reversibility": "Easy",
+    "layer": "L5",
+    "notes": "Bank rec; cash accuracy; close"
+  },
+  {
+    "id": "D-077",
+    "questionIds": [
+      "O2C-10"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Integration",
+    "decides": "A/R automation platform, if any",
+    "nsSetting": "Invoice delivery / dunning / cash application connector",
+    "reversibility": "Easy",
+    "layer": "L5",
+    "notes": "Remittance detail system of record"
+  },
+  {
+    "id": "D-078",
+    "questionIds": [
+      "SYS-4",
+      "SYS-6"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Integration",
+    "decides": "Everything else that moves data today, and what it is built on",
+    "nsSetting": "Native connector vs iPaaS vs custom",
+    "reversibility": "Easy",
+    "layer": "L5",
+    "notes": "Hidden manual work after go-live; integration cost"
+  },
+  {
+    "id": "D-079",
+    "questionIds": [
+      "CLS-8"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Reporting",
+    "decides": "Reports that must exist on day one",
+    "nsSetting": "Financial Statement layouts; saved searches",
+    "reversibility": "Easy",
+    "layer": "L6",
+    "notes": "Stakeholder confidence at go-live"
+  },
+  {
+    "id": "D-080",
+    "questionIds": [
+      "RPT-1",
+      "RPT-3"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Reporting",
+    "decides": "Full recurring report inventory, owners, and metric definitions",
+    "nsSetting": "Reports; Saved Searches; Dashboards; KPIs",
+    "reversibility": "Easy",
+    "layer": "L6",
+    "notes": "Adoption; whether Excel shadow reporting returns"
+  },
+  {
+    "id": "D-081",
+    "questionIds": [
+      "QLT-6"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Reporting",
+    "decides": "Recall / traceability exercise as an acceptance test",
+    "nsSetting": "Lot and Serial Number Trace; saved searches",
+    "reversibility": "Easy",
+    "layer": "L6",
+    "notes": "Proves the L0-L2 traceability design actually works"
+  },
+  {
+    "id": "D-082",
+    "questionIds": [
+      "DIM-3"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Reporting",
+    "decides": "VALIDATION: do the L1 dimensions actually produce the L6 reports?",
+    "nsSetting": "Report build against real data",
+    "reversibility": "Costly",
+    "layer": "L6",
+    "notes": "If no, dimension rework before cutover - not after"
+  },
+  {
+    "id": "D-083",
+    "questionIds": [],
+    "pseudoRefs": [
+      "ART",
+      "CLS"
+    ],
+    "tier1": false,
+    "area": "Cutover",
+    "decides": "Opening trial balance and tie-out",
+    "nsSetting": "Journal Entries; period setup",
+    "reversibility": "One-way",
+    "layer": "L7",
+    "notes": "Every downstream financial statement"
+  },
+  {
+    "id": "D-084",
+    "questionIds": [],
+    "pseudoRefs": [
+      "ART"
+    ],
+    "tier1": false,
+    "area": "Cutover",
+    "decides": "Open AR, AP, POs, SOs carried forward",
+    "nsSetting": "Open transaction import",
+    "reversibility": "Costly",
+    "layer": "L7",
+    "notes": "Operations continuity on day one"
+  },
+  {
+    "id": "D-085",
+    "questionIds": [
+      "ITM-5a"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Cutover",
+    "decides": "Opening inventory quantity and value by location",
+    "nsSetting": "Inventory Adjustment / Worksheet",
+    "reversibility": "One-way",
+    "layer": "L7",
+    "notes": "MLI note: no inventory transaction can be dated before MLI was enabled"
+  },
+  {
+    "id": "D-086",
+    "questionIds": [
+      "CAL-1",
+      "CAL-2"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Cutover",
+    "decides": "Go-live date against the business calendar",
+    "nsSetting": "Accounting period open/close",
+    "reversibility": "Costly",
+    "layer": "L7",
+    "notes": "Whether the cutover is survivable"
+  },
+  {
+    "id": "D-087",
+    "questionIds": [
+      "ORG-6"
+    ],
+    "pseudoRefs": [],
+    "tier1": false,
+    "area": "Cutover",
+    "decides": "UAT and training capacity",
+    "nsSetting": "n/a - project plan",
+    "reversibility": "Costly",
+    "layer": "L7",
+    "notes": "Adoption; how bad hypercare gets"
+  }
+]

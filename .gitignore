@@ -1,0 +1,8 @@
+# Implementation data never lives in this repo - it belongs to the client's data folder.
+tracker-data/
+*-snapshot-*.json
+
+__pycache__/
+*.log
+.DS_Store
+Thumbs.db

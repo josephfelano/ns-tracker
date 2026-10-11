@@ -1,0 +1,204 @@
+[
+  {
+    "num": 1,
+    "constraint": "Item costing method cannot be changed once the item record is saved. Fixing it means creating a new item, losing continuity of history and sales comparison.",
+    "why": "Highest-consequence single decision in the build. Must be settled per item category before any item is loaded.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Setting a Default Inventory Costing Method",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-036"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 2,
+    "constraint": "Multi-Location Inventory cannot be turned off, once enabled and items distributed, without contacting NetSuite Customer Support.",
+    "why": "Near-certain 'yes' for a multi-site food business, but it must be a deliberate yes.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Enabling the Multi-Location Inventory Feature: 'After you have enabled the feature and distributed items, you are not able to turn the feature off without contacting Customer Support.'",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-005"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 3,
+    "constraint": "No inventory transaction can be dated earlier than the date Multi-Location Inventory was enabled.",
+    "why": "Directly constrains the cutover date and any backdated inventory correction. Enable MLI before the period you intend to open with.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Enabling the Multi-Location Inventory Feature: 'You cannot post inventory transactions dated prior to the date you enable Multi-Location Inventory.'",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-005",
+      "D-085"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 4,
+    "constraint": "CORRECTED: Enable Multi-Location Inventory BEFORE loading items, not after. Oracle's sequence is enable the feature, then create location records, then distribute items.",
+    "why": "The 'load items first' advice in circulation describes remediating an account that ALREADY has items without locations. It does not apply to a new account. Following it here would delay the MLI enable date and collide with constraint #3.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Enabling the Multi-Location Inventory Feature: 'After you have enabled the Multi-Location Inventory feature, you need to create a record for each of your company's locations and distribute items.'",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-005"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 5,
+    "constraint": "Lot or serial numbered items cannot be members of a regular assembly. A non-lot assembly cannot contain a lot-numbered component.",
+    "why": "Lot tracking cascades UP the BOM. One lot-tracked raw material forces a lot-numbered assembly parent, and so on to finished goods. Scope this before building any item.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Assembly Item Records",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-006",
+      "D-038"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 6,
+    "constraint": "These features cannot be disabled once used: Advanced Revenue Management, Multiple Currencies, Dynamic Allocation, Statistical Accounts, Advanced Taxes. Multi-Location Inventory is disable-by-Support-only.",
+    "why": "Do not enable speculatively. Every one of these should trace to a documented business need in the packet.",
+    "confidence": "Oracle docs",
+    "source": "Confirmed against NetSuite Help - Enabling Features and the individual feature topics",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-002",
+      "D-005",
+      "D-015",
+      "D-016",
+      "D-017"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 7,
+    "constraint": "CORRECTED: Multiple Units of Measure is the PREREQUISITE for Statistical Accounts - not the reverse. Enabling Statistical Accounts auto-enables Multiple UOM. Multiple UOM cannot then be disabled if Statistical Accounts has been used.",
+    "why": "The earlier note had this backwards and would have discouraged enabling MUOM for the wrong reason. A food business buying in cases and selling in units needs MUOM regardless. If DIM-6 returns per-unit metrics, Statistical Accounts is needed too and MUOM comes with it.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Enabling Statistical Accounts: 'The Multiple Unit of Measure feature is a requirement for using the Statistical Accounts feature. If it isn't enabled, the system automatically enables the feature.'",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-007",
+      "D-017"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 8,
+    "constraint": "Multi-Subsidiary Customer requires reversing or deleting all related transactions to disable.",
+    "why": "Only relevant if OneWorld. Decide once; do not enable to 'see what it does'.",
+    "confidence": "Secondary",
+    "source": "NetSuite certification study material - confirm in SuiteAnswers",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-001",
+      "D-003"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 9,
+    "constraint": "Advanced Receiving changes WHEN inventory costing posts: at item receipt if enabled, at bill entry if not.",
+    "why": "Also required for a genuine 3-way match. Without it, receiving collapses into the vendor bill and the control is gone.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Setting a Default Inventory Costing Method; Costing Methods",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-014"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 10,
+    "constraint": "Item receipt cost drives inventory costing, not the vendor bill. A bill at a different amount posts the difference to Accrued Purchases rather than correcting item cost.",
+    "why": "This is where unexplainable inventory variances come from. Design the receipt-cost process deliberately.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Costing Methods",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-014",
+      "D-054"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 11,
+    "constraint": "BOMs embedded directly in assembly items are unsupported as of 2023.1. Advanced Bill of Materials is the current structure and is free.",
+    "why": "Build on Advanced BOM from day one. No reason to start on the deprecated structure.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Assembly Item Records",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-040"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 12,
+    "constraint": "Enabling Inventory auto-creates Inventory Asset and COGS accounts. Enabling MLI auto-creates Transfer Orders and Inventory In Transit accounts.",
+    "why": "These land in the COA whether or not the COA design anticipated them. Account for them in DIM-1.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Enabling Inventory Features",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-024"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 13,
+    "constraint": "Catch weight (variable-weight product invoiced on actual weight) is NOT supported by standard Multiple UOM, which handles fixed ratios only.",
+    "why": "If ITM-2b returns yes, this needs a SuiteApp or a custom design and it must be scoped before the item build - and before the quote.",
+    "confidence": "Secondary",
+    "source": "Practitioner material - confirm approach with the implementation partner",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-008"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 14,
+    "constraint": "Minimum remaining shelf life on outbound shipments is not enforced natively. FEFO allocation is native; a customer-mandated remaining-life threshold is not.",
+    "why": "If ITM-4b returns customer mandates, this is unscoped work. Surface it before signature.",
+    "confidence": "Secondary",
+    "source": "Practitioner material - confirm in SuiteAnswers",
+    "isOneWay": true,
+    "decisionIds": [
+      "D-043"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 15,
+    "constraint": "NOT a one-way door: non-inventory and other-charge items CAN be converted to inventory items later, including to lot or serialized types. Pre-conversion history stays classified as it was.",
+    "why": "Useful escape hatch. Reduces the cost of guessing wrong on borderline items.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Converting Non-Inventory Items to Inventory Items",
+    "isOneWay": false,
+    "decisionIds": [
+      "D-037"
+    ],
+    "mappedBy": "heuristic"
+  },
+  {
+    "num": 16,
+    "constraint": "NOT a one-way door: COGS and Asset accounts on an item CAN be changed later, with an option to apply the change retroactively to existing transactions.",
+    "why": "GL account mapping on items is recoverable. Costing method is not. Do not confuse the two.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Changing the COGS and Asset Accounts on Assembly and Inventory Items",
+    "isOneWay": false,
+    "decisionIds": [
+      "D-036",
+      "D-037"
+    ],
+    "mappedBy": "heuristic"
+  }
+]

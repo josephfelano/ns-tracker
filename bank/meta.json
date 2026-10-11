@@ -1,0 +1,574 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-09-10T13:17:47Z",
+  "generatedAtBasis": "newest source file mtime (override with --generated-at)",
+  "sources": [
+    {
+      "key": "discovery",
+      "file": "NS GUIDE/netsuite-discovery-workbook.xlsx",
+      "sha256": "a4f169919e814481d4ca90805e2b194d132d4e2403ca98e7da2e6c8df532c99a"
+    },
+    {
+      "key": "register",
+      "file": "NS GUIDE/netsuite-decision-register.xlsx",
+      "sha256": "d182347fe7af7aaf6de8318c6d447dec43cf45fdee5b0ad75189b60e4bbd17df"
+    },
+    {
+      "key": "prework",
+      "file": "NS GUIDE/netsuite-implementation-readiness-prework.xlsx",
+      "sha256": "57ac3c0decbc8b9441785e673f9f4f89c1c947048eb3503e84d7b85afded9544"
+    },
+    {
+      "key": "readinessV1",
+      "file": "netsuite-readiness-packet-v1.xlsx",
+      "sha256": "1c7796fcb8de90aee6fd48971a7ae7070ec2ac0166b9781188b8a9f8b67707f8"
+    },
+    {
+      "key": "packetV2",
+      "file": "netsuite-preimplementation-packet-v2.md",
+      "sha256": "ea457c252869c960f6de3a36cf28c5639d8c5b23b1e2a35089d56e3871fb7035"
+    },
+    {
+      "key": "auditNotes",
+      "file": "netsuite-readiness-packet-audit-notes.md",
+      "sha256": "a2a40123c4041848b79a80b5532122b67b0b614edc5d5f8cfc5b851c0861ccad"
+    }
+  ],
+  "enums": {
+    "questionStatus": [
+      "Not started",
+      "In progress",
+      "Complete",
+      "Need help",
+      "Not applicable"
+    ],
+    "decisionStatus": [
+      "Not started",
+      "Requested",
+      "Partial",
+      "Answered",
+      "Decided",
+      "Blocked",
+      "N/A"
+    ],
+    "reversibility": [
+      "One-way",
+      "Costly",
+      "Easy"
+    ],
+    "layer": [
+      "L0",
+      "L1",
+      "L2",
+      "L3",
+      "L4",
+      "L5",
+      "L6",
+      "L7"
+    ],
+    "decisionArea": [
+      "AP",
+      "Access",
+      "Assets",
+      "Calendar",
+      "Close",
+      "Controls",
+      "Costing",
+      "Cutover",
+      "Entity",
+      "Fulfillment",
+      "GL",
+      "Governance",
+      "Integration",
+      "Inventory",
+      "Items",
+      "Licensing",
+      "Master data",
+      "Migration",
+      "Planning",
+      "Procurement",
+      "Production",
+      "Quality",
+      "Reporting",
+      "Revenue",
+      "Sales",
+      "Tax",
+      "Traceability"
+    ],
+    "preworkReadiness": [
+      "Ready / trusted",
+      "Available, cleanup needed",
+      "Multiple / conflicting sources",
+      "Major gaps",
+      "Not located yet",
+      "Not applicable"
+    ],
+    "preworkCollectionStatus": [
+      "Not started",
+      "In progress",
+      "Ready for review",
+      "Not applicable"
+    ],
+    "preworkDocumentation": [
+      "Formal SOP / process map",
+      "Checklist / working file",
+      "Examples only",
+      "Tribal knowledge only",
+      "Nothing established",
+      "Unknown",
+      "Not applicable"
+    ],
+    "preworkClarity": [
+      "Clear / consistent",
+      "Mostly clear",
+      "Varies by person / team",
+      "Unclear / needs definition",
+      "Unknown",
+      "Not applicable"
+    ],
+    "preworkDataArea": [
+      "Company / Finance",
+      "Master Data",
+      "Systems",
+      "Controls / Quality"
+    ],
+    "preworkProcessArea": [
+      "Finance",
+      "Master Data",
+      "Supply Chain",
+      "Procure to Pay",
+      "Inventory",
+      "Manufacturing",
+      "Quality",
+      "Order to Cash",
+      "Logistics",
+      "Controls"
+    ],
+    "systemType": [
+      "Core system",
+      "Critical spreadsheet",
+      "3PL / warehouse",
+      "Co-manufacturer",
+      "Marketplace / ecommerce",
+      "EDI / VAN",
+      "Bank",
+      "Payment processor",
+      "Carrier / TMS",
+      "Quality / spec system",
+      "Other"
+    ],
+    "systemExchange": [
+      "API",
+      "EDI",
+      "SFTP",
+      "CSV / file",
+      "Portal",
+      "Email",
+      "Manual entry",
+      "Multiple / mixed",
+      "Unknown",
+      "Not applicable"
+    ],
+    "systemDocsAvailable": [
+      "Yes",
+      "Partial",
+      "No",
+      "Unknown",
+      "Not applicable"
+    ],
+    "systemSampleAvailable": [
+      "Yes",
+      "No",
+      "Unknown",
+      "Not applicable"
+    ],
+    "systemExpectedAfter": [
+      "Stay",
+      "Replace",
+      "Read-only / archive",
+      "Unsure",
+      "Not applicable"
+    ],
+    "moduleScopingStatus": [
+      "Not started",
+      "Asked",
+      "Answered",
+      "Quoted",
+      "Confirmed",
+      "N/A"
+    ],
+    "fileChecklistStatus": [
+      "Not started",
+      "In progress",
+      "Complete",
+      "Need help",
+      "Not applicable"
+    ],
+    "fileChecklistCategory": [
+      "Financial",
+      "Master data",
+      "Samples",
+      "Operational"
+    ],
+    "oneWayDoorConfidence": [
+      "Oracle docs",
+      "Secondary"
+    ]
+  },
+  "statusSemantics": {
+    "questionDone": [
+      "Complete",
+      "Not applicable"
+    ],
+    "questionOutstandingVisible": [
+      "Need help"
+    ],
+    "decisionDone": [
+      "Decided",
+      "N/A"
+    ]
+  },
+  "parts": [
+    {
+      "id": "P1",
+      "name": "Part 1 - Structural",
+      "packetTitle": "Structural"
+    },
+    {
+      "id": "P2",
+      "name": "Part 2 - Process",
+      "packetTitle": "Process"
+    },
+    {
+      "id": "P3",
+      "name": "Part 3 - Wrap Up",
+      "packetTitle": "Validation"
+    }
+  ],
+  "prefixes": [
+    {
+      "prefix": "SYS",
+      "title": "Systems and ownership map",
+      "part": "P1"
+    },
+    {
+      "prefix": "FIN",
+      "title": "Entity, calendar, and accounting policy",
+      "part": "P1"
+    },
+    {
+      "prefix": "DIM",
+      "title": "Chart of accounts and reporting dimensions",
+      "part": "P1"
+    },
+    {
+      "prefix": "ITM",
+      "title": "Items, inventory, and production",
+      "part": "P1"
+    },
+    {
+      "prefix": "QLT",
+      "title": "Quality and release",
+      "part": "P1"
+    },
+    {
+      "prefix": "CLS",
+      "title": "The close",
+      "part": "P1"
+    },
+    {
+      "prefix": "P2P",
+      "title": "Procure to pay",
+      "part": "P2"
+    },
+    {
+      "prefix": "O2C",
+      "title": "Order to cash and fulfillment",
+      "part": "P2"
+    },
+    {
+      "prefix": "CSH",
+      "title": "Cash, payments, and reconciliation",
+      "part": "P2"
+    },
+    {
+      "prefix": "ORG",
+      "title": "People, roles, and approvals",
+      "part": "P2"
+    },
+    {
+      "prefix": "RPT",
+      "title": "Reporting inventory",
+      "part": "P3"
+    },
+    {
+      "prefix": "CAL",
+      "title": "Business calendar",
+      "part": "P3"
+    },
+    {
+      "prefix": "ART",
+      "title": "Artifacts to collect",
+      "part": "P3"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Systems",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "SYS"
+      ]
+    },
+    {
+      "name": "Entity",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "FIN"
+      ]
+    },
+    {
+      "name": "Fiscal calendar",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "FIN"
+      ]
+    },
+    {
+      "name": "External",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "FIN"
+      ]
+    },
+    {
+      "name": "Costing",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "FIN",
+        "ITM"
+      ]
+    },
+    {
+      "name": "Revenue",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "FIN"
+      ]
+    },
+    {
+      "name": "Assets",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "FIN"
+      ]
+    },
+    {
+      "name": "Planning",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "FIN"
+      ]
+    },
+    {
+      "name": "Dimensions",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "DIM"
+      ]
+    },
+    {
+      "name": "Items",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "ITM"
+      ]
+    },
+    {
+      "name": "Traceability",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "ITM"
+      ]
+    },
+    {
+      "name": "Inventory",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "ITM"
+      ]
+    },
+    {
+      "name": "Production",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "ITM"
+      ]
+    },
+    {
+      "name": "Quality",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "QLT"
+      ]
+    },
+    {
+      "name": "Close",
+      "part": "P1",
+      "sheet": "Part 1 - Structural",
+      "prefixes": [
+        "CLS"
+      ]
+    },
+    {
+      "name": "Procurement",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "P2P"
+      ]
+    },
+    {
+      "name": "Purchasing",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "P2P"
+      ]
+    },
+    {
+      "name": "Receiving",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "P2P"
+      ]
+    },
+    {
+      "name": "AP",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "P2P"
+      ]
+    },
+    {
+      "name": "A/P platform",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "P2P"
+      ]
+    },
+    {
+      "name": "Sales",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "O2C"
+      ]
+    },
+    {
+      "name": "Fulfillment",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "O2C"
+      ]
+    },
+    {
+      "name": "TMS",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "O2C"
+      ]
+    },
+    {
+      "name": "AR",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "O2C"
+      ]
+    },
+    {
+      "name": "Subscription",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "O2C"
+      ]
+    },
+    {
+      "name": "Marketplace",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "O2C"
+      ]
+    },
+    {
+      "name": "EDI",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "O2C"
+      ]
+    },
+    {
+      "name": "Cash",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "CSH"
+      ]
+    },
+    {
+      "name": "People",
+      "part": "P2",
+      "sheet": "Part 2 - Process",
+      "prefixes": [
+        "ORG"
+      ]
+    },
+    {
+      "name": "Reports",
+      "part": "P3",
+      "sheet": "Part 3 - Wrap Up",
+      "prefixes": [
+        "RPT"
+      ]
+    },
+    {
+      "name": "Business calendar",
+      "part": "P3",
+      "sheet": "Part 3 - Wrap Up",
+      "prefixes": [
+        "CAL"
+      ]
+    },
+    {
+      "name": "Files",
+      "part": "P3",
+      "sheet": "Part 3 - Wrap Up",
+      "prefixes": [
+        "ART"
+      ]
+    }
+  ]
+}

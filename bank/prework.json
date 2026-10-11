@@ -1,0 +1,584 @@
+{
+  "dataDocuments": [
+    {
+      "id": "PW-D01",
+      "area": "Company / Finance",
+      "item": "Legal entity / subsidiary list",
+      "goodEnough": "Entities, countries, base/reporting currencies and a named owner.",
+      "preparesQuestionIds": [
+        "FIN-1a",
+        "FIN-1c"
+      ],
+      "preparesFrom": [
+        "R-FIN-1"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D02",
+      "area": "Company / Finance",
+      "item": "Fiscal calendar",
+      "goodEnough": "Fiscal year end and accounting period structure.",
+      "preparesQuestionIds": [
+        "FIN-2a",
+        "FIN-2b"
+      ],
+      "preparesFrom": [
+        "R-FIN-1"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D03",
+      "area": "Company / Finance",
+      "item": "Chart of accounts",
+      "goodEnough": "Current COA export with account type; active/inactive if available.",
+      "preparesQuestionIds": [
+        "DIM-1",
+        "DIM-2"
+      ],
+      "preparesFrom": [
+        "R-FIN-2"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D04",
+      "area": "Company / Finance",
+      "item": "Reporting dimensions",
+      "goodEnough": "Current departments, cost centers, classes, locations or other reporting axes, if used.",
+      "preparesQuestionIds": [
+        "DIM-3"
+      ],
+      "preparesFrom": [
+        "R-FIN-2"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D05",
+      "area": "Company / Finance",
+      "item": "Management reporting package",
+      "goodEnough": "Current monthly financial / management package as actually delivered.",
+      "preparesQuestionIds": [
+        "CLS-8",
+        "RPT-2"
+      ],
+      "preparesFrom": [
+        "R-FIN-5"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D06",
+      "area": "Company / Finance",
+      "item": "Month-end close checklist",
+      "goodEnough": "Existing close checklist or working schedule. If none exists, mark that clearly.",
+      "preparesQuestionIds": [
+        "CLS-1",
+        "CLS-3"
+      ],
+      "preparesFrom": [
+        "R-FIN-4"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D07",
+      "area": "Company / Finance",
+      "item": "Fixed asset register",
+      "goodEnough": "Current register / depreciation schedule, if applicable.",
+      "preparesQuestionIds": [
+        "FIN-5c"
+      ],
+      "preparesFrom": [
+        "R-FIN-7"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D08",
+      "area": "Company / Finance",
+      "item": "Cash & reconciliation account list",
+      "goodEnough": "List bank accounts, credit cards, processors, marketplace clearing and other accounts reconciled. No statements required.",
+      "preparesQuestionIds": [
+        "CSH-1",
+        "CSH-2",
+        "CSH-5"
+      ],
+      "preparesFrom": [
+        "R-SYS-5"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D09",
+      "area": "Master Data",
+      "item": "Item / SKU master",
+      "goodEnough": "Full current export with all available fields. Flag obvious duplicates, blanks or competing sources.",
+      "preparesQuestionIds": [
+        "SYS-8",
+        "ITM-1a",
+        "ITM-1b",
+        "ITM-1d",
+        "ITM-10"
+      ],
+      "preparesFrom": [
+        "R-ITM-1",
+        "R-ITM-2"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D10",
+      "area": "Master Data",
+      "item": "BOMs / recipes / formulas",
+      "goodEnough": "Current BOM/recipe files, including revisions/effective dates if they exist.",
+      "preparesQuestionIds": [
+        "ITM-6b",
+        "ITM-6c"
+      ],
+      "preparesFrom": [
+        "R-BOM-1",
+        "R-BOM-2"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D11",
+      "area": "Master Data",
+      "item": "UOM / packaging / barcode data",
+      "goodEnough": "Current units, conversions, each/case/pallet configuration, UPC/GTIN/case codes.",
+      "preparesQuestionIds": [
+        "ITM-2a",
+        "ITM-8"
+      ],
+      "preparesFrom": [
+        "R-ITM-3"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D12",
+      "area": "Master Data",
+      "item": "Customer master",
+      "goodEnough": "Current customer export including bill-to / ship-to and terms where available.",
+      "preparesQuestionIds": [
+        "SYS-8",
+        "O2C-8"
+      ],
+      "preparesFrom": [
+        "R-CUS-1"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D13",
+      "area": "Master Data",
+      "item": "Vendor / partner master",
+      "goodEnough": "Current vendor export; identify vendor/partner category if available.",
+      "preparesQuestionIds": [
+        "SYS-8",
+        "P2P-8e",
+        "P2P-11"
+      ],
+      "preparesFrom": [
+        "R-VEN-1"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D14",
+      "area": "Master Data",
+      "item": "Inventory location list",
+      "goodEnough": "Every place company-owned inventory can sit: own sites, 3PLs, co-mans, marketplaces, in transit, hold/quarantine if separate.",
+      "preparesQuestionIds": [
+        "ITM-5a",
+        "ITM-5b"
+      ],
+      "preparesFrom": [
+        "R-INV-1"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D15",
+      "area": "Master Data",
+      "item": "Price lists / pricing files",
+      "goodEnough": "Current channel, customer, contract or tiered pricing files.",
+      "preparesQuestionIds": [
+        "O2C-1d"
+      ],
+      "preparesFrom": [
+        "R-CUS-3"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D16",
+      "area": "Master Data",
+      "item": "Product / ingredient specifications",
+      "goodEnough": "Current product, ingredient and packaging specs; approved supplier list if maintained.",
+      "preparesQuestionIds": [
+        "QLT-1",
+        "QLT-5"
+      ],
+      "preparesFrom": [
+        "R-QLT-2"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D17",
+      "area": "Master Data",
+      "item": "Employee / user roster",
+      "goodEnough": "Employees likely to need NetSuite access: role/title, department and location.",
+      "preparesQuestionIds": [
+        "ORG-1",
+        "ORG-7"
+      ],
+      "preparesFrom": [
+        "R-ORG-2"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D18",
+      "area": "Systems",
+      "item": "System / application inventory",
+      "goodEnough": "List every system, portal and critical shared spreadsheet; purpose and owner are enough.",
+      "preparesQuestionIds": [
+        "SYS-1",
+        "SYS-7",
+        "SYS-10"
+      ],
+      "preparesFrom": [
+        "R-SYS-1"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D19",
+      "area": "Systems",
+      "item": "System-of-record map",
+      "goodEnough": "Identify where item, customer, vendor, inventory, forecast, pricing, quality and GL data are authoritative today.",
+      "preparesQuestionIds": [
+        "SYS-2"
+      ],
+      "preparesFrom": [
+        "R-SYS-2"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D20",
+      "area": "Systems",
+      "item": "Interface / integration inventory",
+      "goodEnough": "Simple source → destination list with method such as API, EDI, SFTP, CSV, portal or manual.",
+      "preparesQuestionIds": [
+        "SYS-4",
+        "SYS-6"
+      ],
+      "preparesFrom": [
+        "R-SYS-3"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D21",
+      "area": "Systems",
+      "item": "Critical spreadsheet inventory",
+      "goodEnough": "The spreadsheets the business could not operate without. Link them and name the owner.",
+      "preparesQuestionIds": [
+        "SYS-3"
+      ],
+      "preparesFrom": [
+        "R-SYS-4"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D22",
+      "area": "Systems",
+      "item": "Recurring report inventory",
+      "goodEnough": "List the recurring reports people rely on; copies of the most important are enough.",
+      "preparesQuestionIds": [
+        "RPT-1",
+        "RPT-2"
+      ],
+      "preparesFrom": [
+        "R-RPT-1",
+        "R-RPT-2"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D23",
+      "area": "Controls / Quality",
+      "item": "Approval / control documents",
+      "goodEnough": "Current approval matrix, delegation policy, SoD/control matrix or similar if they exist.",
+      "preparesQuestionIds": [
+        "P2P-2b",
+        "P2P-6e",
+        "ORG-2",
+        "ORG-3"
+      ],
+      "preparesFrom": [
+        "R-CTL-1"
+      ],
+      "mappedBy": "heuristic"
+    },
+    {
+      "id": "PW-D24",
+      "area": "Controls / Quality",
+      "item": "Quality / traceability documents",
+      "goodEnough": "Current hold/release, non-conformance, recall/traceability SOPs and latest mock recall if available.",
+      "preparesQuestionIds": [
+        "QLT-6"
+      ],
+      "preparesFrom": [
+        "R-QLT-3"
+      ],
+      "mappedBy": "heuristic"
+    }
+  ],
+  "dataDocumentsTemplate": [
+    {
+      "column": "Area",
+      "enum": null
+    },
+    {
+      "column": "What to have ready",
+      "enum": null
+    },
+    {
+      "column": "Good enough before day one",
+      "enum": null
+    },
+    {
+      "column": "Owner",
+      "enum": null
+    },
+    {
+      "column": "Current source / system",
+      "enum": null
+    },
+    {
+      "column": "Data readiness",
+      "enum": "preworkReadiness"
+    },
+    {
+      "column": "File / link",
+      "enum": null
+    },
+    {
+      "column": "Known gap / cleanup needed",
+      "enum": null
+    },
+    {
+      "column": "Collection status",
+      "enum": "preworkCollectionStatus"
+    }
+  ],
+  "processes": [
+    {
+      "id": "PW-P01",
+      "area": "Finance",
+      "process": "Month-end close"
+    },
+    {
+      "id": "PW-P02",
+      "area": "Finance",
+      "process": "Bank / payment processor reconciliation"
+    },
+    {
+      "id": "PW-P03",
+      "area": "Finance",
+      "process": "Budgeting / forecasting / management reporting"
+    },
+    {
+      "id": "PW-P04",
+      "area": "Master Data",
+      "process": "Item setup and item changes"
+    },
+    {
+      "id": "PW-P05",
+      "area": "Master Data",
+      "process": "Vendor onboarding / maintenance"
+    },
+    {
+      "id": "PW-P06",
+      "area": "Master Data",
+      "process": "Customer onboarding / credit setup"
+    },
+    {
+      "id": "PW-P07",
+      "area": "Supply Chain",
+      "process": "Demand / supply planning"
+    },
+    {
+      "id": "PW-P08",
+      "area": "Procure to Pay",
+      "process": "Purchasing / PO creation and approval"
+    },
+    {
+      "id": "PW-P09",
+      "area": "Procure to Pay",
+      "process": "Receiving / receipt confirmation"
+    },
+    {
+      "id": "PW-P10",
+      "area": "Procure to Pay",
+      "process": "Vendor invoice approval and payment"
+    },
+    {
+      "id": "PW-P11",
+      "area": "Inventory",
+      "process": "Inventory transfers / adjustments / cycle counts"
+    },
+    {
+      "id": "PW-P12",
+      "area": "Manufacturing",
+      "process": "Production / co-manufacturing"
+    },
+    {
+      "id": "PW-P13",
+      "area": "Manufacturing",
+      "process": "Product costing / landed cost / cost updates"
+    },
+    {
+      "id": "PW-P14",
+      "area": "Quality",
+      "process": "Inspection / hold / release / non-conformance"
+    },
+    {
+      "id": "PW-P15",
+      "area": "Quality",
+      "process": "Recall / lot traceability"
+    },
+    {
+      "id": "PW-P16",
+      "area": "Order to Cash",
+      "process": "Order intake by sales channel"
+    },
+    {
+      "id": "PW-P17",
+      "area": "Order to Cash",
+      "process": "Fulfillment / warehouse / 3PL handoff"
+    },
+    {
+      "id": "PW-P18",
+      "area": "Order to Cash",
+      "process": "EDI / retail compliance"
+    },
+    {
+      "id": "PW-P19",
+      "area": "Logistics",
+      "process": "Transportation / freight execution"
+    },
+    {
+      "id": "PW-P20",
+      "area": "Order to Cash",
+      "process": "Customer invoicing"
+    },
+    {
+      "id": "PW-P21",
+      "area": "Order to Cash",
+      "process": "Cash application / collections / deductions"
+    },
+    {
+      "id": "PW-P22",
+      "area": "Order to Cash",
+      "process": "Returns / refunds / credits"
+    },
+    {
+      "id": "PW-P23",
+      "area": "Controls",
+      "process": "Transaction approvals / segregation of duties"
+    }
+  ],
+  "processesTemplate": [
+    {
+      "column": "Area",
+      "enum": null
+    },
+    {
+      "column": "Process",
+      "enum": null
+    },
+    {
+      "column": "Primary owner",
+      "enum": null
+    },
+    {
+      "column": "Current system(s) / tools",
+      "enum": null
+    },
+    {
+      "column": "Existing documentation",
+      "enum": "preworkDocumentation"
+    },
+    {
+      "column": "Current-state clarity",
+      "enum": "preworkClarity"
+    },
+    {
+      "column": "File / link",
+      "enum": null
+    },
+    {
+      "column": "One-line note / known gap",
+      "enum": null
+    },
+    {
+      "column": "Collection status",
+      "enum": "preworkCollectionStatus"
+    }
+  ],
+  "systemsTemplate": [
+    {
+      "column": "Type",
+      "enum": "systemType"
+    },
+    {
+      "column": "System / partner",
+      "enum": null
+    },
+    {
+      "column": "What it is used for",
+      "enum": null
+    },
+    {
+      "column": "Business owner",
+      "enum": null
+    },
+    {
+      "column": "Technical contact",
+      "enum": null
+    },
+    {
+      "column": "Current exchange / connection",
+      "enum": "systemExchange"
+    },
+    {
+      "column": "Docs / specs available?",
+      "enum": "systemDocsAvailable"
+    },
+    {
+      "column": "Sample file / report available?",
+      "enum": "systemSampleAvailable"
+    },
+    {
+      "column": "Expected after NetSuite",
+      "enum": "systemExpectedAfter"
+    },
+    {
+      "column": "Link / notes",
+      "enum": null
+    },
+    {
+      "column": "Collection status",
+      "enum": "preworkCollectionStatus"
+    }
+  ]
+}

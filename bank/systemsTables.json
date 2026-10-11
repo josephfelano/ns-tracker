@@ -1,0 +1,159 @@
+{
+  "tables": [
+    {
+      "key": "systemInventory",
+      "number": 1,
+      "title": "System inventory",
+      "questionIds": [
+        "SYS-1"
+      ],
+      "description": "Every system, tool, portal and shared spreadsheet used to run the business. Include named spreadsheets, not just software. The column that matters most is \"Data held nowhere else\" - that is what has to be migrated or replaced. Include your A/P platform, A/R or collections tool, TMS or freight system, ecommerce platform, marketplace seller accounts, EDI provider, 3PL and warehouse portals, payroll, expense and card systems, forecasting models, and quality or specification systems.",
+      "columns": [
+        "System / file name",
+        "What it's used for",
+        "Who owns it",
+        "Who else touches it",
+        "Data held nowhere else",
+        "How data gets in",
+        "How data gets out",
+        "Cost / renewal date",
+        "Could we turn it off afterward?"
+      ],
+      "example": {
+        "System / file name": "Freight Recon Master.xlsx",
+        "What it's used for": "Matching carrier invoices to shipments",
+        "Who owns it": "J. Rivera",
+        "Who else touches it": "A. Chen, ops team",
+        "Data held nowhere else": "Freight cost per shipment before invoice arrives",
+        "How data gets in": "Manual paste from TMS export",
+        "How data gets out": "Emailed to accounting monthly",
+        "Cost / renewal date": "n/a",
+        "Could we turn it off afterward?": "Probably - if freight cost lands in the ERP"
+      }
+    },
+    {
+      "key": "systemOfRecord",
+      "number": 2,
+      "title": "System of record",
+      "questionIds": [
+        "SYS-2"
+      ],
+      "description": "For each type of data, the one place considered authoritative today. Where two systems disagree, tell us which wins and who decides.",
+      "columns": [
+        "Type of data",
+        "Authoritative system today",
+        "Who decides when systems disagree",
+        "Notes"
+      ],
+      "example": {
+        "Type of data": "Inventory on hand - by location",
+        "Authoritative system today": "3PL portal, reconciled weekly to a spreadsheet",
+        "Who decides when systems disagree": "Ops manager",
+        "Notes": "Portal and spreadsheet drift between reconciliations"
+      },
+      "allowOtherRows": true,
+      "presetDataTypes": [
+        "Item / SKU list (and who can create one)",
+        "Bill of materials or recipe",
+        "Customer list and ship-to locations",
+        "Vendor list and remit-to details",
+        "Pricing by customer, channel, volume tier",
+        "Inventory on hand - by location",
+        "Inventory in transit",
+        "Cost of a finished good",
+        "Open purchase commitments",
+        "Open customer orders",
+        "Subscription or recurring order state",
+        "Demand forecast",
+        "The general ledger"
+      ]
+    },
+    {
+      "key": "criticalSpreadsheets",
+      "number": 3,
+      "title": "Critical spreadsheets",
+      "questionIds": [
+        "SYS-3"
+      ],
+      "description": "The ten spreadsheets the business could least afford to lose. The key column is \"Logic that exists nowhere else\" - allocation rules, cost buildups, accrual estimates, tiered pricing, commission splits, yield assumptions.",
+      "columns": [
+        "Spreadsheet",
+        "Who built it",
+        "Still here?",
+        "Who else understands it",
+        "Logic that exists nowhere else",
+        "What breaks if it's wrong",
+        "Report, or a system holding data?"
+      ],
+      "example": {
+        "Spreadsheet": "COGS Buildup v14.xlsx",
+        "Who built it": "Former controller",
+        "Still here?": "No",
+        "Who else understands it": "Nobody fully",
+        "Logic that exists nowhere else": "Overhead allocation % by product line",
+        "What breaks if it's wrong": "Every margin report; pricing decisions",
+        "Report, or a system holding data?": "System - it holds the rates"
+      }
+    },
+    {
+      "key": "interfaces",
+      "number": 4,
+      "title": "Interfaces",
+      "questionIds": [
+        "SYS-4",
+        "SYS-6"
+      ],
+      "description": "Every place data moves between two systems. Include manual ones - a person exporting a CSV and importing it elsewhere is an interface. The last two columns are SYS-6: who owns it and what it is built on.",
+      "columns": [
+        "Source",
+        "Destination",
+        "What moves",
+        "How often",
+        "Who runs it",
+        "What happens when it fails",
+        "How long before anyone notices",
+        "Who built / maintains it",
+        "Native connector, iPaaS, or custom?"
+      ],
+      "example": {
+        "Source": "Ecommerce platform",
+        "Destination": "Bank",
+        "What moves": "Daily payout",
+        "How often": "Daily",
+        "Who runs it": "Nobody - automatic",
+        "What happens when it fails": "Payout is short or delayed",
+        "How long before anyone notices": "Until month-end bank rec",
+        "Who built / maintains it": "Platform default",
+        "Native connector, iPaaS, or custom?": "Native"
+      }
+    }
+  ],
+  "reports": {
+    "key": "reports",
+    "title": "Recurring reports",
+    "questionIds": [
+      "RPT-1"
+    ],
+    "description": "Everything produced on a schedule, including anything assembled by hand in Excel. Add rows as needed. Delete the grey example row once you start.",
+    "columns": [
+      "Report name",
+      "Who receives it",
+      "Frequency",
+      "Format",
+      "Who builds it",
+      "Time to build",
+      "Where the data comes from",
+      "Problem if it disappeared?"
+    ],
+    "example": {
+      "Report name": "Weekly flash P&L",
+      "Who receives it": "CEO, CFO",
+      "Frequency": "Weekly",
+      "Format": "Excel emailed Monday",
+      "Who builds it": "Controller",
+      "Time to build": "3 hours",
+      "Where the data comes from": "GL export + freight spreadsheet + 3PL file",
+      "Problem if it disappeared?": "Yes - CEO runs the week off it"
+    }
+  }
+}
