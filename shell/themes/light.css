@@ -1,0 +1,29 @@
+/* Light theme: tokens only. Every theme defines exactly this set (shell/themes/README.md). */
+.hub-root {
+  /* surfaces */
+  --bg: #f4f6f9; --surface: #ffffff; --surface-2: #f1f4f8; --surface-3: #e5eaf0;
+  --border: #e1e6ed; --border-strong: #cdd4de; --overlay: rgba(11, 19, 43, .45);
+  /* text */
+  --text: #111a2e; --text-2: #475569; --text-3: #6b7789;
+  /* brand: selection, links, primary buttons. Never a status. */
+  --accent: #2563eb; --accent-weak: #e8effd; --accent-text: #1d4ed8; --on-accent: #ffffff;
+  /* status: ok / warn / bad judge; info and na do not */
+  --ok: #157a46; --ok-weak: #e1f3e8; --ok-solid: #15803d;
+  --warn: #9a5800; --warn-weak: #fcefd8;
+  --bad: #b8322b; --bad-weak: #fbe5e3; --bad-solid: #c8322b;
+  --info: #2563a8; --info-weak: #e3eefa;
+  --na: #7c8696; --na-weak: #eef0f3;
+  /* nav rail */
+  --nav-bg: #0b132b; --nav-border: #1b2438; --nav-dropdown-bg: #16203a;
+  --nav-text: #a3aec0; --nav-text-strong: #ffffff; --nav-hover: rgba(255, 255, 255, .07); --nav-active-bg: rgba(255, 255, 255, .13);
+  /* shape */
+  --shadow: 0 1px 2px rgba(16, 24, 40, .05); --shadow-lg: 0 12px 32px rgba(16, 24, 40, .16);
+  --radius: 10px; --radius-sm: 6px;
+  /* type */
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+  --fs-xs: 11.5px; --fs-sm: 12.5px; --fs-base: 14px; --fs-md: 15px; --fs-lg: 17px; --fs-title: 19px; --fs-hero: 24px;
+  /* frame */
+  --rail-w: 56px; --rail-w-open: 240px; --topbar-h: 48px;
+  color-scheme: light;
+}

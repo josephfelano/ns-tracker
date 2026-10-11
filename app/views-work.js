@@ -16,11 +16,11 @@
     render(root, r) {
       const st = store.state;
       const iv = r.id ? st.interviews.find((i) => i.id === r.id) : null;
-      if (r.id && !iv) { location.hash = '#/interview'; return; }
+      if (r.id && !iv) { location.hash = '#/tracker/interview'; return; }
       const set = this.set;
 
       root.innerHTML = `
-        <div class="page-head"><div><h1>Interview</h1><p class="lead">Work through questions with someone. Everything you capture here is linked to this interview.</p></div>
+        <div class="page-head"><div><p class="lead">Work through questions with someone. Everything you capture here is linked to this interview.</p></div>
           <button class="btn primary" data-new>New interview</button></div>
         <div class="iv-bar card">
           <label class="field inline"><span>Interview</span><select data-iv>
@@ -100,7 +100,7 @@
       ui.on(root, 'change', '[data-mode]', (e, s) => { set.mode = s.value; T.rerender(); });
       ui.on(root, 'change', '[data-section]', (e, s) => { set.section = s.value; this.current = null; drawCard(); });
       ui.on(root, 'change', '[data-hide]', (e, c) => { set.hideDone = c.checked; drawList(); });
-      ui.on(root, 'change', '[data-iv]', (e, s) => { location.hash = '#/interview' + (s.value ? '/' + s.value : ''); });
+      ui.on(root, 'change', '[data-iv]', (e, s) => { location.hash = '#/tracker/interview' + (s.value ? '/' + s.value : ''); });
       ui.on(root, 'click', '[data-new]', () => this.editInterview(null));
       ui.on(root, 'click', '[data-edit]', () => this.editInterview(iv));
       ui.on(root, 'input', '[data-ivnotes]', (e, t) => { iv.notes = t.value; store.touch('interviews'); });
@@ -138,7 +138,7 @@
               personIds: [...body.querySelectorAll('.people-pick input:checked')].map((c) => c.value),
             };
             if (iv) { Object.assign(iv, fields); store.touch('interviews'); T.rerender(); }
-            else { const n = store.addInterview(fields); location.hash = '#/interview/' + n.id; }
+            else { const n = store.addInterview(fields); location.hash = '#/tracker/interview/' + n.id; }
           } },
         ],
       });
@@ -163,9 +163,9 @@
         systems: pw.systems.length,
       };
       root.innerHTML = `
-        <div class="page-head"><div><h1>Prework</h1><p class="lead">What the business assembles before day one: where the data lives, who owns each process, which systems and partners exist. Honest ratings beat tidy ones; a gap marked as a gap is a good answer.</p></div>
+        <div class="page-head"><div><p class="lead">What the business assembles before day one: where the data lives, who owns each process, which systems and partners exist. Honest ratings beat tidy ones; a gap marked as a gap is a good answer.</p></div>
           <label class="btn">Import prework workbook...<input type="file" accept=".xlsx" data-import-xlsx hidden></label></div>
-        ${ui.tabs([{ key: 'data', label: 'Data & documents', count: counts.data }, { key: 'processes', label: 'Processes', count: counts.processes }, { key: 'systems', label: 'Systems & partners', count: counts.systems }], tab, (k) => '#/prework/' + k)}
+        ${ui.tabs([{ key: 'data', label: 'Data & documents', count: counts.data }, { key: 'processes', label: 'Processes', count: counts.processes }, { key: 'systems', label: 'Systems & partners', count: counts.systems }], tab, (k) => '#/tracker/prework/' + k)}
         <div id="pwbody"></div>`;
       const host = root.querySelector('#pwbody');
       ui.on(root, 'change', '[data-import-xlsx]', async (e, input) => {
@@ -296,8 +296,8 @@
       const tab = r.id || tables[0].key;
       const filesDone = B.fileChecklist.filter((f) => (st.files[f.id] || {}).status === 'Complete').length;
       root.innerHTML = `
-        <div class="page-head"><div><h1>Systems & files</h1><p class="lead">The discovery workbook's tables and the file checklist. Confirm and extend what the prework collected rather than starting over.</p></div></div>
-        ${ui.tabs(tables.map((t) => ({ key: t.key, label: t.title, count: (st.tables[t.key] || []).length || null })).concat([{ key: 'files', label: 'File checklist', count: filesDone + '/' + B.fileChecklist.length }]), tab, (k) => '#/collect/' + k)}
+        <div class="page-head"><div><p class="lead">The discovery workbook's tables and the file checklist. Confirm and extend what the prework collected rather than starting over.</p></div></div>
+        ${ui.tabs(tables.map((t) => ({ key: t.key, label: t.title, count: (st.tables[t.key] || []).length || null })).concat([{ key: 'files', label: 'File checklist', count: filesDone + '/' + B.fileChecklist.length }]), tab, (k) => '#/tracker/collect/' + k)}
         <div id="cbody"></div>`;
       const host = root.querySelector('#cbody');
 
@@ -334,7 +334,7 @@
       const owned = (pid) => Object.values(st.answers).filter((a) => a.ownerId === pid).length;
       const decs = (pid) => Object.values(st.decisions).filter((d) => d.ownerId === pid).length;
       const ivs = (pid) => st.interviews.filter((i) => i.personIds.includes(pid)).length;
-      root.innerHTML = `<div class="page-head"><div><h1>People</h1><p class="lead">Every owner field points at a named person, not a department.</p></div><button class="btn primary" data-add>Add a person</button></div><div id="pbody"></div>`;
+      root.innerHTML = `<div class="page-head"><div><p class="lead">Every owner field points at a named person, not a department.</p></div><button class="btn primary" data-add>Add a person</button></div><div id="pbody"></div>`;
       const cols = [
         { key: 'id', label: 'ID', readonly: true },
         { key: 'name', label: 'Name', width: 160 },
@@ -368,8 +368,8 @@
       const items = store.state.activity.slice().reverse();
       const byDay = new Map();
       items.forEach((a) => { const d = a.at.slice(0, 10); if (!byDay.has(d)) byDay.set(d, []); byDay.get(d).push(a); });
-      const refLink = (ref) => (!ref ? '' : idx.q.has(ref) ? ui.idLink(ref, 'questions') : idx.d.has(ref) ? ui.idLink(ref, 'decisions') : idx.m.has(ref) ? ui.idLink(ref, 'scoping') : /^I-/.test(ref) ? `<a class="idlink" href="#/interview/${ref}">${esc(ref)}</a>` : `<span class="mono">${esc(ref)}</span>`);
-      root.innerHTML = `<div class="page-head"><div><h1>Activity</h1><p class="lead">What changed and when. Edits to the same item within 15 minutes are folded into one line.</p></div></div>
+      const refLink = (ref) => (!ref ? '' : idx.q.has(ref) ? ui.idLink(ref, 'questions') : idx.d.has(ref) ? ui.idLink(ref, 'decisions') : idx.m.has(ref) ? ui.idLink(ref, 'scoping') : /^I-/.test(ref) ? `<a class="idlink" href="#/tracker/interview/${ref}">${esc(ref)}</a>` : `<span class="mono">${esc(ref)}</span>`);
+      root.innerHTML = `<div class="page-head"><div><p class="lead">What changed and when. Edits to the same item within 15 minutes are folded into one line.</p></div></div>
         ${byDay.size ? [...byDay].map(([day, list]) => `<section class="card"><div class="card-head"><h2>${new Date(day + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</h2><span class="fine">${list.length}</span></div>
           <div class="list">${list.map((a) => `<div class="list-row"><span class="fine when">${new Date(a.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>${refLink(a.ref)}<span>${esc(a.text)}</span></div>`).join('')}</div></section>`).join('') : '<p class="fine">Nothing yet.</p>'}`;
     },
@@ -381,8 +381,7 @@
       const st = store.state;
       const a = store.adapter;
       const meta = B.meta;
-      root.innerHTML = `<div class="page-head"><div><h1>Settings</h1></div></div>
-        <section class="card"><div class="card-head"><h2>Project</h2></div>
+      root.innerHTML = `<section class="card"><div class="card-head"><h2>Project</h2></div>
           <label class="field"><span>Name shown in the app</span><input type="text" data-name value="${esc(st.tracker.name)}"></label></section>
         <section class="card"><div class="card-head"><h2>Where data is saved</h2></div>
           <p>${a.kind === 'folder' ? `Folder <b>${esc(a.label)}</b>. Each area is one JSON file in that folder:` : '<b>This browser only.</b> Data is not in any file and is lost if browser data is cleared. Connect a folder to save files.'}</p>
@@ -396,7 +395,7 @@
           <dt>Contents</dt><dd>${B.questions.length} questions (${B.questions.filter((q) => q.tier1).length} Tier 1), ${B.decisions.length} decisions, ${B.layers.length} layers, ${B.oneWayDoors.length} one-way door notes, ${B.moduleScoping.length} scoping asks, ${B.prework.dataDocuments.length + B.prework.processes.length} prework items, ${B.fileChecklist.length} files</dd>
           <dt>Corrections</dt><dd>Changes from the source workbooks are logged in <code>bank/CORRECTIONS.md</code>.</dd></dl></section>`;
       ui.on(root, 'input', '[data-name]', (e, t) => { st.tracker.name = t.value; store.touch('tracker'); });
-      ui.on(root, 'click', '[data-switch]', async () => { await store.flushAll(); T.reconnect(); });
+      ui.on(root, 'click', '[data-switch]', () => Hub.switchFolder());
       ui.on(root, 'click', '[data-export]', () => {
         const blob = new Blob([JSON.stringify(store.snapshot(), null, 2)], { type: 'application/json' });
         const link = document.createElement('a');

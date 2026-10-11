@@ -36,14 +36,14 @@
     const feeds = [
       decisions.length ? `<div class="feed-row"><span class="feed-label">Decides</span><div class="chips">${decisions.map((did) => {
         const d = idx.d.get(did); const ds = (store.state.decisions[did] || {}).status || 'Not started';
-        return `<a class="chip" href="#/decisions/${did}" title="${esc(d.nsSetting || '')}">${ui.dot(ds)}<b>${did}</b> ${esc(d.decides)} ${ui.rev(d.reversibility)}</a>`;
+        return `<a class="chip" href="#/tracker/decisions/${did}" title="${esc(d.nsSetting || '')}">${ui.dot(ds)}<b>${did}</b> ${esc(d.decides)} ${ui.rev(d.reversibility)}</a>`;
       }).join('')}</div></div>` : '',
-      scoping.length && scoping.length < 10 ? `<div class="feed-row"><span class="feed-label">Quote check</span><div class="chips">${scoping.map((mid) => `<a class="chip" href="#/scoping/${mid}"><b>${mid}</b> ${esc(idx.m.get(mid).ask)}</a>`).join('')}</div></div>` : '',
+      scoping.length && scoping.length < 10 ? `<div class="feed-row"><span class="feed-label">Quote check</span><div class="chips">${scoping.map((mid) => `<a class="chip" href="#/tracker/scoping/${mid}"><b>${mid}</b> ${esc(idx.m.get(mid).ask)}</a>`).join('')}</div></div>` : '',
       prework.length ? `<div class="feed-row"><span class="feed-label">Prework</span><div class="chips">${prework.map((pid) => {
         const p = B.prework.dataDocuments.find((x) => x.id === pid); const pd = store.state.prework.data[pid] || {};
-        return `<a class="chip" href="#/prework/data" title="Prework item that prepares this question">${pd['data-readiness'] ? ui.badge(pd['data-readiness']) : ''}<b>${pid}</b> ${esc(p.item)}</a>`;
+        return `<a class="chip" href="#/tracker/prework/data" title="Prework item that prepares this question">${pd['data-readiness'] ? ui.badge(pd['data-readiness']) : ''}<b>${pid}</b> ${esc(p.item)}</a>`;
       }).join('')}</div></div>` : '',
-      layers.length ? `<div class="feed-row"><span class="feed-label">Layers</span><div class="chips">${layers.map((l) => `<a class="chip" href="#/layers">${l}</a>`).join('')}</div></div>` : '',
+      layers.length ? `<div class="feed-row"><span class="feed-label">Layers</span><div class="chips">${layers.map((l) => `<a class="chip" href="#/tracker/layers">${l}</a>`).join('')}</div></div>` : '',
     ].join('');
 
     const el = ui.el(`<div class="qed${opts.big ? ' big' : ''}">
@@ -58,7 +58,7 @@
         <label class="field"><span>Owner (who answers for this)</span>${ui.personSelect(a.ownerId, 'data-f="ownerId"')}</label>
         <label class="field"><span>Files / links (one per line)</span><textarea class="grow" data-f="links" rows="1" placeholder="Path or URL">${esc((a.links || []).join('\n'))}</textarea></label>
       </div>
-      <div class="qed-foot">${a.updatedAt ? 'Updated ' + T.fmtWhen(a.updatedAt) : 'Not touched yet'}${interviews.length ? ' &middot; From ' + interviews.map((i) => `<a href="#/interview/${i.id}">${esc(i.id)}${i.title ? ' ' + esc(i.title) : ''}</a>`).join(', ') : ''}</div>
+      <div class="qed-foot">${a.updatedAt ? 'Updated ' + T.fmtWhen(a.updatedAt) : 'Not touched yet'}${interviews.length ? ' &middot; From ' + interviews.map((i) => `<a href="#/tracker/interview/${i.id}">${esc(i.id)}${i.title ? ' ' + esc(i.title) : ''}</a>`).join(', ') : ''}</div>
     </div>`);
 
     ui.on(el, 'click', '[data-status]', (e, b) => {
@@ -106,7 +106,7 @@
       <div class="inputs">${d.questionIds.map((qid) => {
         const q = idx.q.get(qid); const a = store.state.answers[qid] || {};
         return `<div class="input-q">
-          <div class="input-q-head">${ui.dot(a.status)}<a class="idlink" href="#/questions/${qid}">${qid}</a> ${ui.tier(q.tier1)} <span class="input-q-text">${esc(q.text)}</span></div>
+          <div class="input-q-head">${ui.dot(a.status)}<a class="idlink" href="#/tracker/questions/${qid}">${qid}</a> ${ui.tier(q.tier1)} <span class="input-q-text">${esc(q.text)}</span></div>
           ${a.answer ? `<div class="input-q-answer">${esc(a.answer)}</div>` : '<div class="input-q-answer empty">No answer yet</div>'}
         </div>`;
       }).join('') || '<p class="fine">No discovery question is linked to this decision.</p>'}</div>
@@ -172,37 +172,37 @@
           const secs = m.sections.filter((s) => s.part === p);
           const done = secs.reduce((n, s) => n + s.done, 0); const total = secs.reduce((n, s) => n + s.total, 0);
           return `<div class="part-block"><div class="part-head"><b>${esc(idx.partName[p])}</b><span class="fine">${done} / ${total}</span></div>
-            ${secs.map((s) => `<a class="sec-row" href="#/questions" data-section="${esc(s.name)}"><span class="sec-name">${esc(s.name)}</span>${ui.bar(s.done, s.total)}<span class="sec-num">${s.done}/${s.total}${s.help ? ` <span class="badge tone-warn" title="Need help">${s.help}</span>` : ''}</span></a>`).join('')}</div>`;
+            ${secs.map((s) => `<a class="sec-row" href="#/tracker/questions" data-section="${esc(s.name)}"><span class="sec-name">${esc(s.name)}</span>${ui.bar(s.done, s.total)}<span class="sec-num">${s.done}/${s.total}${s.help ? ` <span class="badge tone-warn" title="Need help">${s.help}</span>` : ''}</span></a>`).join('')}</div>`;
         }).join('');
 
         root.innerHTML = `
-          <div class="page-head"><div><h1>${esc(st.tracker.name)}</h1><p class="lead">Where the implementation stands: what must be answered, decided and built, in order.</p></div>
-            <a class="btn primary" href="#/interview">Start an interview</a></div>
+          <div class="page-head"><div><p class="lead">Where the implementation stands: what must be answered, decided and built, in order.</p></div>
+            <a class="btn primary" href="#/tracker/interview">Start an interview</a></div>
           <div class="gates">
-            ${gate('Tier 1 questions answered', m.tier1QDone, m.tier1QTotal, 'Answer before contract signature', m.tier1QDone === m.tier1QTotal, '#/questions')}
-            ${gate('Tier 1 decisions open', m.tier1DOpen, m.tier1DTotal, m.tier1DOpen ? 'Must reach 0 before signing' : 'Clear to sign', m.tier1DOpen === 0, '#/decisions')}
-            ${gate('Module scoping confirmed', m.scopingDone, m.scopingTotal, 'Check the quote against the business', m.scopingDone === m.scopingTotal, '#/scoping')}
-            ${gate('One-way decisions open', m.oneWayOpen, m.oneWayTotal, m.oneWayOpen ? 'Must reach 0 before L0 / L2 setup' : 'Clear to configure', m.oneWayOpen === 0, '#/layers')}
+            ${gate('Tier 1 questions answered', m.tier1QDone, m.tier1QTotal, 'Answer before contract signature', m.tier1QDone === m.tier1QTotal, '#/tracker/questions')}
+            ${gate('Tier 1 decisions open', m.tier1DOpen, m.tier1DTotal, m.tier1DOpen ? 'Must reach 0 before signing' : 'Clear to sign', m.tier1DOpen === 0, '#/tracker/decisions')}
+            ${gate('Module scoping confirmed', m.scopingDone, m.scopingTotal, 'Check the quote against the business', m.scopingDone === m.scopingTotal, '#/tracker/scoping')}
+            ${gate('One-way decisions open', m.oneWayOpen, m.oneWayTotal, m.oneWayOpen ? 'Must reach 0 before L0 / L2 setup' : 'Clear to configure', m.oneWayOpen === 0, '#/tracker/layers')}
           </div>
           <div class="grid-2">
             <section class="card"><div class="card-head"><h2>Discovery</h2><span class="fine">${m.qDone} of ${m.qTotal} done${m.qHelp ? ' &middot; ' + m.qHelp + ' need help' : ''}</span></div>${byPart}</section>
             <section class="card"><div class="card-head"><h2>Build layers</h2><span class="fine">${m.dDone} of ${m.dTotal} decisions made</span></div>
-              ${m.layers.map((l) => { const L = idx.layer.get(l.code); return `<a class="layer-row" href="#/layers"><span class="layer-code">${l.code}</span><span class="layer-name">${esc(L.decides.split(':')[0])}</span>${ui.bar(l.done, l.total)}<span class="sec-num">${l.done}/${l.total}${l.oneWayOpen ? ` <span class="badge tone-bad" title="One-way decisions open">${l.oneWayOpen}</span>` : ''}</span></a>`; }).join('')}
+              ${m.layers.map((l) => { const L = idx.layer.get(l.code); return `<a class="layer-row" href="#/tracker/layers"><span class="layer-code">${l.code}</span><span class="layer-name">${esc(L.decides.split(':')[0])}</span>${ui.bar(l.done, l.total)}<span class="sec-num">${l.done}/${l.total}${l.oneWayOpen ? ` <span class="badge tone-bad" title="One-way decisions open">${l.oneWayOpen}</span>` : ''}</span></a>`; }).join('')}
               <p class="fine">Each layer assumes everything above it is settled. Red counts are one-way decisions still open.</p>
             </section>
           </div>
           <div class="grid-2">
-            <section class="card"><div class="card-head"><h2>Next Tier 1 questions</h2><a class="fine" href="#/interview">Interview mode</a></div>
-              ${nextT1.length ? `<div class="list">${nextT1.map((q) => `<a class="list-row" href="#/questions/${q.id}">${ui.dot((st.answers[q.id] || {}).status)}<span class="mono">${q.id}</span><span class="clamp">${esc(q.text)}</span></a>`).join('')}</div>` : '<p class="ok-text">All Tier 1 questions are answered.</p>'}
+            <section class="card"><div class="card-head"><h2>Next Tier 1 questions</h2><a class="fine" href="#/tracker/interview">Interview mode</a></div>
+              ${nextT1.length ? `<div class="list">${nextT1.map((q) => `<a class="list-row" href="#/tracker/questions/${q.id}">${ui.dot((st.answers[q.id] || {}).status)}<span class="mono">${q.id}</span><span class="clamp">${esc(q.text)}</span></a>`).join('')}</div>` : '<p class="ok-text">All Tier 1 questions are answered.</p>'}
             </section>
-            <section class="card"><div class="card-head"><h2>Recent activity</h2><a class="fine" href="#/activity">All</a></div>
+            <section class="card"><div class="card-head"><h2>Recent activity</h2><a class="fine" href="#/tracker/activity">All</a></div>
               ${recent.length ? `<div class="list">${recent.map((r) => `<div class="list-row"><span class="fine when">${T.fmtWhen(r.at)}</span><span>${esc(r.text)}</span></div>`).join('')}</div>` : '<p class="fine">Nothing yet. Answers, decisions and status changes show up here.</p>'}
             </section>
           </div>
           <div class="grid-3">
-            <section class="card"><div class="card-head"><h2>Prework: data</h2><a class="fine" href="#/prework/data">Open</a></div>${countList(readiness, T.enums.preworkReadiness)}</section>
-            <section class="card"><div class="card-head"><h2>Prework: process clarity</h2><a class="fine" href="#/prework/processes">Open</a></div>${countList(clarity, T.enums.preworkClarity)}</section>
-            <section class="card"><div class="card-head"><h2>Files collected</h2><a class="fine" href="#/collect/files">Open</a></div>
+            <section class="card"><div class="card-head"><h2>Prework: data</h2><a class="fine" href="#/tracker/prework/data">Open</a></div>${countList(readiness, T.enums.preworkReadiness)}</section>
+            <section class="card"><div class="card-head"><h2>Prework: process clarity</h2><a class="fine" href="#/tracker/prework/processes">Open</a></div>${countList(clarity, T.enums.preworkClarity)}</section>
+            <section class="card"><div class="card-head"><h2>Files collected</h2><a class="fine" href="#/tracker/collect/files">Open</a></div>
               <div class="big-num">${m.filesDone}<span> / ${m.filesTotal}</span></div>${ui.bar(m.filesDone, m.filesTotal)}</section>
           </div>`;
         ui.on(root, 'click', '[data-section]', (e, a) => { V.questions.filters = Object.assign(V.questions.defaults(), { section: a.dataset.section }); });
@@ -220,7 +220,7 @@
       const f = (this.filters = this.filters || this.defaults());
       const people = store.state.people;
       root.innerHTML = `
-        <div class="page-head"><div><h1>Questions</h1><p class="lead">The discovery question bank. Click a row to answer it.</p></div></div>
+        <div class="page-head"><div><p class="lead">The discovery question bank. Click a row to answer it.</p></div></div>
         <div class="filters">
           <input type="search" data-k="text" placeholder="Filter by ID, words or answer" value="${esc(f.text)}">
           <select data-k="part">${ui.options(B.meta.parts.map((p) => p.id), f.part, 'All parts')}</select>
@@ -267,14 +267,14 @@
       ui.on(root, 'input', '[data-k]', (e, el) => { f[el.dataset.k] = el.value; draw(); });
       ui.on(root, 'change', 'select[data-k]', (e, el) => { f[el.dataset.k] = el.value; draw(); });
       ui.on(root, 'click', '[data-clear]', () => { this.filters = null; T.rerender(); });
-      ui.on(root, 'click', 'tr[data-q]', (e, tr) => { location.hash = '#/questions/' + tr.dataset.q; });
+      ui.on(root, 'click', 'tr[data-q]', (e, tr) => { location.hash = '#/tracker/questions/' + tr.dataset.q; });
       draw();
       T.live(root, draw, ['answers', 'reload', 'people']);
       this.select(r);
     },
     select(r) {
       document.querySelectorAll('tr[data-q]').forEach((tr) => tr.classList.toggle('sel', !!r.id && tr.dataset.q === r.id));
-      if (r.id) T.openQuestion(r.id, '#/questions'); else ui.drawer.close(true);
+      if (r.id) T.openQuestion(r.id, '#/tracker/questions'); else ui.drawer.close(true);
     },
   };
 
@@ -285,7 +285,7 @@
     render(root, r) {
       const f = (this.filters = this.filters || this.defaults());
       root.innerHTML = `
-        <div class="page-head"><div><h1>Decisions</h1><p class="lead">What each discovery answer decides in NetSuite, grouped by build layer. One-way decisions cannot be undone once configured.</p></div></div>
+        <div class="page-head"><div><p class="lead">What each discovery answer decides in NetSuite, grouped by build layer. One-way decisions cannot be undone once configured.</p></div></div>
         <div class="filters">
           <input type="search" data-k="text" placeholder="Filter by ID, words or setting" value="${esc(f.text)}">
           <select data-k="layer">${ui.options(T.enums.layer, f.layer, 'All layers')}</select>
@@ -338,14 +338,14 @@
       ui.on(root, 'input', '[data-k]', (e, el) => { f[el.dataset.k] = el.value; draw(); });
       ui.on(root, 'change', 'select[data-k]', (e, el) => { f[el.dataset.k] = el.value; draw(); });
       ui.on(root, 'click', '[data-clear]', () => { this.filters = null; T.rerender(); });
-      ui.on(root, 'click', 'tr[data-d]', (e, tr) => { location.hash = '#/decisions/' + tr.dataset.d; });
+      ui.on(root, 'click', 'tr[data-d]', (e, tr) => { location.hash = '#/tracker/decisions/' + tr.dataset.d; });
       draw();
       T.live(root, draw, ['decisions', 'answers', 'reload']);
       this.select(r);
     },
     select(r) {
       document.querySelectorAll('tr[data-d]').forEach((tr) => tr.classList.toggle('sel', !!r.id && tr.dataset.d === r.id));
-      if (r.id) T.openDecision(r.id, '#/decisions'); else ui.drawer.close(true);
+      if (r.id) T.openDecision(r.id, '#/tracker/decisions'); else ui.drawer.close(true);
     },
   };
 
@@ -356,7 +356,7 @@
         const st = store.state;
         const m = T.metrics(st);
         root.innerHTML = `
-          <div class="page-head"><div><h1>Build layers</h1><p class="lead">The account is built top to bottom. Each layer assumes everything above it is settled; changing an upper layer later means rework below it.</p></div></div>
+          <div class="page-head"><div><p class="lead">The account is built top to bottom. Each layer assumes everything above it is settled; changing an upper layer later means rework below it.</p></div></div>
           <div class="layers">${B.layers.map((L) => {
             const lm = m.layers.find((x) => x.code === L.code);
             const ds = B.decisions.filter((d) => d.layer === L.code);
@@ -388,7 +388,7 @@
             <div class="door-head"><span>#${o.num}</span> ${o.isOneWay ? ui.badge('One-way') : '<span class="badge tone-muted">Not a one-way door</span>'} <span class="fine">${esc(o.confidence)}</span></div>
             <div class="door-text">${esc(o.constraint)}</div>
             ${o.why ? `<div class="fine">${esc(o.why)}</div>` : ''}
-            ${(o.decisionIds || []).length ? `<div class="chips">${o.decisionIds.map((did) => `<a class="chip" href="#/decisions/${did}">${ui.dot((st.decisions[did] || {}).status)}<b>${did}</b> ${esc(idx.d.get(did).decides)}</a>`).join('')}</div>` : ''}
+            ${(o.decisionIds || []).length ? `<div class="chips">${o.decisionIds.map((did) => `<a class="chip" href="#/tracker/decisions/${did}">${ui.dot((st.decisions[did] || {}).status)}<b>${did}</b> ${esc(idx.d.get(did).decides)}</a>`).join('')}</div>` : ''}
             ${o.source ? `<div class="fine">Source: ${esc(o.source)}</div>` : ''}
           </div>`).join('')}</div>`;
       };
@@ -410,12 +410,12 @@
       const t1 = B.questions.filter((q) => q.tier1);
       const t1Done = t1.filter((q) => T.qDone((st.answers[q.id] || {}).status)).length;
       root.innerHTML = `
-        <div class="page-head"><div><h1>Module scoping</h1><p class="lead">Questions to put to NetSuite and the implementation partner before signing, so the quote matches the business. Each is driven by discovery answers.</p></div></div>
+        <div class="page-head"><div><p class="lead">Questions to put to NetSuite and the implementation partner before signing, so the quote matches the business. Each is driven by discovery answers.</p></div></div>
         <div class="scoping">${B.moduleScoping.map((m) => {
           const s = st.scoping[m.id] || {};
           const drivers = m.drivenByAllTier1
             ? `<span class="chip">All Tier 1 questions: ${t1Done}/${t1.length} answered</span>`
-            : m.drivenByQuestionIds.map((qid) => `<a class="chip" href="#/questions/${qid}">${ui.dot((st.answers[qid] || {}).status)}<b>${qid}</b></a>`).join('') || `<span class="fine">${esc(m.drivenByRaw || '-')}</span>`;
+            : m.drivenByQuestionIds.map((qid) => `<a class="chip" href="#/tracker/questions/${qid}">${ui.dot((st.answers[qid] || {}).status)}<b>${qid}</b></a>`).join('') || `<span class="fine">${esc(m.drivenByRaw || '-')}</span>`;
           return `<div class="card scope${r && r.id === m.id ? ' sel' : ''}" id="scope-${m.id}">
             <div class="scope-head"><span class="mono">${m.id}</span><div class="scope-ask">${esc(m.ask)}</div>${ui.statusSelect('moduleScopingStatus', s.status, `data-m="${m.id}"`)}</div>
             ${m.why ? `<div class="fine">${esc(m.why)}</div>` : ''}

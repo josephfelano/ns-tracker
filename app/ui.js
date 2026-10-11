@@ -1,23 +1,14 @@
-// UI components shared by every view. Views render HTML strings built with these helpers,
-// then wire behaviour with T.ui.on() delegated listeners on their own root element
-// (a fresh element per render, so listeners never outlive the view).
+// Tracker UI helpers: badges, status selects, people pickers, the editable table.
+// The generic services (toast, modal, confirm, prompt, drawer, tabs, delegated listeners)
+// come from the shared shell (Hub.ui); they are re-exported here so views keep calling T.ui.*.
+// Views render HTML strings built with these helpers, then wire behaviour with ui.on()
+// delegated listeners on their own root element (a fresh element per render).
 (function () {
   'use strict';
   const T = window.T;
   const esc = T.esc;
   const ui = (T.ui = {});
-
-  ui.on = (root, type, selector, fn) =>
-    root.addEventListener(type, (e) => {
-      const t = e.target.closest(selector);
-      if (t && root.contains(t)) fn(e, t);
-    });
-
-  ui.el = (html) => {
-    const d = document.createElement('div');
-    d.innerHTML = html.trim();
-    return d.firstElementChild;
-  };
+  ['on', 'el', 'toast', 'modal', 'confirm', 'promptText', 'tabs'].forEach((k) => { ui[k] = Hub.ui[k]; });
 
   // ---------- small render helpers ----------
   ui.badge = (text, tone) => (text ? `<span class="badge tone-${tone || T.tone(text)}">${esc(text)}</span>` : '');
@@ -25,7 +16,7 @@
   ui.rev = (r) => (r ? `<span class="badge tone-${T.tone(r)}" title="Reversibility">${esc(r)}</span>` : '');
   ui.idLink = (id, kind) => {
     const route = kind || (id.startsWith('D-') ? 'decisions' : id.startsWith('M-') ? 'scoping' : 'questions');
-    return `<a class="idlink" href="#/${route}/${encodeURIComponent(id)}">${esc(id)}</a>`;
+    return `<a class="idlink" href="${T.href(route + '/' + encodeURIComponent(id))}">${esc(id)}</a>`;
   };
   ui.bar = (done, total, tone) => {
     const p = T.pct(done, total);
@@ -78,108 +69,12 @@
   ui.growAll = (root) => requestAnimationFrame(() => root.querySelectorAll('textarea.grow').forEach(ui.grow));
   document.addEventListener('input', (e) => { if (e.target.matches && e.target.matches('textarea.grow')) ui.grow(e.target); });
 
-  // ---------- toast ----------
-  ui.toast = (msg, type) => {
-    let host = document.getElementById('toasts');
-    if (!host) { host = ui.el('<div id="toasts" class="toasts" role="status" aria-live="polite"></div>'); document.body.appendChild(host); }
-    const t = ui.el(`<div class="toast tone-${type || 'info'}">${esc(msg)}</div>`);
-    host.appendChild(t);
-    setTimeout(() => t.classList.add('out'), 3200);
-    setTimeout(() => t.remove(), 3600);
-  };
-
-  // ---------- modal / confirm / prompt ----------
-  ui.modal = ({ title, body, actions, wide }) => {
-    const m = ui.el(`<div class="modal-back"><div class="modal${wide ? ' wide' : ''}" role="dialog" aria-modal="true">
-      <div class="modal-head"><h3>${esc(title)}</h3><button class="icon-btn" data-close aria-label="Close">&times;</button></div>
-      <div class="modal-body"></div>
-      <div class="modal-foot"></div></div></div>`);
-    const bodyEl = m.querySelector('.modal-body');
-    if (typeof body === 'string') bodyEl.innerHTML = body; else if (body) bodyEl.appendChild(body);
-    const foot = m.querySelector('.modal-foot');
-    let closed = false;
-    const close = () => { if (closed) return; closed = true; m.remove(); document.removeEventListener('keydown', onKey); };
-    (actions || [{ label: 'Close' }]).forEach((a) => {
-      const b = ui.el(`<button class="btn${a.primary ? ' primary' : ''}${a.danger ? ' danger' : ''}">${esc(a.label)}</button>`);
-      b.addEventListener('click', () => { const keep = a.onClick && a.onClick(m) === false; if (!keep) close(); });
-      foot.appendChild(b);
-    });
-    m.addEventListener('click', (e) => { if (e.target === m || e.target.closest('[data-close]')) close(); });
-    const onKey = (e) => { if (e.key === 'Escape') close(); };
-    document.addEventListener('keydown', onKey);
-    document.body.appendChild(m);
-    const first = m.querySelector('input, textarea, select') || foot.querySelector('.primary');
-    if (first) first.focus();
-    return { el: m, close };
-  };
-
-  ui.confirm = ({ title, message, confirmLabel, danger }) =>
-    new Promise((res) => {
-      let answered = false;
-      const m = ui.modal({
-        title, body: `<p>${esc(message)}</p>`,
-        actions: [
-          { label: 'Cancel', onClick: () => { answered = true; res(false); } },
-          { label: confirmLabel || 'OK', primary: !danger, danger, onClick: () => { answered = true; res(true); } },
-        ],
-      });
-      const obs = new MutationObserver(() => { if (!document.body.contains(m.el)) { obs.disconnect(); if (!answered) res(false); } });
-      obs.observe(document.body, { childList: true });
-    });
-
-  ui.promptText = ({ title, label, value, placeholder }) =>
-    new Promise((res) => {
-      let answered = false;
-      const body = ui.el(`<label class="field"><span>${esc(label)}</span><input type="text" value="${esc(value || '')}" placeholder="${esc(placeholder || '')}"></label>`);
-      const input = body.querySelector('input');
-      const m = ui.modal({
-        title, body,
-        actions: [
-          { label: 'Cancel', onClick: () => { answered = true; res(null); } },
-          { label: 'Save', primary: true, onClick: () => { answered = true; res(input.value.trim() || null); } },
-        ],
-      });
-      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { answered = true; res(input.value.trim() || null); m.close(); } });
-      const obs = new MutationObserver(() => { if (!document.body.contains(m.el)) { obs.disconnect(); if (!answered) res(null); } });
-      obs.observe(document.body, { childList: true });
-    });
-
-  // ---------- drawer (right-hand detail panel) ----------
+  // The shell's drawer, plus auto-growing the textareas the tracker's editors put in it.
   ui.drawer = {
-    el: null,
-    open({ title, subtitle, body, onClose }) {
-      this.close(true);
-      const d = ui.el(`<aside class="drawer" role="dialog" aria-label="${esc(title)}">
-        <div class="drawer-head"><div><div class="drawer-sub">${subtitle || ''}</div><h2>${esc(title)}</h2></div>
-        <button class="icon-btn" data-close aria-label="Close">&times;</button></div>
-        <div class="drawer-body"></div></aside>`);
-      const b = d.querySelector('.drawer-body');
-      if (typeof body === 'string') b.innerHTML = body; else b.appendChild(body);
-      d.querySelector('[data-close]').addEventListener('click', () => this.close());
-      document.body.appendChild(d);
-      document.body.classList.add('has-drawer');
-      this.el = d;
-      this.onClose = onClose;
-      ui.growAll(d);
-      return d;
-    },
-    close(silent) {
-      if (!this.el) return;
-      this.el.remove();
-      this.el = null;
-      document.body.classList.remove('has-drawer');
-      const cb = this.onClose;
-      this.onClose = null;
-      if (!silent && cb) cb();
-    },
+    get el() { return Hub.ui.drawer.el; },
+    open(opts) { const d = Hub.ui.drawer.open(opts); ui.growAll(d); return d; },
+    close: (silent) => Hub.ui.drawer.close(silent),
   };
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && ui.drawer.el && !document.querySelector('.modal-back')) ui.drawer.close();
-  });
-
-  // ---------- tabs ----------
-  ui.tabs = (items, active, hrefFor) =>
-    `<nav class="tabs">${items.map((t) => `<a class="tab${t.key === active ? ' active' : ''}" href="${hrefFor(t.key)}">${esc(t.label)}${t.count != null ? ` <span class="count">${t.count}</span>` : ''}</a>`).join('')}</nav>`;
 
   // ---------- editable table ----------
   // columns: [{key, label, enum?, person?, readonly?, long?, width?}]

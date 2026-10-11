@@ -8,7 +8,9 @@ A local, no-install app for running a NetSuite implementation: discovery intervi
 2. Open `index.html` in Chrome or Edge.
 3. Choose a folder. A folder that already holds a tracker opens; any other folder gets an `ns-tracker` folder set up inside it.
 
-Nothing is installed and nothing is sent anywhere. Each implementation is just a folder, so one copy of the app serves any number of them; switch from Settings.
+Nothing is installed and nothing is sent anywhere. Each implementation is just a folder, so one copy of the app serves any number of them; switch from the folder button in the top bar.
+
+The tracker runs on the same shell as Mission Control (`shell/`, an identical copy in both repos), so the two look and work the same and remember the same folder.
 
 **Design rule:** clone, open, pick a folder, go. No build step, no dependencies, no server, no workspace layout required. Any change that would add a setup step needs a very good reason.
 
@@ -19,7 +21,7 @@ Nothing is installed and nothing is sent anywhere. Each implementation is just a
 | **Question bank** | 187 questions, 87 decisions, 8 build layers, one-way doors, module scoping, prework and file checklist templates | `bank/*.json` in this repo (bundled into `app/bank.js`) | This repo |
 | **Implementation data** | Answers, decisions made, people, interviews, prework entries, system tables, files, activity log | A data folder you choose on first launch, one JSON file per area | Whoever's implementation it is |
 
-The app never writes into this repo. Choosing a folder: one with `tracker.json` is used as is; one containing `ns-tracker/` uses that; any other gets `ns-tracker/` created inside it. So pointing every tool at the same company folder (for example `dev\lemme`) keeps each tool's data side by side. Recent folders are remembered, so switching is one click (Settings > Switch data folder).
+The app never writes into this repo. Choosing a folder: one with `tracker.json` is used as is; one containing `ns-tracker/` uses that; any other is offered an `ns-tracker/` folder set up inside it. So pointing every tool at the same company folder keeps each tool's data side by side. Recent folders are remembered, so switching is one click.
 
 Data folder files: `tracker.json`, `people.json`, `interviews.json`, `answers.json`, `decisions.json`, `scoping.json`, `prework.json`, `tables.json`, `files.json`, `activity.json`. They are plain, pretty-printed JSON keyed by bank IDs (`FIN-4c`, `D-013`, `M-02`, `PW-D01`, `F-01`), so they diff cleanly in git and Claude can read or edit them directly. If a file is edited outside the app while it is open, the app reloads it when the window regains focus, or asks before overwriting.
 
@@ -54,11 +56,15 @@ Plain HTML, CSS and JavaScript with no build step and no dependencies. Classic `
 
 | File | Does |
 |---|---|
+| `index.html` | The tracker on its own: the pinned hub shell plus this one module |
+| `module.js` | Loads the tracker onto the shell (its stylesheet and scripts, in order); listed in `index.html` |
+| `shell/` | The shared shell (frame, data folder, themes, shared components). Mission Control keeps an identical copy; change both and run `node tools/check-shell.js ../mission-control` (see `shell/README.md`) |
 | `app/core.js` | Utilities, bank indexes (question -> decisions, layers, scoping, prework), status semantics, derived metrics and gates |
 | `app/store.js` | Instance state, adapters, debounced saves, outside-edit detection, activity log, mutations |
-| `app/ui.js` | Shared components: badges, selects, editable table, drawer, modal, toast |
+| `app/ui.js` | Tracker helpers: badges, status selects, people pickers, editable table; re-exports the shell's toast, modal, drawer and tabs |
 | `app/views-core.js` | Overview, Questions, Decisions, Build layers, Module scoping, question and decision editors |
 | `app/xlsx.js` | Minimal .xlsx reader (zip + XML, browser built-ins only) |
 | `app/import-prework.js` | Prework workbook import: plan (no writes), then apply |
 | `app/views-work.js` | Interview, Prework, Systems & files, People, Activity, Settings |
-| `app/app.js` | Shell: navigation, router, search, theme, connect screen |
+| `app/app.js` | The module definition: navigation, routing into views, search, save status, outside-edit handling |
+| `app/styles.css` | Tracker page styles only; tokens and shared components come from the shell |

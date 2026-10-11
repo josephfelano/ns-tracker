@@ -25,90 +25,26 @@
     activity: [],
   });
 
-  // ---------- IndexedDB (remembers the folder handle between visits) ----------
-  const idb = {
-    open() {
-      return new Promise((res, rej) => {
-        const r = indexedDB.open('ns-tracker', 1);
-        r.onupgradeneeded = () => r.result.createObjectStore('kv');
-        r.onsuccess = () => res(r.result);
-        r.onerror = () => rej(r.error);
-      });
-    },
-    async get(k) {
-      const db = await this.open();
-      return new Promise((res, rej) => {
-        const r = db.transaction('kv').objectStore('kv').get(k);
-        r.onsuccess = () => res(r.result);
-        r.onerror = () => rej(r.error);
-      });
-    },
-    async set(k, v) {
-      const db = await this.open();
-      return new Promise((res, rej) => {
-        const tx = db.transaction('kv', 'readwrite');
-        tx.objectStore('kv').put(v, k);
-        tx.oncomplete = () => res();
-        tx.onerror = () => rej(tx.error);
-      });
-    },
-    async del(k) {
-      const db = await this.open();
-      return new Promise((res) => {
-        const tx = db.transaction('kv', 'readwrite');
-        tx.objectStore('kv').delete(k);
-        tx.oncomplete = () => res();
-        tx.onerror = () => res();
-      });
-    },
+  // What a new data folder contains: every collection as a JSON file. The shell writes these
+  // when it sets a folder up; mission-control/tools/lib/company.js (initTrackerData) writes the
+  // same files from Node, so a folder set up either way opens the same.
+  // name: what the user typed (e.g. the company folder "lemme") -> "Lemme NetSuite implementation".
+  const templateFiles = (name) => {
+    const d = defaults();
+    const display = String(name).split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    d.tracker.name = display + ' NetSuite implementation';
+    return COLLECTIONS.map((c) => ({ path: c + '.json', content: JSON.stringify(d[c], null, 2) + '\n' }));
   };
 
   // ---------- Folder adapter (File System Access API; Chrome / Edge) ----------
-  // label: what the user sees - the company folder's name when they picked a company folder.
+  // The shell picks and remembers the folder and hands the tracker its data folder handle.
+  // label: what the user sees - the name of the folder that was picked (normally the company's).
   function FolderAdapter(handle, label) {
     this.kind = 'folder';
     this.handle = handle;
     this.label = label || (handle ? handle.name : '');
     this.known = {}; // name -> lastModified we last read or wrote
   }
-  FolderAdapter.supported = () => typeof window.showDirectoryPicker === 'function';
-  // Picking a folder:
-  //   1. it is a tracker data folder (has tracker.json)  -> use it
-  //   2. it contains ns-tracker/                          -> use that
-  //   3. anything else                                    -> { setUp(): adapter } creates <picked>/ns-tracker/
-  // Returns { adapter } or { parent, setUp }.
-  FolderAdapter.pick = async function () {
-    const picked = await window.showDirectoryPicker({ id: 'ns-tracker-data', mode: 'readwrite' });
-    const has = async (dir, name) => { try { await dir.getFileHandle(name); return true; } catch (e) { return false; } };
-    if (await has(picked, 'tracker.json')) return { adapter: new FolderAdapter(picked, picked.name) };
-    try { return { adapter: new FolderAdapter(await picked.getDirectoryHandle('ns-tracker'), picked.name) }; } catch (e) { /* not there */ }
-    return {
-      parent: picked,
-      setUp: async () => new FolderAdapter(await picked.getDirectoryHandle('ns-tracker', { create: true }), picked.name),
-    };
-  };
-  FolderAdapter.restore = async function () {
-    try {
-      const v = await idb.get('folder');
-      if (!v) return null;
-      return v.handle ? new FolderAdapter(v.handle, v.label) : new FolderAdapter(v);
-    } catch (e) {
-      return null;
-    }
-  };
-  FolderAdapter.recent = async function () {
-    try { return (await idb.get('recent')) || []; } catch (e) { return []; }
-  };
-  // Remember as the current folder and at the top of the recent list (max 6).
-  FolderAdapter.prototype.remember = async function () {
-    const entry = { handle: this.handle, label: this.label };
-    await idb.set('folder', entry);
-    const kept = [];
-    for (const r of await FolderAdapter.recent()) {
-      try { if (!(await r.handle.isSameEntry(this.handle))) kept.push(r); } catch (e) { /* stale */ }
-    }
-    await idb.set('recent', [entry].concat(kept).slice(0, 6));
-  };
   FolderAdapter.prototype.init = async function (fromGesture) {
     let perm = await this.handle.queryPermission({ mode: 'readwrite' });
     if (perm !== 'granted' && fromGesture) perm = await this.handle.requestPermission({ mode: 'readwrite' });
@@ -195,7 +131,7 @@
     listeners: new Set(),
     timers: {},
     dirty: new Set(),
-    FolderAdapter, BrowserAdapter, COLLECTIONS,
+    FolderAdapter, BrowserAdapter, COLLECTIONS, templateFiles,
   });
 
   store.onChange = (fn) => { store.listeners.add(fn); return () => store.listeners.delete(fn); };
@@ -379,10 +315,5 @@
     }
     await store.flushAll();
     emit('load');
-  };
-
-  store.disconnect = async function () {
-    await idb.del('folder');
-    store.adapter = null;
   };
 })();
