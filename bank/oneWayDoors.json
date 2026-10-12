@@ -1,11 +1,15 @@
 [
   {
     "num": 1,
-    "constraint": "Item costing method cannot be changed once the item record is saved. Fixing it means creating a new item, losing continuity of history and sales comparison.",
+    "kind": "record-lock",
+    "constraint": "Item costing method can't be changed once the item record is saved. Oracle's fix: adjust the item to zero, inactivate it and recreate it as a new item.",
     "why": "Highest-consequence single decision in the build. Must be settled per item category before any item is loaded.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Setting a Default Inventory Costing Method",
-    "isOneWay": true,
+    "sources": [
+      "S-058",
+      "S-162"
+    ],
     "decisionIds": [
       "D-036"
     ],
@@ -13,11 +17,15 @@
   },
   {
     "num": 2,
+    "kind": "support-only",
     "constraint": "Multi-Location Inventory cannot be turned off, once enabled and items distributed, without contacting NetSuite Customer Support.",
     "why": "Near-certain 'yes' for a multi-site food business, but it must be a deliberate yes.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Enabling the Multi-Location Inventory Feature: 'After you have enabled the feature and distributed items, you are not able to turn the feature off without contacting Customer Support.'",
-    "isOneWay": true,
+    "sources": [
+      "S-054",
+      "S-064"
+    ],
     "decisionIds": [
       "D-005"
     ],
@@ -25,11 +33,15 @@
   },
   {
     "num": 3,
-    "constraint": "No inventory transaction can be dated earlier than the date Multi-Location Inventory was enabled.",
+    "kind": "order",
+    "constraint": "Enable Multi-Location Inventory before the first inventory transaction. Oracle's current text: a distribution is dated after the last inventory-affecting transactions, and inventory transactions dated before a distribution must not be deleted or changed. The older wording (no inventory transaction dated before the MLI enable date) was not found on a current Oracle page.",
     "why": "Directly constrains the cutover date and any backdated inventory correction. Enable MLI before the period you intend to open with.",
-    "confidence": "Oracle docs",
-    "source": "NetSuite Help - Enabling the Multi-Location Inventory Feature: 'You cannot post inventory transactions dated prior to the date you enable Multi-Location Inventory.'",
-    "isOneWay": true,
+    "confidence": "Unverified",
+    "source": "NetSuite Help - inventory distribution (section_N2304534); OneWorld and inventory (section_N275901). The quoted enable-date sentence was not found.",
+    "sources": [
+      "S-111",
+      "S-002"
+    ],
     "decisionIds": [
       "D-005",
       "D-085"
@@ -38,11 +50,15 @@
   },
   {
     "num": 4,
-    "constraint": "CORRECTED: Enable Multi-Location Inventory BEFORE loading items, not after. Oracle's sequence is enable the feature, then create location records, then distribute items.",
+    "kind": "order",
+    "constraint": "Enable Multi-Location Inventory BEFORE loading items, together with Locations, even if only one location is tracked. Oracle's order: enable the feature, create location records, then distribute items.",
     "why": "The 'load items first' advice in circulation describes remediating an account that ALREADY has items without locations. It does not apply to a new account. Following it here would delay the MLI enable date and collide with constraint #3.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Enabling the Multi-Location Inventory Feature: 'After you have enabled the Multi-Location Inventory feature, you need to create a record for each of your company's locations and distribute items.'",
-    "isOneWay": true,
+    "sources": [
+      "S-064",
+      "S-055"
+    ],
     "decisionIds": [
       "D-005"
     ],
@@ -50,11 +66,14 @@
   },
   {
     "num": 5,
-    "constraint": "Lot or serial numbered items cannot be members of a regular assembly. A non-lot assembly cannot contain a lot-numbered component.",
+    "kind": "record-lock",
+    "constraint": "Lot or serial numbered items cannot be members of a regular assembly. An assembly with a lot or serial component must itself be a lot numbered or serialized assembly.",
     "why": "Lot tracking cascades UP the BOM. One lot-tracked raw material forces a lot-numbered assembly parent, and so on to finished goods. Scope this before building any item.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Assembly Item Records",
-    "isOneWay": true,
+    "sources": [
+      "S-089"
+    ],
     "decisionIds": [
       "D-006",
       "D-038"
@@ -63,11 +82,18 @@
   },
   {
     "num": 6,
-    "constraint": "These features cannot be disabled once used: Advanced Revenue Management, Multiple Currencies, Dynamic Allocation, Statistical Accounts, Advanced Taxes. Multi-Location Inventory is disable-by-Support-only.",
+    "kind": "cannot-disable",
+    "constraint": "These features cannot be disabled: ARM (Essentials), ARM (Revenue Allocation) and Advanced Taxes lock on enable; Multiple Currencies, Dynamic Allocation and Statistical Accounts lock once used. Multi-Location Inventory is disable-by-Support-only after items are distributed.",
     "why": "Do not enable speculatively. Every one of these should trace to a documented business need in the packet.",
     "confidence": "Oracle docs",
     "source": "Confirmed against NetSuite Help - Enabling Features and the individual feature topics",
-    "isOneWay": true,
+    "sources": [
+      "S-012",
+      "S-007",
+      "S-039",
+      "S-020",
+      "S-054"
+    ],
     "decisionIds": [
       "D-002",
       "D-005",
@@ -79,11 +105,14 @@
   },
   {
     "num": 7,
+    "kind": "locked-once-used",
     "constraint": "CORRECTED: Multiple Units of Measure is the PREREQUISITE for Statistical Accounts - not the reverse. Enabling Statistical Accounts auto-enables Multiple UOM. Multiple UOM cannot then be disabled if Statistical Accounts has been used.",
     "why": "The earlier note had this backwards and would have discouraged enabling MUOM for the wrong reason. A food business buying in cases and selling in units needs MUOM regardless. If DIM-6 returns per-unit metrics, Statistical Accounts is needed too and MUOM comes with it.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Enabling Statistical Accounts: 'The Multiple Unit of Measure feature is a requirement for using the Statistical Accounts feature. If it isn't enabled, the system automatically enables the feature.'",
-    "isOneWay": true,
+    "sources": [
+      "S-020"
+    ],
     "decisionIds": [
       "D-007",
       "D-017"
@@ -92,24 +121,30 @@
   },
   {
     "num": 8,
-    "constraint": "Multi-Subsidiary Customer requires reversing or deleting all related transactions to disable.",
+    "kind": "locked-once-used",
+    "constraint": "To disable Multi-Subsidiary Customer: reverse or delete all transactions tied to customers and their secondary subsidiaries, and remove all secondary subsidiaries from customer records. Costly, not strictly one-way. It cannot be enabled together with EU One Stop Shop.",
     "why": "Only relevant if OneWorld. Decide once; do not enable to 'see what it does'.",
-    "confidence": "Secondary",
-    "source": "NetSuite certification study material - confirm in SuiteAnswers",
-    "isOneWay": true,
-    "decisionIds": [
-      "D-001",
-      "D-003"
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Enable the Multi-Subsidiary Customer Feature",
+    "sources": [
+      "S-031",
+      "S-032"
     ],
-    "mappedBy": "heuristic"
+    "decisionIds": [
+      "D-101"
+    ],
+    "mappedBy": "research"
   },
   {
     "num": 9,
+    "kind": "behaviour",
     "constraint": "Advanced Receiving changes WHEN inventory costing posts: at item receipt if enabled, at bill entry if not.",
     "why": "Also required for a genuine 3-way match. Without it, receiving collapses into the vendor bill and the control is gone.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Setting a Default Inventory Costing Method; Costing Methods",
-    "isOneWay": true,
+    "sources": [
+      "S-058"
+    ],
     "decisionIds": [
       "D-014"
     ],
@@ -117,11 +152,15 @@
   },
   {
     "num": 10,
-    "constraint": "Item receipt cost drives inventory costing, not the vendor bill. A bill at a different amount posts the difference to Accrued Purchases rather than correcting item cost.",
+    "kind": "behaviour",
+    "constraint": "Item receipt cost drives inventory costing (FIFO/LIFO cost comes from the PO amounts), not the vendor bill. A bill at a different amount may post the difference to Accrued Purchases; Post Vendor Bill Variances then moves it to the Bill Price / Quantity / Exchange Rate variance accounts set on the item, not into item cost.",
     "why": "This is where unexplainable inventory variances come from. Design the receipt-cost process deliberately.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Costing Methods",
-    "isOneWay": true,
+    "sources": [
+      "S-163",
+      "S-118"
+    ],
     "decisionIds": [
       "D-014",
       "D-054"
@@ -130,11 +169,15 @@
   },
   {
     "num": 11,
-    "constraint": "BOMs embedded directly in assembly items are unsupported as of 2023.1. Advanced Bill of Materials is the current structure and is free.",
+    "kind": "recommendation",
+    "constraint": "BOMs embedded in assembly items are unsupported as of 2023.1. Advanced Bill of Materials is the current structure and is free; enabling it migrates existing BOMs. Disabling it later deletes the BOM and revision records created under it, so enable it at L0 before building BOMs.",
     "why": "Build on Advanced BOM from day one. No reason to start on the deprecated structure.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Assembly Item Records",
-    "isOneWay": true,
+    "sources": [
+      "S-089",
+      "S-088"
+    ],
     "decisionIds": [
       "D-040"
     ],
@@ -142,11 +185,17 @@
   },
   {
     "num": 12,
-    "constraint": "Enabling Inventory auto-creates Inventory Asset and COGS accounts. Enabling MLI auto-creates Transfer Orders and Inventory In Transit accounts.",
+    "kind": "behaviour",
+    "constraint": "Features create accounts: Inventory creates Inventory Asset and COGS; MLI creates Transfer Orders and Inventory In Transit; Advanced Receiving creates Accrued Purchases; Work Orders creates Work Orders; ARM creates Deferred Revenue, Unbilled Receivables and Revenue Arrangement; Purchase Orders, Sales Orders, Return Authorizations, Vendor Return Authorizations, Requisitions and Estimates each create a non-posting account.",
     "why": "These land in the COA whether or not the COA design anticipated them. Account for them in DIM-1.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Enabling Inventory Features",
-    "isOneWay": true,
+    "sources": [
+      "S-054",
+      "S-057",
+      "S-056",
+      "S-012"
+    ],
     "decisionIds": [
       "D-024"
     ],
@@ -154,11 +203,15 @@
   },
   {
     "num": 13,
+    "kind": "scope-risk",
     "constraint": "Catch weight (variable-weight product invoiced on actual weight) is NOT supported by standard Multiple UOM, which handles fixed ratios only.",
     "why": "If ITM-2b returns yes, this needs a SuiteApp or a custom design and it must be scoped before the item build - and before the quote.",
     "confidence": "Secondary",
     "source": "Practitioner material - confirm approach with the implementation partner",
-    "isOneWay": true,
+    "sources": [
+      "S-114",
+      "S-113"
+    ],
     "decisionIds": [
       "D-008"
     ],
@@ -166,11 +219,17 @@
   },
   {
     "num": 14,
-    "constraint": "Minimum remaining shelf life on outbound shipments is not enforced natively. FEFO allocation is native; a customer-mandated remaining-life threshold is not.",
-    "why": "If ITM-4b returns customer mandates, this is unscoped work. Surface it before signature.",
-    "confidence": "Secondary",
-    "source": "Practitioner material - confirm in SuiteAnswers",
-    "isOneWay": true,
+    "kind": "scope-risk",
+    "constraint": "Not in core. FEFO and minimum remaining shelf life on lot assignment come through the FEFO Lot Assignments SuiteApp (required shelf life at item and customer-item level, checked as fulfillment date plus required days against lot expiry); FEFO picking comes through NetSuite WMS.",
+    "why": "If ITM-4b returns customer mandates, confirm the SuiteApp fits and what it costs before signature; otherwise it is custom work.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - FEFO Lot Assignments; Pick Task Sorting and Recommended Bins (NetSuite WMS)",
+    "sources": [
+      "S-103",
+      "S-104",
+      "S-078",
+      "S-151"
+    ],
     "decisionIds": [
       "D-043"
     ],
@@ -178,11 +237,16 @@
   },
   {
     "num": 15,
-    "constraint": "NOT a one-way door: non-inventory and other-charge items CAN be converted to inventory items later, including to lot or serialized types. Pre-conversion history stays classified as it was.",
+    "kind": "not-a-door",
+    "constraint": "NOT a one-way door: Non-Inventory and Other Charge items can be converted to Inventory items later, one direction only and final on save. Existing inventory items cannot be converted to serialized items. How pre-conversion history is classified is not stated by Oracle.",
     "why": "Useful escape hatch. Reduces the cost of guessing wrong on borderline items.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Converting Non-Inventory Items to Inventory Items",
-    "isOneWay": false,
+    "sources": [
+      "S-135",
+      "S-137",
+      "S-112"
+    ],
     "decisionIds": [
       "D-037"
     ],
@@ -190,15 +254,364 @@
   },
   {
     "num": 16,
-    "constraint": "NOT a one-way door: COGS and Asset accounts on an item CAN be changed later, with an option to apply the change retroactively to existing transactions.",
+    "kind": "not-a-door",
+    "constraint": "NOT a one-way door: COGS and Asset accounts on an assembly or inventory item can be changed later, and existing transactions can be updated too - the retroactive option is available when the \"Do Not Update COGS and Asset Accounts on Existing Transactions When Accounts Are Changed\" preference is on.",
     "why": "GL account mapping on items is recoverable. Costing method is not. Do not confuse the two.",
     "confidence": "Oracle docs",
     "source": "NetSuite Help - Changing the COGS and Asset Accounts on Assembly and Inventory Items",
-    "isOneWay": false,
+    "sources": [
+      "S-164"
+    ],
     "decisionIds": [
-      "D-036",
+      "D-024",
       "D-037"
     ],
-    "mappedBy": "heuristic"
+    "mappedBy": "research"
+  },
+  {
+    "num": 17,
+    "kind": "record-lock",
+    "constraint": "A subsidiary's currency, country, edition, elimination state and Period End Journal Entries state can't be edited after its first save (the parent also locks legal name, tax numbers, logos and similar). Changing them means deleting and recreating the record; base currency only while there are no transactions.",
+    "why": "Settle country and base currency per subsidiary at L0, before the first save.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Subsidiary Record Fields Unavailable for Edits",
+    "sources": [
+      "S-017",
+      "S-001"
+    ],
+    "decisionIds": [
+      "D-001",
+      "D-033"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 18,
+    "kind": "locked-once-used",
+    "constraint": "A subsidiary with transactions or records can't be deleted, and the subsidiary with ID 1 can never be deleted.",
+    "why": "A test or misconfigured subsidiary that gets used stays in the account.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - deleting subsidiaries (section_3760056730)",
+    "sources": [
+      "S-165"
+    ],
+    "decisionIds": [
+      "D-001"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 19,
+    "kind": "recommendation",
+    "constraint": "Design the subsidiary hierarchy once. Changing it later needs a special preference, and Oracle warns existing financial statements may be lost with no recovery, consolidated and budget exchange rates may be irreversibly recalculated, and the consequences are outside Support scope.",
+    "why": "Hierarchy is part of D-001; get it right before transactions.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - modifying the subsidiary hierarchy (section_157252074629)",
+    "sources": [
+      "S-166",
+      "S-106"
+    ],
+    "decisionIds": [
+      "D-001"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 20,
+    "kind": "locked-once-used",
+    "constraint": "Without OneWorld, the base currency can't be changed after any record that includes a currency amount or link has been saved. Oracle: make base currency changes before you do anything else.",
+    "why": "Set the base currency first in a non-OneWorld account.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Enabling the Multiple Currencies Feature",
+    "sources": [
+      "S-006"
+    ],
+    "decisionIds": [
+      "D-033"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 21,
+    "kind": "record-lock",
+    "constraint": "After a units type is assigned to an item, the item's units type can't be changed; a units type in use can only gain more units.",
+    "why": "Design units types before the item load.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - units types (section_N2212390)",
+    "sources": [
+      "S-069",
+      "S-068"
+    ],
+    "decisionIds": [
+      "D-007"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 22,
+    "kind": "record-lock",
+    "constraint": "Existing inventory items can't be converted to serialized items; serialized items must be created as serialized.",
+    "why": "Decide serial tracking per item before the item load.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - serialized inventory items (section_N2230957)",
+    "sources": [
+      "S-112"
+    ],
+    "decisionIds": [
+      "D-006",
+      "D-038"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 23,
+    "kind": "order",
+    "constraint": "In an account upgraded to OneWorld, historical data dated before the OneWorld upgrade date can't be imported.",
+    "why": "If OneWorld may be needed, provision it before history is loaded.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - OneWorld and inventory (section_N275901)",
+    "sources": [
+      "S-002"
+    ],
+    "decisionIds": [
+      "D-003",
+      "D-023"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 24,
+    "kind": "locked-once-used",
+    "constraint": "With Group Average Costing, the in-transit costing preference can't be changed after any Group Average item has had costing calculations run; Oracle says to set it immediately after enabling the feature.",
+    "why": "Set the preference on the day Group Average Costing is enabled.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - accounting preferences (section_N1387022)",
+    "sources": [
+      "S-086",
+      "S-085"
+    ],
+    "decisionIds": [
+      "D-099",
+      "D-031"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 25,
+    "kind": "order",
+    "constraint": "Before enabling Multi-Location Inventory, all open orders must be fully shipped or otherwise closed.",
+    "why": "Enable MLI in a new account before any orders are entered.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - enabling Multi-Location Inventory (section_N2303574)",
+    "sources": [
+      "S-064"
+    ],
+    "decisionIds": [
+      "D-005"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 26,
+    "kind": "record-lock",
+    "constraint": "A custom segment's GL Impact setting can't be changed after the segment is created, and its ID can't change. A balancing segment must have GL Impact, which can't be cleared afterwards; at most two balancing segments can be active.",
+    "why": "Decide GL Impact for every segment before creating it (D-103).",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Configuring GL Impact for a Custom Segment; Editing Custom Segments; Creating a Balancing Segment",
+    "sources": [
+      "S-022",
+      "S-170",
+      "S-172"
+    ],
+    "decisionIds": [
+      "D-103",
+      "D-026",
+      "D-028"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "num": 27,
+    "kind": "order",
+    "constraint": "The GL Audit Numbering method can only be set in the last month of a fiscal year, quarter or period.",
+    "why": "If gapless numbering is needed, plan the switch-on date against the close calendar (D-107).",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - GL Audit Numbering; Enable Accounting Basic Features",
+    "sources": [
+      "S-019",
+      "S-018"
+    ],
+    "decisionIds": [
+      "D-107"
+    ],
+    "mappedBy": "research"
+  },
+  {
+    "mappedBy": "research",
+    "num": 28,
+    "kind": "recommendation",
+    "constraint": "Don't use location records for areas inside a warehouse (bin, shelf, dock). Oracle says it causes problems with fulfillments, LIFO/FIFO costing and reporting; use bins instead.",
+    "why": "Design locations as places and bins as positions within them before items are distributed (D-032, D-095).",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Creating Locations",
+    "sources": [
+      "S-115",
+      "S-071"
+    ],
+    "decisionIds": [
+      "D-032",
+      "D-011",
+      "D-095"
+    ]
+  },
+  {
+    "mappedBy": "research",
+    "num": 29,
+    "kind": "order",
+    "constraint": "Turn on Standard Costing before any item is saved with the Standard costing method; the method is then fixed on the item (door #1).",
+    "why": "If any item category will be on Standard, Standard Costing goes on at L0, before the item load (D-036, D-041).",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - enabling Standard Costing (section_N2200714); Setting a Default Inventory Costing Method",
+    "sources": [
+      "S-083",
+      "S-058"
+    ],
+    "decisionIds": [
+      "D-031",
+      "D-036",
+      "D-041"
+    ]
+  },
+  {
+    "mappedBy": "research",
+    "num": 30,
+    "kind": "behaviour",
+    "constraint": "The Prevent Negative Inventory preference (Enhanced Validations and Defaulting SuiteApp) does not apply to REST, Custom Tool or Web Store transactions.",
+    "why": "Integrations that post inventory through REST can still drive stock negative; plan the close search (D-070) accordingly (D-112).",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Setting the Prevent Negative Inventory Preference",
+    "sources": [
+      "S-198"
+    ],
+    "decisionIds": [
+      "D-112",
+      "D-070"
+    ]
+  },
+  {
+    "mappedBy": "research",
+    "num": 31,
+    "kind": "behaviour",
+    "constraint": "Once a purchase order line is on an inbound shipment, it must be received from the shipment, not from the purchase order.",
+    "why": "Receiving staff and integrations that receive against the PO must switch to the shipment for those lines (D-054).",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Using Inbound Shipment Management",
+    "sources": [
+      "S-216"
+    ],
+    "decisionIds": [
+      "D-054",
+      "D-055",
+      "D-056"
+    ]
+  },
+  {
+    "mappedBy": "research",
+    "num": 32,
+    "kind": "behaviour",
+    "constraint": "Consigned items (Consigned Inventory Management) can't be added to an inbound shipment.",
+    "why": "Vendor consignment and tracking goods in transit on inbound shipments can't cover the same items (D-053, D-055).",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Consigned Inventory Management (limitations)",
+    "sources": [
+      "S-079"
+    ],
+    "decisionIds": [
+      "D-053",
+      "D-055"
+    ]
+  },
+  {
+    "mappedBy": "research",
+    "num": 33,
+    "kind": "record-lock",
+    "constraint": "Once a vendor bill variance journal posts, the linked purchase order, item receipt and vendor bill can't be changed.",
+    "why": "Corrections after Post Vendor Bill Variances need reversing entries, so set match tolerances and variance accounts before go-live (D-057).",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Vendor Bill Variances",
+    "sources": [
+      "S-163"
+    ],
+    "decisionIds": [
+      "D-057",
+      "D-014"
+    ]
+  },
+  {
+    "num": 34,
+    "mappedBy": "research",
+    "kind": "behaviour",
+    "constraint": "Records imported by CSV in error can't be mass-deleted; each one has to be deleted one at a time.",
+    "why": "A bad production load is expensive to undo, so every load is trial-run in sandbox and reconciled first.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Deleting Incorrect CSV Data",
+    "sources": [
+      "S-129"
+    ],
+    "decisionIds": [
+      "D-128",
+      "D-084",
+      "D-023"
+    ]
+  },
+  {
+    "num": 35,
+    "mappedBy": "research",
+    "kind": "behaviour",
+    "constraint": "A sandbox refresh replaces everything in the sandbox, including trial loads and development work, and can't be cancelled once started. Sandboxes go offline for upgrade with production, and a refresh that overlaps the upgrade fails.",
+    "why": "Trial loads and unfinished build work in sandbox are lost on refresh; schedule refreshes around them and around releases.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Refreshing Sandbox Accounts; NetSuite Sandbox FAQ",
+    "sources": [
+      "S-224",
+      "S-124"
+    ],
+    "decisionIds": [
+      "D-128",
+      "D-130",
+      "D-089"
+    ]
+  },
+  {
+    "num": 36,
+    "mappedBy": "research",
+    "kind": "behaviour",
+    "constraint": "Two-factor authentication is mandatory for Administrator and other highly privileged roles in every account type, and API access for those roles must use token-based authentication or OAuth 2.0.",
+    "why": "Integrations can't sign in as a privileged user with a password; plan integration users and roles before L5.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - Mandatory Two-Factor Authentication",
+    "sources": [
+      "S-125"
+    ],
+    "decisionIds": [
+      "D-127",
+      "D-078"
+    ]
+  },
+  {
+    "num": 37,
+    "mappedBy": "research",
+    "kind": "scope-risk",
+    "constraint": "Customer Center and Partner Center roles are never allowed into a sandbox, so portals can't be tested there.",
+    "why": "Portal acceptance testing needs its own plan.",
+    "confidence": "Oracle docs",
+    "source": "NetSuite Help - NetSuite Sandbox FAQ",
+    "sources": [
+      "S-124"
+    ],
+    "decisionIds": [
+      "D-130",
+      "D-022"
+    ]
   }
 ]

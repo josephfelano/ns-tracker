@@ -262,5 +262,56 @@
     "coveredByPreworkId": "PW-D24",
     "coverage": "full",
     "mappedBy": "heuristic"
+  },
+  {
+    "id": "F-38",
+    "category": "Operational",
+    "file": "Open purchase orders with remaining quantities, as of cutover",
+    "notes": null
+  },
+  {
+    "id": "F-39",
+    "category": "Operational",
+    "file": "Open sales orders and backorders with remaining quantities, as of cutover",
+    "notes": null
+  },
+  {
+    "id": "F-40",
+    "category": "Operational",
+    "file": "Open work orders and transfer orders, as of cutover",
+    "notes": null
+  },
+  {
+    "id": "F-41",
+    "category": "Financial",
+    "file": "Customer deposits, prepayments, gift card and store credit liability detail, as of cutover",
+    "notes": null
+  },
+  {
+    "id": "F-42",
+    "category": "Financial",
+    "file": "Unapplied cash, open credit memos and open vendor credits, as of cutover",
+    "notes": null
+  },
+  {
+    "id": "F-43",
+    "category": "Financial",
+    "file": "Last bank reconciliation per account, with outstanding checks and deposits in transit",
+    "notes": null
+  },
+  {
+    "id": "F-44",
+    "category": "Operational",
+    "file": "On-hand by item, location and lot, with expiry, as of cutover",
+    "notes": null
+  },
+  {
+    "id": "F-45",
+    "category": "Master data",
+    "file": "Org chart",
+    "notes": "Anyone who touches a transaction, with role and location",
+    "coveredByPreworkId": "PW-D17",
+    "coverage": "partial",
+    "mappedBy": "research"
   }
 ]

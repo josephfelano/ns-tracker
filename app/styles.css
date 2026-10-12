@@ -21,7 +21,7 @@
 .part-block { margin-bottom: 12px; }
 .part-head { display: flex; justify-content: space-between; margin-bottom: 4px; }
 .sec-row, .layer-row { display: grid; grid-template-columns: 130px 1fr 74px; gap: 10px; align-items: center; padding: 3px 4px; border-radius: 4px; color: var(--text); text-decoration: none !important; }
-.layer-row { grid-template-columns: 30px 150px 1fr 74px; }
+.layer-row { grid-template-columns: 62px 150px 1fr 74px; }
 .sec-row:hover, .layer-row:hover { background: var(--surface-2); }
 .sec-name, .layer-name { font-size: 13px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sec-num { font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; color: var(--text-2); white-space: nowrap; }
@@ -76,6 +76,35 @@ details.layer[open] summary { border-bottom: 1px solid var(--border); }
 .layer-stats { display: flex; gap: 14px; font-size: 12.5px; color: var(--text-2); white-space: nowrap; align-items: center; }
 .layer-body { padding: 12px 18px 16px; }
 
+/* answer picker: selected = wash fill + text colour, nothing else */
+.picker { display: flex; flex-direction: column; gap: 6px; }
+.pick-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.pick-btn { font: inherit; font-size: var(--fs-sm); font-weight: 550; padding: 5px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-2); cursor: pointer; text-align: left; }
+.pick-btn:hover:not(:disabled) { background: var(--surface-2); }
+.pick-btn.on { background: var(--accent-weak); color: var(--accent-text); border-color: var(--accent); font-weight: 650; }
+.pick-btn:disabled { cursor: default; opacity: .5; }
+.pick-btn.on:disabled { opacity: 1; }
+.pick-input { max-width: 240px; }
+.pick-note { font-size: var(--fs-sm); color: var(--text-2); }
+.pick-note.bad, .bad-text { color: var(--bad); }
+.picker.compact .pick-btn { padding: 3px 9px; font-size: var(--fs-xs); }
+.dec-picks { flex-direction: column; align-items: stretch; }
+.dec-pick { display: flex; flex-direction: column; gap: 6px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.dec-pick:last-child { border-bottom: 0; }
+.dec-pick > .chip { align-self: flex-start; }
+.answer-line { font-size: 12.5px; color: var(--accent-text); font-weight: 550; }
+.conseq { margin: -4px 0 16px; }
+.conseq .feed-label { padding-top: 6px; }
+.feed-val { flex: 1; min-width: 0; padding: 4px 0; }
+ul.does { margin: 2px 0; padding-left: 18px; font-size: 13.5px; }
+ul.does li { margin-bottom: 2px; }
+details.srcs { font-size: var(--fs-sm); color: var(--text-3); margin: 4px 0 10px; }
+details.srcs summary { cursor: pointer; }
+details.srcs ul { margin: 4px 0 0; padding-left: 18px; }
+.cfg { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 8px; }
+.cfg-head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.layer-body .door { margin-bottom: 8px; }
+
 /* scoping */
 .scoping { display: flex; flex-direction: column; }
 .scope.sel { border-color: var(--accent); }
@@ -116,4 +145,13 @@ details.layer[open] summary { border-bottom: 1px solid var(--border); }
 @media (max-width: 860px) {
   .gates, .iv-layout { grid-template-columns: 1fr; }
   .iv-queue { position: static; max-height: 360px; }
+}
+
+/* ---------- print (the implementation guide) ---------- */
+@media print {
+  .hub-nav, .hub-topbar, .hub-title-bar, .btn-row, .drawer, .hub-nav-overlay { display: none !important; }
+  .hub-main, .hub-content { margin: 0 !important; padding: 0 !important; overflow: visible !important; height: auto !important; }
+  .card { box-shadow: none; break-inside: avoid-page; }
+  details.layer summary { grid-template-columns: auto 1fr auto; }
+  .layer-bar { display: none; }
 }

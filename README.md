@@ -1,6 +1,6 @@
 # NS Implementation Tracker
 
-A local, no-install app for running a NetSuite implementation: discovery interviews, the decision register, build layers, module scoping, prework and the file checklist, all linked so any decision can be traced back to the answers behind it.
+A local, no-install app for running a NetSuite implementation from scoping to go-live: discovery interviews, the decision register, the implementation guide, module scoping, prework and the file checklist. Each decision has answers to pick from; the answers drive the guide (features to enable, what to configure, what stops applying, one-way warnings, the quote checklist), and every decision traces back to the interview answers behind it.
 
 ## Quick start
 
@@ -18,7 +18,7 @@ The tracker runs on the same shell as Mission Control (`shell/`, an identical co
 
 | | What | Where | Owner |
 |---|---|---|---|
-| **Question bank** | 187 questions, 87 decisions, 8 build layers, one-way doors, module scoping, prework and file checklist templates | `bank/*.json` in this repo (bundled into `app/bank.js`) | This repo |
+| **Question bank** | Questions, decisions with their answer options, implementation steps, NetSuite features and their rules, sources, one-way doors, data load order, module scoping, prework and file checklist templates | `bank/*.json` in this repo (bundled into `app/bank.js`) | This repo |
 | **Implementation data** | Answers, decisions made, people, interviews, prework entries, system tables, files, activity log | A data folder you choose on first launch, one JSON file per area | Whoever's implementation it is |
 
 The app never writes into this repo. Choosing a folder: one with `tracker.json` is used as is; one containing `ns-tracker/` uses that; any other is offered an `ns-tracker/` folder set up inside it. So pointing every tool at the same company folder keeps each tool's data side by side. Recent folders are remembered, so switching is one click.
@@ -38,17 +38,28 @@ The app talks to storage through one adapter interface (`app/store.js`):
 
 A hosted backend would be a third adapter. The views do not change.
 
-## Rebuilding the bank
+## The bank
 
-The bank is generated from the source workbooks, with corrections applied by the builder and logged in `bank/CORRECTIONS.md`:
+The bank files in `bank/` are the source: edit them directly, then run
 
 ```
-python -I tools/build_bank.py --source <folder with the workbooks>
 node tools/check_bank.js
 node tools/bundle_bank.js
 ```
 
-`check_bank.js` verifies every cross-reference, ID, enum and expected count and exits non-zero on failure. `bundle_bank.js` regenerates `app/bank.js` (browsers block `fetch()` from `file://`, so the bank ships as a script). Never edit `app/bank.js` or `CORRECTIONS.md` by hand.
+`check_bank.js` verifies every reference (questions, decisions, features, sources, steps), the enums, that the feature rules have no requirement cycles, and that every NetSuite fact carries a source or an explicit unverified note; it exits non-zero on failure. `bundle_bank.js` regenerates `app/bank.js` (browsers block `fetch()` from `file://`, so the bank ships as a script). Never edit `app/bank.js` by hand. The bank was first imported from consultant workbooks; that import script and its corrections log are in git history. Research behind the content is in `research/`.
+
+| File | Holds |
+|---|---|
+| `steps.json` | The implementation steps in order: Scoping and licensing, Kickoff, Discovery and design, build layers L0-L6, Testing, Training, L7 Cutover, Go-live and hypercare, Operate |
+| `decisions.json` | Each decision: the questions that feed it, the step it must be decided by and the step it is built in, reversibility, and `input`: the answer type (yes/no, pick one, pick several, number, text) and options. Each option lists the setup it means (`does`), the features it turns on or leaves off, the decisions it makes not applicable, licence impact, warnings and sources |
+| `features.json` | NetSuite features and their rules, once: what each requires, switches on, conflicts with, how it locks and whether it is licensed |
+| `sources.json` | Every source behind a NetSuite fact (Oracle docs first), referenced by id |
+| `loadOrder.json` | The order data is loaded in, with the method and step for each |
+| `oneWayDoors.json` | Constraints to read before configuring, each with a kind (cannot be undone, locked once used, locked on the record, order, behaviour, recommendation, scope risk) |
+| `questions.json`, `moduleScoping.json`, `prework.json`, `systemsTables.json`, `fileChecklist.json`, `meta.json` | Discovery questions, pre-quote asks, prework and file templates, enums |
+
+**How answers drive the guide.** Chosen options turn features on, and the feature rules close over them (requires, switches on). A pick-one or yes/no decision whose answer NetSuite then fixes is shown as set, with the reason ("Multiple Currencies is required by OneWorld (D-001)"); an option those rules rule out is disabled; `makesNA` drops decisions that stop applying; conflicting features are flagged. Pick-several decisions are never forced, and a decision with `input.forceable: false` (an account default or policy) is never forced either; both still have options ruled out. Rules live only on features, never copied into options. The answer is saved as `choice` in the data folder's `decisions.json`.
 
 ## Code layout
 
@@ -59,10 +70,10 @@ Plain HTML, CSS and JavaScript with no build step and no dependencies. Classic `
 | `index.html` | The tracker on its own: the pinned hub shell plus this one module |
 | `module.js` | Loads the tracker onto the shell (its stylesheet and scripts, in order); listed in `index.html` |
 | `shell/` | The shared shell (frame, data folder, themes, shared components). Mission Control keeps an identical copy; change both and run `node tools/check-shell.js ../mission-control` (see `shell/README.md`) |
-| `app/core.js` | Utilities, bank indexes (question -> decisions, layers, scoping, prework), status semantics, derived metrics and gates |
+| `app/core.js` | Utilities, bank indexes (question -> decisions, steps, scoping, prework), status semantics, the decision logic (features on, forced answers, not applicable, conflicts), derived metrics and gates |
 | `app/store.js` | Instance state, adapters, debounced saves, outside-edit detection, activity log, mutations |
 | `app/ui.js` | Tracker helpers: badges, status selects, people pickers, editable table; re-exports the shell's toast, modal, drawer and tabs |
-| `app/views-core.js` | Overview, Questions, Decisions, Build layers, Module scoping, question and decision editors |
+| `app/views-core.js` | Overview, Questions, Decisions, Implementation guide (page, print, Markdown export), Module scoping, question and decision editors, the answer picker |
 | `app/xlsx.js` | Minimal .xlsx reader (zip + XML, browser built-ins only) |
 | `app/import-prework.js` | Prework workbook import: plan (no writes), then apply |
 | `app/views-work.js` | Interview, Prework, Systems & files, People, Activity, Settings |

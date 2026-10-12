@@ -392,8 +392,8 @@
           <p class="fine">A snapshot is every area in one file: a backup, or a way to move data into a folder.</p></section>
         <section class="card"><div class="card-head"><h2>Question bank</h2></div>
           <dl class="kv"><dt>Version</dt><dd>${esc(meta.version)}</dd><dt>Source date</dt><dd>${esc(meta.generatedAt)}</dd>
-          <dt>Contents</dt><dd>${B.questions.length} questions (${B.questions.filter((q) => q.tier1).length} Tier 1), ${B.decisions.length} decisions, ${B.layers.length} layers, ${B.oneWayDoors.length} one-way door notes, ${B.moduleScoping.length} scoping asks, ${B.prework.dataDocuments.length + B.prework.processes.length} prework items, ${B.fileChecklist.length} files</dd>
-          <dt>Corrections</dt><dd>Changes from the source workbooks are logged in <code>bank/CORRECTIONS.md</code>.</dd></dl></section>`;
+          <dt>Contents</dt><dd>${B.questions.length} questions (${B.questions.filter((q) => q.tier1).length} Tier 1), ${B.decisions.length} decisions, ${B.steps.length} steps, ${B.features.length} NetSuite features, ${B.oneWayDoors.length} one-way door notes, ${B.moduleScoping.length} scoping asks, ${B.prework.dataDocuments.length + B.prework.processes.length} prework items, ${B.fileChecklist.length} files</dd>
+          <dt>Sources</dt><dd>${B.sources.length} sources behind the NetSuite facts; research in <code>research/</code>.</dd></dl></section>`;
       ui.on(root, 'input', '[data-name]', (e, t) => { st.tracker.name = t.value; store.touch('tracker'); });
       ui.on(root, 'click', '[data-switch]', () => Hub.switchFolder());
       ui.on(root, 'click', '[data-export]', () => {

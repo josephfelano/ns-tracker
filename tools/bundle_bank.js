@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Bundles bank/*.json into app/bank.js so index.html can load the bank from file://
-// (browsers block fetch() of local files). Run after build_bank.py:
+// (browsers block fetch() of local files). Run after editing the bank and check_bank.js:
 //   node tools/bundle_bank.js
 'use strict';
 const fs = require('fs');
@@ -14,7 +14,10 @@ const parts = {
   meta: 'meta.json',
   questions: 'questions.json',
   decisions: 'decisions.json',
-  layers: 'layers.json',
+  steps: 'steps.json',
+  features: 'features.json',
+  sources: 'sources.json',
+  loadOrder: 'loadOrder.json',
   oneWayDoors: 'oneWayDoors.json',
   moduleScoping: 'moduleScoping.json',
   prework: 'prework.json',

@@ -250,13 +250,21 @@
 
   store.setDecision = function (did, field, value) {
     const d = (store.state.decisions[did] = store.state.decisions[did] || {});
-    if (d[field] === value) return;
+    if (JSON.stringify(d[field]) === JSON.stringify(value)) return;
     d[field] = value;
     d.updatedAt = T.now();
-    if (field === 'status' && value === 'Decided' && !d.decidedAt) d.decidedAt = T.today();
+    // Picking an answer is making the decision.
+    const picked = field === 'choice' && value != null && value !== '' && !(Array.isArray(value) && !value.length);
+    if (picked && !T.dDone(d.status || 'Not started')) d.status = 'Decided';
+    if ((field === 'status' && value === 'Decided') || (picked && d.status === 'Decided')) d.decidedAt = d.decidedAt || T.today();
     store.touch('decisions');
     if (field === 'status') store.log('decision-status', did, did + ' marked ' + value);
-    else store.log('decision-edit', did, did + ' ' + field + ' updated');
+    else if (field === 'choice') {
+      const opts = T.idx.opt.get(did);
+      const label = (v) => (opts && opts.get(String(v)) ? opts.get(String(v)).label : String(v));
+      const text = value == null || value === '' || (Array.isArray(value) && !value.length) ? 'cleared' : (Array.isArray(value) ? value : [value]).map(label).join(', ');
+      store.log('decision-choice', did, did + ' answer: ' + text);
+    } else store.log('decision-edit', did, did + ' ' + field + ' updated');
     emit('decisions');
   };
 

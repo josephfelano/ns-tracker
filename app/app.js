@@ -15,7 +15,7 @@
     { key: 'interview', label: 'Interview', icon: 'M4 5h16v10H8l-4 4z' },
     { key: 'questions', label: 'Questions', icon: 'M9 9a3 3 0 1 1 4 2.8c-.6.3-1 .9-1 1.6V14M12 17.5v.01M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z' },
     { key: 'decisions', label: 'Decisions', icon: 'M6 3v18M6 5h11l-2 4 2 4H6' },
-    { key: 'layers', label: 'Build layers', icon: 'M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5M3 17l9 5 9-5' },
+    { key: 'guide', label: 'Implementation guide', icon: 'M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5M3 17l9 5 9-5' },
     { key: 'scoping', label: 'Module scoping', icon: 'M4 6h16M4 12h16M4 18h10' },
     { sep: 'Collect' },
     { key: 'prework', label: 'Prework', icon: 'M6 3h9l5 5v13H6zM14 3v6h6' },
@@ -61,7 +61,7 @@
     const qs = T.bank.questions.filter((x) => x.id.toLowerCase().startsWith(q) || hit(x.text) || hit((store.state.answers[x.id] || {}).answer))
       .map((x) => ({ id: x.id, text: x.text, meta: x.section, href: T.href('questions/' + encodeURIComponent(x.id)) }));
     const ds = T.bank.decisions.filter((x) => x.id.toLowerCase().startsWith(q) || hit(x.decides) || hit(x.nsSetting) || hit(x.area))
-      .map((x) => ({ id: x.id, text: x.decides, meta: x.area + ' - ' + x.layer, href: T.href('decisions/' + encodeURIComponent(x.id)) }));
+      .map((x) => ({ id: x.id, text: x.decides, meta: x.area + ' - ' + x.decideBy, href: T.href('decisions/' + encodeURIComponent(x.id)) }));
     return ds.concat(qs).slice(0, 14);
   }
 
@@ -108,7 +108,7 @@
     label: 'Implementation tracker',
     mark: 'NS',
     icon: 'M9 4h6v3H9zM8 5H6v16h12V5h-2M9 13l2 2 4-4',
-    description: 'Discovery, decisions and build layers for a NetSuite implementation',
+    description: 'Discovery, decisions and the implementation guide for a NetSuite implementation',
     nav,
     footNav: FOOT,
     // Found, remembered and set up by the shell's one folder rule (shell/hub.js).

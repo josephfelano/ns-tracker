@@ -100,6 +100,26 @@
     "why": "Single-person access becomes an emergency at exactly the wrong moment."
   },
   {
+    "id": "SYS-11",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "Which documents must be attached to records in NetSuite (signed POs, vendor invoices, certificates, contracts), and roughly how much storage do they take today?",
+    "why": "File storage in NetSuite is capped by the service tier, so attachment volume can change the quote."
+  },
+  {
+    "id": "SYS-12",
+    "parentId": null,
+    "prefix": "SYS",
+    "part": "P1",
+    "section": "Systems",
+    "tier1": false,
+    "text": "For each list and open transaction you will move (items, customers, vendors, open invoices and bills), what is its unique id in the current system, and does it ever change?",
+    "why": "That id is carried into NetSuite as the External ID, so a re-run updates records instead of duplicating them and imported payments can be matched to imported invoices."
+  },
+  {
     "id": "FIN-1a",
     "parentId": "FIN-1",
     "prefix": "FIN",
@@ -320,6 +340,46 @@
     "why": "Transfers at cost are simple. Transfers above cost create profit sitting in inventory that has to be stripped out every single close."
   },
   {
+    "id": "FIN-9",
+    "parentId": null,
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Entity",
+    "tier1": true,
+    "text": "Do you report under more than one accounting basis - for example local statutory rules in one country plus group GAAP or IFRS, or a separate tax book? Which entities, and which bases?",
+    "why": "Parallel books are a separate NetSuite feature. It has to be set up before transactions are posted in those entities, needs Oracle's professional services, and changes the quote."
+  },
+  {
+    "id": "FIN-10",
+    "parentId": null,
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Fiscal calendar",
+    "tier1": true,
+    "text": "Only if there is more than one entity: do all entities share the same fiscal year end and the same period pattern? If not, which ones differ?",
+    "why": "Different fiscal years per entity need a feature that cannot be turned off once a calendar is assigned."
+  },
+  {
+    "id": "FIN-11",
+    "parentId": null,
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Fiscal calendar",
+    "tier1": false,
+    "text": "Does any entity have a legal or statutory requirement to post closing entries in the ledger at year end, rather than just carrying the result into retained earnings?",
+    "why": "By default NetSuite calculates retained earnings without closing entries. Posting real closing entries uses a feature that cannot be turned off once used."
+  },
+  {
+    "id": "FIN-12",
+    "parentId": null,
+    "prefix": "FIN",
+    "part": "P1",
+    "section": "Assets",
+    "tier1": false,
+    "text": "Do you hold any leases - property, vehicles, equipment - that are accounted for on the balance sheet under ASC 842 or IFRS 16? Roughly how many?",
+    "why": "Lease accounting in NetSuite comes with the Fixed Assets Management add-on, so leases can bring that module into scope even without a fixed asset register."
+  },
+  {
     "id": "DIM-1",
     "parentId": null,
     "prefix": "DIM",
@@ -398,6 +458,16 @@
     "tier1": false,
     "text": "Is there spend or activity that legitimately has no department, channel or product line - corporate overhead, insurance, interest?",
     "why": "Decides whether each reporting axis is mandatory or optional. Mandatory gives clean reports and forces guessing; optional gives honest blanks and messier reports."
+  },
+  {
+    "id": "DIM-9",
+    "parentId": null,
+    "prefix": "DIM",
+    "part": "P1",
+    "section": "Dimensions",
+    "tier1": false,
+    "text": "Does a single bill, invoice or journal ever need to be split across more than one department, class or location? And must journals balance within each department or class?",
+    "why": "NetSuite sets these either once per transaction or line by line, with separate rules for journals."
   },
   {
     "id": "ITM-1a",
@@ -750,6 +820,56 @@
     "why": null
   },
   {
+    "id": "ITM-12",
+    "parentId": null,
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Inventory",
+    "tier1": true,
+    "text": "Do you store product in addressable bins, racks or shelf positions within a site, and do you need on-hand by bin?",
+    "why": "Bin tracking is a prerequisite for several other features, including inventory statuses for held product and counting lot-tracked stock. Please answer even if the answer is no."
+  },
+  {
+    "id": "ITM-13",
+    "parentId": null,
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Costing",
+    "tier1": true,
+    "text": "If the same item is held at more than one site: should it carry one cost across all sites, or its own cost at each site?",
+    "why": "This is set when items are created and cannot be changed on an item afterward."
+  },
+  {
+    "id": "ITM-14",
+    "parentId": null,
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Inventory",
+    "tier1": false,
+    "text": "Is product ever shipped or consumed before its receipt or build is recorded? How often, and how is it caught up?",
+    "why": "Decides whether NetSuite blocks negative stock or allows it and estimates the cost."
+  },
+  {
+    "id": "ITM-15",
+    "parentId": null,
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Traceability",
+    "tier1": false,
+    "text": "Who assigns lot numbers, at receipt and at production, and what is recorded against each lot?",
+    "why": "Lot numbers can be the supplier's, typed by hand, or generated from a format, and each needs different setup."
+  },
+  {
+    "id": "ITM-16",
+    "parentId": null,
+    "prefix": "ITM",
+    "part": "P1",
+    "section": "Items",
+    "tier1": false,
+    "text": "Do products come in variants (size, flavour, pack) sold as one family?",
+    "why": "Variants can be set up as one parent item with child items, or as separate items."
+  },
+  {
     "id": "QLT-1",
     "parentId": null,
     "prefix": "QLT",
@@ -918,6 +1038,16 @@
     "tier1": false,
     "text": "Only if there is more than one entity: where does consolidation happen today, who performs it, and is it a spreadsheet?",
     "why": null
+  },
+  {
+    "id": "CLS-12",
+    "parentId": null,
+    "prefix": "CLS",
+    "part": "P1",
+    "section": "Close",
+    "tier1": false,
+    "text": "Which costs are allocated or spread across periods each month - for example shared overhead, rent, insurance or prepaid contracts - and on what basis?",
+    "why": "NetSuite offers fixed-weight allocation, allocation weighted by statistical figures, and amortization from vendor bills; one of them cannot be turned off once used."
   },
   {
     "id": "P2P-0",
@@ -1320,6 +1450,16 @@
     "why": "Card spend is usually a meaningful share of the spend that has no purchase order behind it."
   },
   {
+    "id": "P2P-14",
+    "parentId": null,
+    "prefix": "P2P",
+    "part": "P2",
+    "section": "AP",
+    "tier1": false,
+    "text": "Do you pay any vendor before delivery (deposits, prepayments, cash in advance)? How are those payments tracked against the order and the bill?",
+    "why": "A vendor prepayment can be linked to its purchase order and applied to that order's bills automatically."
+  },
+  {
     "id": "O2C-1a",
     "parentId": "O2C-1",
     "prefix": "O2C",
@@ -1670,6 +1810,36 @@
     "why": null
   },
   {
+    "id": "O2C-11",
+    "parentId": null,
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "Only if there is more than one entity: does any customer buy from more than one of your entities? Which customers, and roughly how many?",
+    "why": "Sharing one customer record across entities is a separate feature. It is not compatible with some tax features and is costly to turn off."
+  },
+  {
+    "id": "O2C-12",
+    "parentId": null,
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "Are sales reps, brokers or partners paid commission? How is it calculated, and from which transactions?",
+    "why": "Calculating commission inside NetSuite conflicts with NetSuite's own subscription billing, so it has to be decided early."
+  },
+  {
+    "id": "O2C-13",
+    "parentId": null,
+    "prefix": "O2C",
+    "part": "P2",
+    "section": "Sales",
+    "tier1": false,
+    "text": "Do sales orders need someone's approval before they ship? Who approves, and on what condition (amount, customer, margin)?",
+    "why": "Sets whether new orders wait for approval before fulfillment, and whether an edit sends them back."
+  },
+  {
     "id": "CSH-1",
     "parentId": null,
     "prefix": "CSH",
@@ -1800,6 +1970,26 @@
     "why": "Full licenses, limited-access roles and no-login integrations cost very different amounts and imply very different designs. This is needed before we can be quoted."
   },
   {
+    "id": "ORG-8",
+    "parentId": null,
+    "prefix": "ORG",
+    "part": "P2",
+    "section": "People",
+    "tier1": true,
+    "text": "Who only needs to approve transactions, not enter them? And who only uses warehouse scanning? Roughly how many people in each group?",
+    "why": "Approve-only and scanning-only users can hold specialized licences instead of full ones. This is needed before we can be quoted."
+  },
+  {
+    "id": "ORG-9",
+    "parentId": null,
+    "prefix": "ORG",
+    "part": "P2",
+    "section": "People",
+    "tier1": false,
+    "text": "Do you use a company identity provider (for example Okta, Microsoft Entra ID or Google) and want single sign-on? Any restrictions on where people can log in from?",
+    "why": "Single sign-on is set up per account and hands user access control to whoever runs the identity provider."
+  },
+  {
     "id": "RPT-1",
     "parentId": null,
     "prefix": "RPT",
@@ -1828,6 +2018,16 @@
     "tier1": false,
     "text": "Which metrics does leadership actually manage by, and how is each calculated today?",
     "why": null
+  },
+  {
+    "id": "RPT-4",
+    "parentId": null,
+    "prefix": "RPT",
+    "part": "P3",
+    "section": "Reports",
+    "tier1": false,
+    "text": "Do any reports or dashboards need to be built in a BI tool or data warehouse outside NetSuite? Which tool, and who maintains it?",
+    "why": "Data access from outside NetSuite is a separate purchase, so it belongs on the quote."
   },
   {
     "id": "CAL-1",
@@ -1868,5 +2068,105 @@
     "tier1": false,
     "text": "Work through the File Checklist tab and populate the shared folder.",
     "why": "The single request that pays off fastest. Real files answer questions we haven't thought to ask yet."
+  },
+  {
+    "id": "PRJ-1",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Governance",
+    "tier1": false,
+    "text": "Who signs off (a) each design decision, (b) user acceptance testing, and (c) the final go / no-go? Who breaks a tie between departments?",
+    "why": "Decisions stall without a named owner. This is separate from whose buy-in matters (ORG-5)."
+  },
+  {
+    "id": "PRJ-2",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Governance",
+    "tier1": false,
+    "text": "Who will build and change scripts, workflows and custom fields in NetSuite, during the project and after go-live? Must every change be tested in a sandbox before it reaches production, and who approves a release?",
+    "why": "Customisations deployed from a development project overwrite edits made directly in production, so the rule needs to be set before building starts."
+  },
+  {
+    "id": "PRJ-3",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Governance",
+    "tier1": false,
+    "text": "Who will be the NetSuite administrator after go-live, and how many people will hold the Administrator role?",
+    "why": "Administrator and other highly privileged roles require two-factor authentication in every account."
+  },
+  {
+    "id": "PRJ-4",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Governance",
+    "tier1": false,
+    "text": "Who will review each twice-yearly NetSuite release in the Release Preview account, and how often should the sandbox be refreshed?",
+    "why": "A sandbox refresh replaces everything in the sandbox, and a refresh that overlaps a release upgrade fails, so both need an owner and a calendar."
+  },
+  {
+    "id": "PRJ-5",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Testing",
+    "tier1": false,
+    "text": "How many trial data loads will run in the sandbox before go-live, who reconciles each one, and what counts as a pass - record counts, trial balance, AR and AP totals?",
+    "why": "Records imported by mistake have to be deleted one at a time, so every load is rehearsed and reconciled before it runs in production."
+  },
+  {
+    "id": "PRJ-6",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Training",
+    "tier1": false,
+    "text": "Who will train end users - the partner, internal trainers, or Oracle training - and who keeps the role guides up to date after go-live?",
+    "why": "Admin and project-team training happens early; end-user training happens close to go-live. Both need an owner."
+  },
+  {
+    "id": "PRJ-7",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Go-live",
+    "tier1": true,
+    "text": "What is the target go-live month, and must it fall on the first day of a fiscal year, quarter or month?",
+    "why": "The date decides which accounting period opens first and when inventory-by-location has to be switched on, so it is needed at the start, not at cutover."
+  },
+  {
+    "id": "PRJ-8",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Go-live",
+    "tier1": false,
+    "text": "Do you want to go live all at once, in phases (by entity, site or module), or run the old and new systems side by side for a while?",
+    "why": "Phasing or a parallel run means keeping the old system longer and loading opening balances more than once."
+  },
+  {
+    "id": "PRJ-9",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Go-live",
+    "tier1": false,
+    "text": "When does entry stop in the current system, and will its last month be closed before opening balances are loaded into NetSuite?",
+    "why": "Opening balances are taken as of a period end, so the freeze date sets the cutover window."
+  },
+  {
+    "id": "PRJ-10",
+    "parentId": null,
+    "prefix": "PRJ",
+    "part": "P4",
+    "section": "Go-live",
+    "tier1": false,
+    "text": "Hypercare: who supports users in the first weeks after go-live, how are issues logged and prioritised, and when does that support end - for example after the first month-end close?",
+    "why": "Hypercare often runs 30 to 90 days, through the first close. It needs a plan before go-live, not after."
   }
 ]

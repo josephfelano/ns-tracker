@@ -1,39 +1,5 @@
 {
-  "version": "1.0.0",
-  "generatedAt": "2026-09-10T13:17:47Z",
-  "generatedAtBasis": "newest source file mtime (override with --generated-at)",
-  "sources": [
-    {
-      "key": "discovery",
-      "file": "NS GUIDE/netsuite-discovery-workbook.xlsx",
-      "sha256": "a4f169919e814481d4ca90805e2b194d132d4e2403ca98e7da2e6c8df532c99a"
-    },
-    {
-      "key": "register",
-      "file": "NS GUIDE/netsuite-decision-register.xlsx",
-      "sha256": "d182347fe7af7aaf6de8318c6d447dec43cf45fdee5b0ad75189b60e4bbd17df"
-    },
-    {
-      "key": "prework",
-      "file": "NS GUIDE/netsuite-implementation-readiness-prework.xlsx",
-      "sha256": "57ac3c0decbc8b9441785e673f9f4f89c1c947048eb3503e84d7b85afded9544"
-    },
-    {
-      "key": "readinessV1",
-      "file": "netsuite-readiness-packet-v1.xlsx",
-      "sha256": "1c7796fcb8de90aee6fd48971a7ae7070ec2ac0166b9781188b8a9f8b67707f8"
-    },
-    {
-      "key": "packetV2",
-      "file": "netsuite-preimplementation-packet-v2.md",
-      "sha256": "ea457c252869c960f6de3a36cf28c5639d8c5b23b1e2a35089d56e3871fb7035"
-    },
-    {
-      "key": "auditNotes",
-      "file": "netsuite-readiness-packet-audit-notes.md",
-      "sha256": "a2a40123c4041848b79a80b5532122b67b0b614edc5d5f8cfc5b851c0861ccad"
-    }
-  ],
+  "version": "2.0.0",
   "enums": {
     "questionStatus": [
       "Not started",
@@ -56,21 +22,12 @@
       "Costly",
       "Easy"
     ],
-    "layer": [
-      "L0",
-      "L1",
-      "L2",
-      "L3",
-      "L4",
-      "L5",
-      "L6",
-      "L7"
-    ],
     "decisionArea": [
       "AP",
       "Access",
       "Assets",
       "Calendar",
+      "Cash",
       "Close",
       "Controls",
       "Costing",
@@ -88,12 +45,15 @@
       "Planning",
       "Procurement",
       "Production",
+      "Project",
       "Quality",
       "Reporting",
       "Revenue",
       "Sales",
       "Tax",
-      "Traceability"
+      "Testing",
+      "Traceability",
+      "Training"
     ],
     "preworkReadiness": [
       "Ready / trusted",
@@ -212,6 +172,62 @@
     ],
     "oneWayDoorConfidence": [
       "Oracle docs",
+      "Secondary",
+      "Unverified"
+    ],
+    "step": [
+      "SCOPE",
+      "KICKOFF",
+      "DESIGN",
+      "L0",
+      "L1",
+      "L2",
+      "L3",
+      "L4",
+      "L5",
+      "L6",
+      "TEST",
+      "TRAIN",
+      "L7",
+      "GOLIVE",
+      "OPERATE"
+    ],
+    "inputType": [
+      "yesno",
+      "single",
+      "multi",
+      "number",
+      "text"
+    ],
+    "doorKind": [
+      "cannot-disable",
+      "locked-once-used",
+      "record-lock",
+      "support-only",
+      "order",
+      "behaviour",
+      "recommendation",
+      "scope-risk",
+      "not-a-door"
+    ],
+    "lockKind": [
+      "none",
+      "cannot-disable",
+      "locked-once-used",
+      "support-only",
+      "unverified"
+    ],
+    "licenceKind": [
+      "included",
+      "module",
+      "add-on",
+      "partner",
+      "unverified"
+    ],
+    "sourceKind": [
+      "Oracle docs",
+      "Oracle service description",
+      "netsuite.com",
       "Secondary"
     ]
   },
@@ -243,6 +259,11 @@
       "id": "P3",
       "name": "Part 3 - Wrap Up",
       "packetTitle": "Validation"
+    },
+    {
+      "id": "P4",
+      "name": "Part 4 - Project",
+      "packetTitle": "Project"
     }
   ],
   "prefixes": [
@@ -310,6 +331,11 @@
       "prefix": "ART",
       "title": "Artifacts to collect",
       "part": "P3"
+    },
+    {
+      "prefix": "PRJ",
+      "title": "Project, governance and go-live",
+      "part": "P4"
     }
   ],
   "sections": [
@@ -569,6 +595,81 @@
       "prefixes": [
         "ART"
       ]
+    },
+    {
+      "name": "Governance",
+      "part": "P4",
+      "sheet": "Part 4 - Project",
+      "prefixes": [
+        "PRJ"
+      ]
+    },
+    {
+      "name": "Testing",
+      "part": "P4",
+      "sheet": "Part 4 - Project",
+      "prefixes": [
+        "PRJ"
+      ]
+    },
+    {
+      "name": "Training",
+      "part": "P4",
+      "sheet": "Part 4 - Project",
+      "prefixes": [
+        "PRJ"
+      ]
+    },
+    {
+      "name": "Go-live",
+      "part": "P4",
+      "sheet": "Part 4 - Project",
+      "prefixes": [
+        "PRJ"
+      ]
+    }
+  ],
+  "importedFrom": {
+    "note": "Imported once from the source workbooks on 2026-09-10 (build_bank.py, removed after the import; see git history). The bank files are now the source and are edited directly.",
+    "sources": [
+      {
+        "key": "discovery",
+        "file": "NS GUIDE/netsuite-discovery-workbook.xlsx",
+        "sha256": "a4f169919e814481d4ca90805e2b194d132d4e2403ca98e7da2e6c8df532c99a"
+      },
+      {
+        "key": "register",
+        "file": "NS GUIDE/netsuite-decision-register.xlsx",
+        "sha256": "d182347fe7af7aaf6de8318c6d447dec43cf45fdee5b0ad75189b60e4bbd17df"
+      },
+      {
+        "key": "prework",
+        "file": "NS GUIDE/netsuite-implementation-readiness-prework.xlsx",
+        "sha256": "57ac3c0decbc8b9441785e673f9f4f89c1c947048eb3503e84d7b85afded9544"
+      },
+      {
+        "key": "readinessV1",
+        "file": "netsuite-readiness-packet-v1.xlsx",
+        "sha256": "1c7796fcb8de90aee6fd48971a7ae7070ec2ac0166b9781188b8a9f8b67707f8"
+      },
+      {
+        "key": "packetV2",
+        "file": "netsuite-preimplementation-packet-v2.md",
+        "sha256": "ea457c252869c960f6de3a36cf28c5639d8c5b23b1e2a35089d56e3871fb7035"
+      },
+      {
+        "key": "auditNotes",
+        "file": "netsuite-readiness-packet-audit-notes.md",
+        "sha256": "a2a40123c4041848b79a80b5532122b67b0b614edc5d5f8cfc5b851c0861ccad"
+      }
+    ]
+  },
+  "research": [
+    {
+      "id": "sweep-2026-10",
+      "date": "2026-10-12",
+      "path": "research/2026-10-sweep/README.md",
+      "note": "Bank checked against Oracle docs and implementation partners; evidence files beside it."
     }
   ]
 }

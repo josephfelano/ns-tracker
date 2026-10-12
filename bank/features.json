@@ -1,0 +1,2999 @@
+[
+  {
+    "id": "ONEWORLD",
+    "name": "NetSuite OneWorld",
+    "where": "Provisioned by NetSuite",
+    "requires": [
+      "MULTICURRENCY"
+    ],
+    "autoEnables": [
+      {
+        "id": "MLI",
+        "when": "INVENTORY"
+      }
+    ],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Oracle documents an upgrade path to OneWorld (existing data goes to the root subsidiary). That OneWorld cannot be reversed is stated by Secondary sources only."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "OneWorld; subsidiary licensing is based on country and base-currency combinations. Elimination subsidiaries are not licensed. Limit 250 subsidiaries, excluding elimination and inactive ones."
+    },
+    "sources": [
+      "S-001",
+      "S-002",
+      "S-003",
+      "S-004",
+      "S-005"
+    ],
+    "unverified": [
+      "Confirm with Oracle whether a OneWorld account can be reversed (only Secondary sources say it cannot)."
+    ]
+  },
+  {
+    "id": "MULTICURRENCY",
+    "name": "Multiple Currencies",
+    "where": "Enable Features > Company",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "Can't be disabled after transactions and records that rely on it exist. Also required and non-disableable when Multi-Book Foreign Currency Management is on."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-006",
+      "S-001",
+      "S-007",
+      "S-008"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "CURRENCY_EXCHANGE_RATE_TYPES",
+    "name": "Currency Exchange Rate Types",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "cannot-disable",
+      "text": "You can't disable it after you enable it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-008"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "ACCOUNTING_PERIODS",
+    "name": "Accounting Periods",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "In non-OneWorld accounts it can't be disabled while any accounting period exists. Base periods with transactions can't be deleted."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-009",
+      "S-010",
+      "S-011"
+    ],
+    "unverified": [
+      "Confirm whether Accounting Periods can be disabled in OneWorld accounts (Oracle states only the non-OneWorld rule)."
+    ]
+  },
+  {
+    "id": "MULTIPLE_CALENDARS",
+    "name": "Multiple Calendars",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "ONEWORLD"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "Can be disabled only until a new fiscal calendar is assigned to a subsidiary. All adjustment periods must be overlapping before enabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-012",
+      "S-013",
+      "S-014"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "PEJE",
+    "name": "Period End Journal Entries",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "ONEWORLD"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "If it is enabled for at least one subsidiary it can't be disabled on the Enable Features page. The Period End Journal Entries state on the subsidiary is locked."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-015",
+      "S-016",
+      "S-012",
+      "S-017"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "GL_AUDIT_NUMBERING",
+    "name": "GL Audit Numbering",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "ACCOUNTING_PERIODS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Whether it can be disabled after sequences run is not stated."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-018",
+      "S-019"
+    ],
+    "unverified": [
+      "Confirm whether GL Audit Numbering can be disabled after numbering sequences have run."
+    ]
+  },
+  {
+    "id": "STATISTICAL_ACCOUNTS",
+    "name": "Statistical Accounts",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "MUOM"
+    ],
+    "autoEnables": [
+      "MUOM"
+    ],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "Can be disabled while no statistical accounts, statistical journals or statistical schedules exist; can't be disabled after it has been used. Once used, Multiple Units of Measure can't be disabled either."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-020",
+      "S-012"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "DYNAMIC_ALLOCATION",
+    "name": "Dynamic Allocation",
+    "where": "Enable Features > Accounting",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "Can't be disabled after it has been used."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-012"
+    ],
+    "unverified": [
+      "Dynamic Allocation weights by statistical account balances; Oracle wording that it formally requires Statistical Accounts was not found."
+    ]
+  },
+  {
+    "id": "CUSTOM_SEGMENTS",
+    "name": "Custom Segments",
+    "where": "Enable Features > SuiteCloud",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "Can't be disabled if a segment is applied to a budget record. Per segment, GL Impact can't be changed after the segment is created."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-021",
+      "S-022"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "MULTIPLE_BUDGETS",
+    "name": "Multiple Budgets",
+    "where": "Enable Features > Accounting",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-012",
+      "S-023"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "MULTI_BOOK",
+    "name": "Multi-Book Accounting",
+    "where": "Enable Features > Accounting (Multi-Book Accounting)",
+    "requires": [
+      "ONEWORLD"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "The primary book can't be made inactive; a subsidiary can't be removed from an active book; subsidiaries with transactions can't be added. Can be cleared only while there are no secondary books. Max five active books."
+    },
+    "licence": {
+      "kind": "add-on",
+      "text": "Contact the sales rep. Setup needs NetSuite Professional Services or a Multi-Book authorized partner."
+    },
+    "sources": [
+      "S-024",
+      "S-025",
+      "S-026"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "ADJUSTMENT_ONLY_BOOKS",
+    "name": "Adjustment-Only Books",
+    "where": "Enable Features > Accounting (Multi-Book Accounting)",
+    "requires": [
+      "ONEWORLD"
+    ],
+    "autoEnables": [],
+    "conflicts": [
+      "MULTI_BOOK"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "Whether Adjustment-Only Books can be disabled is not stated."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Licence not stated; Multi-Book features are quoted through the sales rep."
+    },
+    "sources": [
+      "S-024",
+      "S-027"
+    ],
+    "unverified": [
+      "Confirm whether Adjustment-Only Books can be disabled.",
+      "Confirm with the quote whether Adjustment-Only Books carries a licence cost."
+    ]
+  },
+  {
+    "id": "MB_COA_MAPPING",
+    "name": "Chart of Accounts Mapping (Multi-Book)",
+    "where": "Enable Features > Accounting (Multi-Book Accounting)",
+    "requires": [
+      "MULTI_BOOK"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Part of Multi-Book; licence not stated separately."
+    },
+    "sources": [
+      "S-024"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "MB_FOREIGN_CURRENCY",
+    "name": "Foreign Currency Management (Multi-Book)",
+    "where": "Enable Features > Accounting (Multi-Book Accounting)",
+    "requires": [
+      "MULTI_BOOK",
+      "MULTICURRENCY"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "When it is enabled, Multiple Currencies is required and can't be disabled. Its own disable behaviour is not stated."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Part of Multi-Book; licence not stated separately."
+    },
+    "sources": [
+      "S-024",
+      "S-008"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "MB_REVENUE_EXPENSE",
+    "name": "Revenue and Expense Management (Multi-Book)",
+    "where": "Enable Features > Accounting (Multi-Book Accounting)",
+    "requires": [
+      "MULTI_BOOK"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Part of Multi-Book; licence not stated separately."
+    },
+    "sources": [
+      "S-024"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "MB_EXTENDED_CLOSE",
+    "name": "Extended Accounting Period Close Process (Multi-Book)",
+    "where": "Enable Features > Accounting (Multi-Book Accounting)",
+    "requires": [
+      "MULTI_BOOK"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Part of Multi-Book; licence not stated separately."
+    },
+    "sources": [
+      "S-024"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "AIM_INTERCOMPANY",
+    "name": "Automated Intercompany Management",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "ONEWORLD"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "cannot-disable",
+      "text": "Can't be disabled after it is enabled, even if no intercompany entities or transactions exist. Elimination subsidiaries must exist before enabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-028",
+      "S-004",
+      "S-012"
+    ],
+    "unverified": [
+      "Not to be confused with Advanced Inventory Management. Licence for Automated Intercompany Management is not stated."
+    ]
+  },
+  {
+    "id": "INTERCOMPANY_FRAMEWORK",
+    "name": "Intercompany Framework",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "AIM_INTERCOMPANY"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "cannot-disable",
+      "text": "Can't be disabled once enabled."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-029"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "ICSF",
+    "name": "Intercompany Cross-Subsidiary Fulfillment",
+    "where": "Enable Features",
+    "requires": [
+      "ONEWORLD",
+      "MLI",
+      "ADV_SHIPPING"
+    ],
+    "autoEnables": [],
+    "conflicts": [
+      "WMS"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-030"
+    ],
+    "unverified": [
+      "Oracle names the incompatible product 'NetSuite WMS Advanced'; confirm it applies to the WMS edition in scope."
+    ]
+  },
+  {
+    "id": "MULTI_SUB_CUSTOMER",
+    "name": "Multi-Subsidiary Customer",
+    "where": "Enable Features",
+    "requires": [
+      "ONEWORLD"
+    ],
+    "autoEnables": [],
+    "conflicts": [
+      "EU_OSS"
+    ],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "To disable it: reverse or delete all transactions tied to customers and their secondary subsidiaries, remove all secondary subsidiaries from customer records, then clear the box (Costly, not one-way)."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-031",
+      "S-032"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "EU_OSS",
+    "name": "EU One Stop Shop",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [
+      "MULTI_SUB_CUSTOMER"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Not researched."
+    },
+    "sources": [
+      "S-032"
+    ],
+    "unverified": [
+      "Location, licence and disable behaviour of EU One Stop Shop were not researched; only its incompatibility with Multi-Subsidiary Customer is sourced."
+    ]
+  },
+  {
+    "id": "SUITETAX",
+    "name": "SuiteTax",
+    "where": "Enable Features > Tax",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "cannot-disable",
+      "text": "Non-reversible: once enabled it can't be disabled. Account-wide (all subsidiaries). Legacy tax codes are inactivated on enable; incompatible features and SuiteApps must be removed first."
+    },
+    "licence": {
+      "kind": "included",
+      "text": "Native SuiteTax Engine has no cost; partner tax engines are a separate cost."
+    },
+    "sources": [
+      "S-033",
+      "S-034",
+      "S-035",
+      "S-036",
+      "S-037",
+      "S-038"
+    ],
+    "unverified": [
+      "Confirm whether new accounts are provisioned on SuiteTax by default (Secondary only)."
+    ]
+  },
+  {
+    "id": "ADVANCED_TAXES",
+    "name": "Advanced Taxes (legacy tax)",
+    "where": "Enable Features > Tax",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "cannot-disable",
+      "text": "If you enable Advanced Taxes you can't disable it later. Already enabled in OneWorld accounts."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-039"
+    ],
+    "unverified": [
+      "Whether Advanced Taxes and SuiteTax are formally mutually exclusive is not stated on the pages read."
+    ]
+  },
+  {
+    "id": "ARM_ESSENTIALS",
+    "name": "Advanced Revenue Management (Essentials)",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "ACCOUNTING_PERIODS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "cannot-disable",
+      "text": "When you enable it you can't disable it. The enabling page also allows disabling while ARM in Configuration Mode is on and no system account has a balance, which deletes the ARM configuration."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "NetSuite Revenue Management cloud service."
+    },
+    "sources": [
+      "S-012",
+      "S-040",
+      "S-041",
+      "S-042"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "ARM_REVENUE_ALLOCATION",
+    "name": "ARM (Revenue Allocation)",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "ARM_ESSENTIALS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "cannot-disable",
+      "text": "When you enable it, it can't be disabled."
+    },
+    "licence": {
+      "kind": "add-on",
+      "text": "Revenue Allocation add-on (private-company or public-company version); its prerequisites include the NetSuite Sandbox Environment cloud service."
+    },
+    "sources": [
+      "S-012",
+      "S-041"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "ARM_RULE_BASED",
+    "name": "Rule-Based Recognition Treatment",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "ARM_ESSENTIALS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "Can't be disabled once rules exist and ARM Configuration Mode is off."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Part of ARM; licence not stated separately."
+    },
+    "sources": [
+      "S-012"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "SUITEBILLING",
+    "name": "SuiteBilling",
+    "where": "Provisioned by NetSuite",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [
+      "EMPLOYEE_COMMISSIONS"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Provisioned by Oracle; confirm the SuiteBilling line on the quote."
+    },
+    "sources": [
+      "S-043",
+      "S-044",
+      "S-045"
+    ],
+    "unverified": [
+      "Confirm with the quote whether SuiteBilling is a separately priced module."
+    ]
+  },
+  {
+    "id": "EMPLOYEE_COMMISSIONS",
+    "name": "Employee Commissions",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [
+      "SUITEBILLING"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "Must be disabled before SuiteBilling can be enabled; existing commission data is inaccessible while it is disabled."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Commission feature licensing not confirmed."
+    },
+    "sources": [
+      "S-043"
+    ],
+    "unverified": [
+      "Confirm with the quote whether commission features are licensed separately."
+    ]
+  },
+  {
+    "id": "FAM",
+    "name": "Fixed Assets Management (SuiteApp)",
+    "where": "SuiteApp",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "add-on",
+      "text": "Add-on module (netsuite.com). Includes Lease Accounting."
+    },
+    "sources": [
+      "S-046",
+      "S-047",
+      "S-048",
+      "S-049"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "EPM_PLANNING",
+    "name": "NetSuite Planning and Budgeting (Oracle NetSuite EPM)",
+    "where": "Licensed module",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "none",
+      "text": "Separate EPM cloud service integrated through the Planning and Budgeting Sync SuiteApp; not an Enable Features switch."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "EPM business process (Standard or Premium, named-user subscription, needs an active NetSuite subscription). Standard EPM covers one business process (Planning and Budgeting or Account Reconciliation), max 10 users."
+    },
+    "sources": [
+      "S-050",
+      "S-051",
+      "S-052",
+      "S-053"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "INVENTORY",
+    "name": "Inventory",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-054"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "LOCATIONS",
+    "name": "Locations",
+    "where": "Enable Features > Company",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-054",
+      "S-055"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "PURCHASE_ORDERS",
+    "name": "Purchase Orders",
+    "where": "Enable Features > Transactions",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-056"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "RETURN_AUTHORIZATIONS",
+    "name": "Return Authorizations",
+    "where": "Enable Features > Transactions",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-056"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "VENDOR_RETURN_AUTHORIZATIONS",
+    "name": "Vendor Return Authorizations",
+    "where": "Enable Features > Transactions",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-056"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "ADV_RECEIVING",
+    "name": "Advanced Receiving",
+    "where": "Enable Features > Transactions",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement on disabling it. Locked in effect while Multi-Location Inventory is on, because MLI requires it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-057",
+      "S-054",
+      "S-058",
+      "S-059"
+    ],
+    "unverified": [
+      "Confirm whether Advanced Receiving can be disabled on an account without Multi-Location Inventory (community answers only)."
+    ]
+  },
+  {
+    "id": "ADV_SHIPPING",
+    "name": "Advanced Shipping",
+    "where": "Enable Features > Transactions",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "After you enable it, it can't be turned off unless all fulfilled sales orders are billed."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-060",
+      "S-054"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "PICK_PACK_SHIP",
+    "name": "Pick, Pack and Ship",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Inventory Management cloud service."
+    },
+    "sources": [
+      "S-061",
+      "S-062",
+      "S-041"
+    ],
+    "unverified": [
+      "Oracle's steps enable it together with Advanced Shipping; an explicit 'requires' statement was not found."
+    ]
+  },
+  {
+    "id": "FULFILLMENT_REQUEST",
+    "name": "Fulfillment Request",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [
+      "ADV_SHIPPING",
+      "PICK_PACK_SHIP"
+    ],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-063"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "MLI",
+    "name": "Multi-Location Inventory",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "LOCATIONS",
+      "INVENTORY",
+      "ADV_SHIPPING",
+      "ADV_RECEIVING"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "support-only",
+      "text": "After you enable it and distribute items, you can't turn it off without contacting Customer Support. All open orders must be fully shipped or closed before enabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-054",
+      "S-064",
+      "S-002"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "LOT_TRACKING",
+    "name": "Lot Tracking",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "After you enable Lot Tracking and create lot-tracked items, you can't turn it off."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Inventory Management cloud service."
+    },
+    "sources": [
+      "S-054",
+      "S-065",
+      "S-041"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "SERIALIZED",
+    "name": "Serialized Inventory",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "After you enable Serialized Inventory and create serialized items, you can't turn it off."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Inventory Management cloud service."
+    },
+    "sources": [
+      "S-054",
+      "S-041"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "MATRIX_ITEMS",
+    "name": "Matrix Items",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Inventory Management cloud service."
+    },
+    "sources": [
+      "S-062",
+      "S-066",
+      "S-041"
+    ],
+    "unverified": [
+      "Whether an existing item can later be converted to a matrix parent or child is not stated."
+    ]
+  },
+  {
+    "id": "MUOM",
+    "name": "Multiple Units of Measure",
+    "where": "Enable Features > Company",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "Can't be disabled once Statistical Accounts has been used. A units type on an item can't be changed (only more units added)."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-067",
+      "S-068",
+      "S-020",
+      "S-069"
+    ],
+    "unverified": [
+      "Confirm whether Multiple Units of Measure can be disabled when Statistical Accounts has not been used (the Oracle enable page is silent)."
+    ]
+  },
+  {
+    "id": "BAR_CODING",
+    "name": "Bar Coding and Item Labels",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-062",
+      "S-070"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "ADV_INVENTORY_MGMT",
+    "name": "Advanced Inventory Management",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [
+      "BAR_CODING",
+      "LOT_TRACKING",
+      "MATRIX_ITEMS",
+      "PICK_PACK_SHIP",
+      "SERIALIZED",
+      "MUOM"
+    ],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether Advanced Inventory Management is licensed separately."
+    },
+    "sources": [
+      "S-062",
+      "S-054"
+    ],
+    "unverified": [
+      "Not to be confused with Automated Intercompany Management."
+    ]
+  },
+  {
+    "id": "BINS",
+    "name": "Bin Management",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "INVENTORY"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "none",
+      "text": "Can be disabled (with both bin features, disable Advanced Bin first). Use Bins can be cleared on an item or location that has no bins and no referencing transactions. Basic bins can't hold lot or serial items."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Inventory Management cloud service."
+    },
+    "sources": [
+      "S-071",
+      "S-072",
+      "S-041"
+    ],
+    "unverified": [
+      "Oracle lists Bin Management under '(Inventory)'; a formal 'requires Inventory' statement was not quoted."
+    ]
+  },
+  {
+    "id": "ADV_BIN_NUMBERED",
+    "name": "Advanced Bin / Numbered Inventory Management",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "BINS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "none",
+      "text": "Can be disabled before basic Bin Management. Each location chooses whether it uses bins."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Inventory Management cloud service."
+    },
+    "sources": [
+      "S-071",
+      "S-072",
+      "S-041"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "INVENTORY_STATUS",
+    "name": "Inventory Status",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "ADV_BIN_NUMBERED"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "If any non-default inventory status exists, the feature can't be disabled. The default Good status can't be deleted; a status's availability boxes lock once it is used on a transaction."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-073",
+      "S-074",
+      "S-075"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "INBOUND_SHIPMENT_MGMT",
+    "name": "Inbound Shipment Management",
+    "where": "Enable Features",
+    "requires": [
+      "MULTICURRENCY",
+      "PURCHASE_ORDERS",
+      "ADV_RECEIVING",
+      "ADV_BIN_NUMBERED",
+      "ADV_INVENTORY_MGMT",
+      "LANDED_COST"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-076"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "SUPPLY_ALLOCATION",
+    "name": "Supply Allocation",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "MLI"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-077"
+    ],
+    "unverified": [
+      "Requirement read from a search excerpt of the Oracle page; Oracle notes a data check may need Support."
+    ]
+  },
+  {
+    "id": "SALES_CHANNEL_ALLOCATION",
+    "name": "Sales Channel Allocation",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-054",
+      "S-078"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "CONSIGNED_INVENTORY",
+    "name": "Consigned Inventory Management",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [
+      "ASSEMBLY_ITEMS",
+      "WMS"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-079",
+      "S-054"
+    ],
+    "unverified": [
+      "Disable behaviour of Consigned Inventory Management is not stated."
+    ]
+  },
+  {
+    "id": "LANDED_COST",
+    "name": "Landed Cost",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Inventory Management cloud service."
+    },
+    "sources": [
+      "S-080",
+      "S-081",
+      "S-082",
+      "S-041"
+    ],
+    "unverified": [
+      "Confirm whether Landed Cost can be disabled after use."
+    ]
+  },
+  {
+    "id": "STANDARD_COSTING",
+    "name": "Standard Costing",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "INVENTORY"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether Standard Costing is licensed separately."
+    },
+    "sources": [
+      "S-083",
+      "S-084",
+      "S-054"
+    ],
+    "unverified": [
+      "Oracle says you should also enable Multi-Location Inventory with Standard Costing (a recommendation, not a requirement)."
+    ]
+  },
+  {
+    "id": "GROUP_AVERAGE_COSTING",
+    "name": "Group Average Costing",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "MLI"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Feature disable behaviour not stated. The in-transit preference can't change after costing runs on any Group Average item."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether Group Average Costing is licensed separately."
+    },
+    "sources": [
+      "S-054",
+      "S-085",
+      "S-086"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "ASSEMBLY_ITEMS",
+    "name": "Assembly Items",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "INVENTORY"
+    ],
+    "autoEnables": [],
+    "conflicts": [
+      "CONSIGNED_INVENTORY"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-087",
+      "S-054",
+      "S-079"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "ADV_BOM",
+    "name": "Advanced Bill of Materials",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "locked-once-used",
+      "text": "Oracle documents disabling it, but disabling deletes the BOM and BOM revision records created under it. Enabling migrates existing embedded BOMs."
+    },
+    "licence": {
+      "kind": "included",
+      "text": "Free of charge (Oracle)."
+    },
+    "sources": [
+      "S-088",
+      "S-089"
+    ],
+    "unverified": [
+      "A formal prerequisite for Advanced BOM was not found."
+    ]
+  },
+  {
+    "id": "WORK_ORDERS",
+    "name": "Work Orders",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "ASSEMBLY_ITEMS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-054",
+      "S-090"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "MFG_WIP",
+    "name": "Manufacturing Work In Process",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "ASSEMBLY_ITEMS",
+      "WORK_ORDERS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-091",
+      "S-092",
+      "S-093"
+    ],
+    "unverified": [
+      "Confirm whether Manufacturing Work In Process can be disabled once used."
+    ]
+  },
+  {
+    "id": "PROJECT_MANAGEMENT",
+    "name": "Project Management",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether Project Management is licensed separately (it is a prerequisite of Manufacturing Routing)."
+    },
+    "sources": [
+      "S-094"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "MFG_ROUTING",
+    "name": "Manufacturing Routing and Work Center",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "MFG_WIP",
+      "MLI",
+      "WORK_ORDERS",
+      "ASSEMBLY_ITEMS",
+      "PROJECT_MANAGEMENT"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-094",
+      "S-095"
+    ],
+    "unverified": [
+      "Confirm whether Manufacturing Routing and Work Center can be disabled once used."
+    ]
+  },
+  {
+    "id": "ADV_MANUFACTURING",
+    "name": "Advanced Manufacturing (SuiteApp)",
+    "where": "SuiteApp",
+    "requires": [
+      "MFG_ROUTING"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether the Advanced Manufacturing SuiteApp is licensed separately."
+    },
+    "sources": [
+      "S-096"
+    ],
+    "unverified": [
+      "Oracle describes it as extending routing into the Work Bench; a formal prerequisite list was not read."
+    ]
+  },
+  {
+    "id": "OUTSOURCED_MFG",
+    "name": "Outsourced Manufacturing",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "PURCHASE_ORDERS",
+      "ADV_RECEIVING",
+      "MLI",
+      "ASSEMBLY_ITEMS",
+      "ADV_BOM",
+      "WORK_ORDERS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether Outsourced Manufacturing is licensed separately."
+    },
+    "sources": [
+      "S-097",
+      "S-098"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "DEMAND_PLANNING",
+    "name": "Demand Planning",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "ADV_INVENTORY_MGMT"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether Demand Planning is licensed separately."
+    },
+    "sources": [
+      "S-054",
+      "S-099"
+    ],
+    "unverified": [
+      "Oracle also requires Work Orders when Demand Planning is used for assembly items."
+    ]
+  },
+  {
+    "id": "MRP",
+    "name": "Material Requirements Planning (Supply Planning)",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [
+      "LOCATIONS",
+      "MLI",
+      "ADV_INVENTORY_MGMT"
+    ],
+    "autoEnables": [
+      "DEMAND_PLANNING"
+    ],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether Material Requirements Planning is licensed separately."
+    },
+    "sources": [
+      "S-100",
+      "S-101",
+      "S-054"
+    ],
+    "unverified": [
+      "With manufacturing, MRP also needs Assembly Items, Advanced BOM and Work Orders."
+    ]
+  },
+  {
+    "id": "WMS",
+    "name": "NetSuite WMS (SuiteApp)",
+    "where": "SuiteApp",
+    "requires": [
+      "MUOM",
+      "ADV_SHIPPING",
+      "PICK_PACK_SHIP",
+      "INVENTORY",
+      "MLI",
+      "BINS",
+      "ADV_BIN_NUMBERED",
+      "ADV_INVENTORY_MGMT"
+    ],
+    "autoEnables": [],
+    "conflicts": [
+      "CONSIGNED_INVENTORY"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether NetSuite WMS is licensed separately (not found in the service description read)."
+    },
+    "sources": [
+      "S-070",
+      "S-079"
+    ],
+    "unverified": [
+      "WMS also needs Custom Records, Advanced PDF/HTML Templates, Client and Server SuiteScript, and the SCM Mobile and NetSuite WMS SuiteApps."
+    ]
+  },
+  {
+    "id": "QUALITY_MANAGEMENT",
+    "name": "Quality Management (SuiteApp)",
+    "where": "SuiteApp",
+    "requires": [
+      "LOCATIONS",
+      "MUOM",
+      "INVENTORY",
+      "PURCHASE_ORDERS",
+      "RETURN_AUTHORIZATIONS",
+      "VENDOR_RETURN_AUTHORIZATIONS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether the Quality Management SuiteApp is licensed separately."
+    },
+    "sources": [
+      "S-102"
+    ],
+    "unverified": [
+      "QM also needs File Cabinet, Custom Records, Client/Server SuiteScript and SuiteFlow."
+    ]
+  },
+  {
+    "id": "LOT_SERIAL_TRACE",
+    "name": "Lot and Serial Number Trace (SuiteApp)",
+    "where": "SuiteApp",
+    "requires": [
+      "LOCATIONS",
+      "MUOM",
+      "BINS",
+      "ADV_BIN_NUMBERED"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether the Lot and Serial Number Trace SuiteApp is licensed separately."
+    },
+    "sources": [
+      "S-065"
+    ],
+    "unverified": [
+      "It also needs SuiteAnalytics Workbook and SuiteFlow."
+    ]
+  },
+  {
+    "id": "FEFO_LOT_ASSIGNMENTS",
+    "name": "FEFO Lot Assignments (SuiteApp)",
+    "where": "SuiteApp",
+    "requires": [
+      "SUPPLY_ALLOCATION",
+      "ADV_BIN_NUMBERED",
+      "SERIALIZED",
+      "LOT_TRACKING"
+    ],
+    "autoEnables": [],
+    "conflicts": [
+      "SALES_CHANNEL_ALLOCATION"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether the FEFO Lot Assignments SuiteApp is licensed separately."
+    },
+    "sources": [
+      "S-103",
+      "S-078",
+      "S-104"
+    ],
+    "unverified": [
+      "Tested primarily for OneWorld. Publisher and licensing are not stated on the Oracle page."
+    ]
+  },
+  {
+    "id": "PROMOTION_CODES",
+    "name": "Promotion Codes",
+    "where": "Enable Features > Transactions",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Oracle help (mirror copy) says not to disable Promotion Codes once transactions carry promotions."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-105",
+      "S-214"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "AUTO_APPLY_PROMOTIONS",
+    "name": "Auto-Apply Promotions",
+    "where": "Enable Features > Transactions",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-105"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "SUITEPROMOTIONS",
+    "name": "SuitePromotions",
+    "where": "Enable Features > Transactions",
+    "requires": [
+      "PROMOTION_CODES",
+      "AUTO_APPLY_PROMOTIONS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-105"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "DEPARTMENTS",
+    "name": "Departments",
+    "where": "Enable Features > Company (Classifications)",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-167"
+    ],
+    "unverified": [
+      "The research places Departments on the Enable Features Company subtab without citing the page; confirm."
+    ]
+  },
+  {
+    "id": "CLASSES",
+    "name": "Classes",
+    "where": "Enable Features > Company (Classifications)",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-167"
+    ],
+    "unverified": [
+      "The research places Classes on the Enable Features Company subtab without citing the page; confirm."
+    ]
+  },
+  {
+    "id": "BALANCING_SEGMENTS",
+    "name": "Balancing Segments",
+    "where": "Enable Features",
+    "requires": [
+      "CUSTOM_SEGMENTS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Whether the feature can be disabled is not stated. A balancing segment must have GL Impact, which can't be cleared afterwards; at most two can be active."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-171",
+      "S-172",
+      "S-022"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "CURRENCY_EXCHANGE_RATE_INTEGRATION",
+    "name": "Currency Exchange Rate Integration",
+    "where": "Enable Features",
+    "requires": [
+      "MULTICURRENCY"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research. It fills only the default exchange rate type."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-108",
+      "S-012",
+      "S-167"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "EXPENSE_ALLOCATION",
+    "name": "Expense Allocation",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "ACCOUNTING_PERIODS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Whether it can be disabled after allocation schedules run is not stated."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-147",
+      "S-012"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "AMORTIZATION",
+    "name": "Amortization",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "ACCOUNTING_PERIODS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Whether it can be disabled after schedules exist is not stated. Enabling it creates Deferred Expense accounts."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-146",
+      "S-012"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "GL_IMPACT_LOCKING",
+    "name": "GL Impact Locking",
+    "where": "Enable Features",
+    "requires": [
+      "GL_AUDIT_NUMBERING"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-175",
+      "S-019"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "BANK_FEEDS",
+    "name": "Bank Feeds (SuiteApp)",
+    "where": "SuiteApp",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research."
+    },
+    "licence": {
+      "kind": "included",
+      "text": "Free SuiteApp; works with supported financial institutions only."
+    },
+    "sources": [
+      "S-176",
+      "S-177"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "INTELLIGENT_CLOSE_MANAGER",
+    "name": "Intelligent Close Manager",
+    "where": "Enable Features",
+    "requires": [
+      "ACCOUNTING_PERIODS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Licensing is not stated in Oracle docs; confirm with the quote."
+    },
+    "sources": [
+      "S-148",
+      "S-012"
+    ],
+    "unverified": [
+      "Confirm Intelligent Close Manager licensing with the quote."
+    ]
+  },
+  {
+    "id": "EXCEPTION_MANAGEMENT_MODELS",
+    "name": "Exception Management Models",
+    "where": "Enable Features > Accounting",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Licensing is not stated in Oracle docs; confirm with the quote."
+    },
+    "sources": [
+      "S-012"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "EXCEPTION_MANAGEMENT",
+    "name": "Exception Management",
+    "where": "Enable Features > Accounting",
+    "requires": [
+      "EXCEPTION_MANAGEMENT_MODELS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Licensing is not stated in Oracle docs; confirm with the quote."
+    },
+    "sources": [
+      "S-012"
+    ],
+    "unverified": [
+      "Confirm Exception Management licensing with the quote."
+    ]
+  },
+  {
+    "id": "EPM_ACCOUNT_RECONCILIATION",
+    "name": "NetSuite Account Reconciliation (Oracle NetSuite EPM)",
+    "where": "Licensed module",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "none",
+      "text": "Separate EPM cloud service; not an Enable Features switch."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "EPM business process (named-user subscription, needs an active NetSuite subscription). Standard EPM allows one business process (Planning and Budgeting or Account Reconciliation), max 10 users."
+    },
+    "sources": [
+      "S-050"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "EPM_CLOSE_CONSOLIDATION",
+    "name": "NetSuite Close Management and Consolidation (Oracle NetSuite EPM)",
+    "where": "Licensed module",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "none",
+      "text": "Separate EPM cloud service; not an Enable Features switch."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "EPM Premium only; named-user subscription that needs an active NetSuite subscription."
+    },
+    "sources": [
+      "S-050"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "EPM_NARRATIVE_REPORTING",
+    "name": "EPM Narrative Reporting (Oracle NetSuite EPM)",
+    "where": "Licensed module",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "none",
+      "text": "Separate EPM cloud service; not an Enable Features switch."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "EPM Premium; named-user subscription separate from NetSuite users."
+    },
+    "sources": [
+      "S-050"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "SUITEANALYTICS_CONNECT",
+    "name": "SuiteAnalytics Connect",
+    "where": "Licensed add-on",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "none",
+      "text": "A separately purchased data access service (ODBC, JDBC, ADO.NET)."
+    },
+    "licence": {
+      "kind": "add-on",
+      "text": "Add-on; not available on Small Business accounts."
+    },
+    "sources": [
+      "S-180"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "NS_ANALYTICS_WAREHOUSE",
+    "name": "NetSuite Analytics Warehouse",
+    "where": "Licensed module",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "none",
+      "text": "Separate subscription; not an Enable Features switch."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Separate subscription in tiers; named-user, separate from NetSuite users."
+    },
+    "sources": [
+      "S-050"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "CASH_BASIS_REPORTING",
+    "name": "Cash Basis Reporting",
+    "where": "Accounting Preferences",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [
+      "SUITETAX"
+    ],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research. It can be overridden per custom report."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-167",
+      "S-035",
+      "S-036"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "APPROVAL_ROUTING",
+    "name": "Approval Routing",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Not stated in the research."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-181",
+      "S-182"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "INVENTORY_COUNT",
+    "name": "Inventory Count",
+    "where": "Enable Features > Items & Inventory",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether Inventory Count is licensed separately."
+    },
+    "sources": [
+      "S-054",
+      "S-194",
+      "S-195"
+    ],
+    "unverified": []
+  },
+  {
+    "id": "LOT_AUTO_NUMBERING",
+    "name": "Lot Auto Numbering (SuiteApp)",
+    "where": "SuiteApp",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether the Lot Auto Numbering SuiteApp is licensed separately."
+    },
+    "sources": [
+      "S-192"
+    ],
+    "unverified": [
+      "Its prerequisite features were not read."
+    ]
+  },
+  {
+    "id": "ENHANCED_VALIDATIONS",
+    "name": "Enhanced Validations and Defaulting (SuiteApp)",
+    "where": "SuiteApp",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether the Enhanced Validations and Defaulting SuiteApp is licensed separately."
+    },
+    "sources": [
+      "S-198"
+    ],
+    "unverified": [
+      "Its prerequisite features were not read."
+    ]
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-138"
+    ],
+    "unverified": [],
+    "id": "MULTIPLE_VENDORS",
+    "name": "Multiple Vendors",
+    "where": "Enable Features > Items & Inventory"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-105"
+    ],
+    "unverified": [],
+    "id": "MULTIPLE_PRICES",
+    "name": "Multiple Prices",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-105"
+    ],
+    "unverified": [],
+    "id": "QUANTITY_PRICING",
+    "name": "Quantity Pricing",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "Oracle says it significantly changes the Item record; disable behaviour is not stated."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Confirm with the quote whether Advanced Pricing is licensed separately."
+    },
+    "sources": [
+      "S-213"
+    ],
+    "unverified": [
+      "Whether Advanced Pricing can be turned off, and its licence, are not confirmed."
+    ],
+    "id": "ADVANCED_PRICING",
+    "name": "Advanced Pricing",
+    "where": "Enable Features"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Procurement cloud service."
+    },
+    "sources": [
+      "S-056",
+      "S-041"
+    ],
+    "unverified": [],
+    "id": "REQUISITIONS",
+    "name": "Requisitions",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Procurement cloud service."
+    },
+    "sources": [
+      "S-056",
+      "S-041"
+    ],
+    "unverified": [],
+    "id": "REQUEST_FOR_QUOTE",
+    "name": "Request for Quote",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Procurement cloud service."
+    },
+    "sources": [
+      "S-056",
+      "S-041"
+    ],
+    "unverified": [],
+    "id": "PURCHASE_CONTRACTS",
+    "name": "Purchase Contracts",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Procurement cloud service."
+    },
+    "sources": [
+      "S-056",
+      "S-041"
+    ],
+    "unverified": [],
+    "id": "BLANKET_PO",
+    "name": "Blanket Purchase Orders",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-181"
+    ],
+    "unverified": [],
+    "id": "PURCHASE_REQUESTS",
+    "name": "Purchase Requests",
+    "where": "Enable Features > Employees"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-012",
+      "S-203"
+    ],
+    "unverified": [],
+    "id": "VENDOR_PREPAYMENTS",
+    "name": "Vendor Prepayments",
+    "where": "Enable Features > Accounting"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "included",
+      "text": "Local country payment formats are free; the advanced version is licensed (ADVANCED_EBP)."
+    },
+    "sources": [
+      "S-207",
+      "S-041"
+    ],
+    "unverified": [],
+    "id": "EBP",
+    "name": "Electronic Bank Payments (SuiteApp)",
+    "where": "SuiteApp"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "add-on",
+      "text": "Licensed: global templates, custom formats, multicurrency and batch automation. Included in several SuiteSuccess editions."
+    },
+    "sources": [
+      "S-207",
+      "S-041"
+    ],
+    "unverified": [],
+    "id": "ADVANCED_EBP",
+    "name": "Advanced Electronic Bank Payments",
+    "where": "SuiteApp (licensed)"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Listed as its own cloud service, included in several SuiteSuccess editions purchased or renewed on or after 15 Sep 2026; Oracle's FAQ also says an AP Automation licence and License Client are required. Confirm with the quote."
+    },
+    "sources": [
+      "S-205",
+      "S-206",
+      "S-041"
+    ],
+    "unverified": [
+      "Oracle's FAQ and the Sep 2026 service description disagree on what licence Intelligent Payment Automation needs."
+    ],
+    "id": "INTELLIGENT_PAYMENT_AUTOMATION",
+    "name": "Intelligent Payment Automation (BILL)",
+    "where": "Provisioned with the Intelligent Payment Automation cloud service"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "The AP Automation cloud service that bundled Bill Capture is retired (no net new sales since 1 Sep 2024). Confirm current Bill Capture licensing with the quote."
+    },
+    "sources": [
+      "S-018",
+      "S-208",
+      "S-041"
+    ],
+    "unverified": [
+      "Current licensing of Bill Capture, and whether it uses pooled AI Units, are not confirmed."
+    ],
+    "id": "BILL_CAPTURE",
+    "name": "Bill Capture",
+    "where": "Enable Features > Accounting"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-200",
+      "S-217"
+    ],
+    "unverified": [],
+    "id": "CREDIT_CARD_PAYMENTS",
+    "name": "Credit Card Payments",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "add-on",
+      "text": "NetSuite Pay cloud service (Versapay; US and Canada). Included in several SuiteSuccess editions purchased or renewed on or after 15 Sep 2026."
+    },
+    "sources": [
+      "S-209",
+      "S-041"
+    ],
+    "unverified": [],
+    "id": "NETSUITE_PAY",
+    "name": "NetSuite Pay",
+    "where": "Provisioned with the NetSuite Pay cloud service (Versapay)"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-105"
+    ],
+    "unverified": [],
+    "id": "REQUIRED_DEPOSIT_WORKFLOW",
+    "name": "Required Deposit Workflow",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-138"
+    ],
+    "unverified": [
+      "Disable behaviour of Gift Certificates is not stated."
+    ],
+    "id": "GIFT_CERTIFICATES",
+    "name": "Gift Certificates",
+    "where": "Enable Features > Items & Inventory"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence statement found; whether it uses pooled AI Units is not confirmed."
+    },
+    "sources": [
+      "S-210"
+    ],
+    "unverified": [],
+    "id": "AUTOMATED_CASH_APPLICATION",
+    "name": "Automated Cash Application",
+    "where": "Enable Features"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-211"
+    ],
+    "unverified": [],
+    "id": "MULTI_LANGUAGE",
+    "name": "Multi-Language",
+    "where": "Enable Features"
+  },
+  {
+    "requires": [
+      "MULTI_LANGUAGE"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Obtained through the account representative. Confirm the cost with the quote."
+    },
+    "sources": [
+      "S-211"
+    ],
+    "unverified": [],
+    "id": "DUNNING",
+    "name": "Dunning Letters (SuiteApp)",
+    "where": "SuiteApp (bundle 392827)"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence statement found; whether it uses pooled AI Units is not confirmed."
+    },
+    "sources": [
+      "S-012"
+    ],
+    "unverified": [],
+    "id": "PAYMENT_DATE_PREDICTION",
+    "name": "Payment Date Prediction",
+    "where": "Enable Features > Accounting"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "add-on",
+      "text": "Rebate Management cloud service. Included in the Food & Beverage SuiteSuccess editions read; otherwise an add-on."
+    },
+    "sources": [
+      "S-041"
+    ],
+    "unverified": [
+      "Requires OneWorld or Subsidiary Management. The bank cannot express an either-or requirement, so it is stated on the option, not enforced."
+    ],
+    "id": "REBATE_MANAGEMENT",
+    "name": "Rebate Management",
+    "where": "Provisioned with the Rebate Management cloud service"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-199"
+    ],
+    "unverified": [],
+    "id": "SALES_ORDERS",
+    "name": "Sales Orders",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [
+      "SALES_ORDERS"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "module",
+      "text": "Listed as a capability of the NetSuite Financial Management cloud service."
+    },
+    "sources": [
+      "S-199",
+      "S-041"
+    ],
+    "unverified": [],
+    "id": "ADVANCED_BILLING",
+    "name": "Advanced Billing",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-199"
+    ],
+    "unverified": [],
+    "id": "INVOICE_GROUPS",
+    "name": "Invoice Groups",
+    "where": "Enable Features > Transactions"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "add-on",
+      "text": "Free for one country; more countries need a licence. Avalara certification needs the Electronic Business extension and Avalara processing licences."
+    },
+    "sources": [
+      "S-212"
+    ],
+    "unverified": [],
+    "id": "ELECTRONIC_INVOICING",
+    "name": "Electronic Invoicing (SuiteApp)",
+    "where": "SuiteApp"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-138"
+    ],
+    "unverified": [],
+    "id": "DROP_SHIPMENTS",
+    "name": "Drop Shipments & Special Orders",
+    "where": "Enable Features > Items & Inventory"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-054"
+    ],
+    "unverified": [],
+    "id": "AVAILABLE_TO_PROMISE",
+    "name": "Available to Promise",
+    "where": "Enable Features > Items & Inventory"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Paid according to an Oracle help mirror and a secondary source; a 2020 secondary source says free. Confirm with the quote."
+    },
+    "sources": [
+      "S-057",
+      "S-218",
+      "S-219"
+    ],
+    "unverified": [
+      "Advanced Order Management licence status is not confirmed."
+    ],
+    "id": "AUTO_LOCATION_ASSIGNMENT",
+    "name": "Automatic Location Assignment (Advanced Order Management)",
+    "where": "Enable Features"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-181"
+    ],
+    "unverified": [],
+    "id": "EXPENSE_REPORTS",
+    "name": "Expense Reports",
+    "where": "Enable Features > Employees"
+  },
+  {
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "add-on",
+      "text": "SuiteProcurement cloud service; includes the Electronic Business Extension. Only Employee Self-Serve users can access it."
+    },
+    "sources": [
+      "S-041"
+    ],
+    "unverified": [],
+    "id": "SUITEPROCUREMENT",
+    "name": "SuiteProcurement (Oracle Business Network)",
+    "where": "Provisioned with the SuiteProcurement cloud service"
+  },
+  {
+    "requires": [
+      "PURCHASE_ORDERS",
+      "ADV_RECEIVING",
+      "APPROVAL_ROUTING"
+    ],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "No licence note on the Oracle page for this feature; confirm with the quote that it is included."
+    },
+    "sources": [
+      "S-183",
+      "S-208"
+    ],
+    "unverified": [
+      "A/P and SuiteFlow are also prerequisites; neither is modelled as a feature here."
+    ],
+    "id": "THREE_WAY_MATCH",
+    "name": "3 Way Match Vendor Bill Approval (NetSuite Approvals Workflow SuiteApp)",
+    "where": "SuiteApp (bundle 537941)"
+  },
+  {
+    "id": "CUSTOMER_ACCESS",
+    "name": "Customer Access",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Licence treatment of Customer Center users is not stated in the Oracle licence overview; confirm with the quote."
+    },
+    "sources": [],
+    "unverified": [
+      "The research names the Customer Access feature for Customer Center logins without citing its Oracle page."
+    ]
+  },
+  {
+    "id": "VENDOR_ACCESS",
+    "name": "Vendor Access",
+    "where": "Enable Features",
+    "requires": [],
+    "autoEnables": [],
+    "conflicts": [],
+    "lock": {
+      "kind": "unverified",
+      "text": "No Oracle statement found on disabling it."
+    },
+    "licence": {
+      "kind": "unverified",
+      "text": "Licence treatment of Vendor Center users is not stated in the Oracle licence overview; confirm with the quote."
+    },
+    "sources": [
+      "S-232"
+    ],
+    "unverified": []
+  }
+]

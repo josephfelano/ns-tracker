@@ -1,4 +1,4 @@
-// Views: Overview, Questions, Decisions, Build layers, Module scoping
+// Views: Overview, Questions, Decisions, Implementation guide, Module scoping
 // plus the question and decision editors used by drawers and Interview mode.
 (function () {
   'use strict';
@@ -21,6 +21,115 @@
   const segmented = (values, current, attr) =>
     `<div class="seg" role="radiogroup">${values.map((v) => `<button type="button" class="seg-btn tone-${T.tone(v)}${v === current ? ' on' : ''}" ${attr}="${esc(v)}" role="radio" aria-checked="${v === current}">${esc(v)}</button>`).join('')}</div>`;
 
+  // ======================= answer picker =======================
+  const DOOR_KIND = {
+    'cannot-disable': 'Cannot be undone', 'locked-once-used': 'Locked once used', 'record-lock': 'Locked on the record',
+    'support-only': 'Only NetSuite Support can undo', order: 'Order matters', behaviour: 'How it behaves',
+    recommendation: 'Recommendation', 'scope-risk': 'Scope risk', 'not-a-door': 'Not a one-way door',
+  };
+  const LOCKING = ['cannot-disable', 'locked-once-used', 'record-lock', 'support-only'];
+  T.doorKind = (k) => DOOR_KIND[k] || k;
+  T.doorLocks = (k) => LOCKING.includes(k) || k === 'order';
+  // Confirmed locks are a danger; an unconfirmed one is "no data" (grey), not a verdict, and says
+  // only that Oracle does not state whether it can be turned off.
+  const LOCK = { 'cannot-disable': 'Cannot be turned off', 'locked-once-used': 'Locked once used', 'support-only': 'Support only', unverified: 'Undo not confirmed' };
+  ui.lock = (f) => (f.lock && LOCK[f.lock.kind] ? `<span class="badge tone-${f.lock.kind === 'unverified' ? 'muted' : 'bad'}" title="${esc(f.lock.text || '')}">${LOCK[f.lock.kind]}</span>` : '');
+  ui.licence = (f) => {
+    const k = f.licence && f.licence.kind;
+    if (!k || k === 'included') return '';
+    return `<span class="badge tone-warn" title="${esc(f.licence.text || '')}">${k === 'unverified' ? 'Licence: confirm' : 'Licensed'}</span>`;
+  };
+  ui.sources = (ids) => {
+    const list = (ids || []).map((id) => idx.src.get(id)).filter(Boolean);
+    if (!list.length) return '';
+    return `<details class="srcs"><summary>Sources (${list.length})</summary><ul>${list.map((s) => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a> <span class="fine">${esc(s.kind)}</span></li>`).join('')}</ul></details>`;
+  };
+  const decLink = (did) => `<a class="idlink" href="#/tracker/decisions/${did}">${did}</a>`;
+  const optLabel = (did, v) => { const o = idx.opt.get(did); return o && o.get(v) ? o.get(v).label : v; };
+
+  // The structured answer for a decision. Yes/no and pick-one are buttons, pick-several toggles,
+  // number and text an input. An answer NetSuite forces shows as set, with the reason; an option
+  // another answer rules out is disabled, with the reason.
+  T.picker = function (did, opts) {
+    opts = opts || {};
+    const d = idx.d.get(did);
+    if (!d.input) return '';
+    const a = T.answer(store.state, did);
+    let body;
+    if (a.kind === 'number' || a.kind === 'text') {
+      body = `<input class="pick-input" type="${a.kind === 'number' ? 'number' : 'text'}" data-pick-input="${did}" value="${esc(a.raw == null ? '' : a.raw)}"${a.na ? ' disabled' : ''}>`;
+    } else {
+      body = `<div class="pick-row${a.kind === 'multi' ? ' multi' : ''}">${d.input.options.map((o) => {
+        const on = a.values.includes(o.value);
+        const forced = a.forced && a.forced.has(o.value);
+        const block = a.blocked.get(o.value);
+        const lockedOn = forced && a.kind === 'multi';
+        const title = block ? 'Ruled out: ' + block : forced ? 'Set by NetSuite: ' + a.forced.get(o.value) : '';
+        return `<button type="button" class="pick-btn${on ? ' on' : ''}${forced ? ' forced' : ''}" data-pick="${did}" data-val="${esc(o.value)}" aria-pressed="${on}"${block || a.na || lockedOn ? ' disabled' : ''}${title ? ` title="${esc(title)}"` : ''}>${esc(o.label)}</button>`;
+      }).join('')}</div>`;
+    }
+    const notes = [];
+    if (a.na) notes.push(`<div class="pick-note">Not applicable: ${a.na.map((x) => `${decLink(x.did)} ${esc(optLabel(x.did, x.value))}`).join('; ')}</div>`);
+    else if (a.forced) notes.push(`<div class="pick-note">Set by NetSuite: ${esc([...new Set(a.forced.values())].join('; '))}</div>`);
+    if (a.overridden && !a.na) notes.push(`<div class="pick-note bad">Your earlier answer is ruled out by this.</div>`);
+    return `<div class="picker${opts.compact ? ' compact' : ''}" data-picker-for="${did}">${body}${notes.join('')}</div>`;
+  };
+
+  // Clicks and typing in any picker inside root; redraws every picker in root (one answer can
+  // force or rule out others) and calls after().
+  T.wirePickers = function (root, after) {
+    const redraw = () => {
+      root.querySelectorAll('[data-picker-for]').forEach((p) => { p.outerHTML = T.picker(p.dataset.pickerFor, { compact: p.classList.contains('compact') }); });
+      if (after) after();
+    };
+    ui.on(root, 'click', '[data-pick]', (e, b) => {
+      const did = b.dataset.pick; const v = b.dataset.val;
+      const d = idx.d.get(did);
+      const cur = (store.state.decisions[did] || {}).choice;
+      if (d.input.type === 'multi') {
+        const list = Array.isArray(cur) ? cur.slice() : [];
+        const i = list.indexOf(v);
+        if (i >= 0) list.splice(i, 1); else list.push(v);
+        store.setDecision(did, 'choice', list);
+      } else store.setDecision(did, 'choice', cur === v ? '' : v);
+      redraw();
+    });
+    ui.on(root, 'change', '[data-pick-input]', (e, t) => { store.setDecision(t.dataset.pickInput, 'choice', t.value.trim()); redraw(); });
+  };
+
+  // What the current answer means: features on and off, setup, what stops applying, licence, sources.
+  T.consequences = function (did) {
+    const d = idx.d.get(did);
+    if (!d.input || !idx.opt.has(did)) return '';
+    const a = T.answer(store.state, did);
+    if (!a.values.length || a.na) return '';
+    const L = T.logic(store.state);
+    const opts = a.values.map((v) => idx.opt.get(did).get(v));
+    const uniq = (xs) => [...new Set(xs)];
+    const featOn = uniq(opts.flatMap((o) => o.features || []));
+    const also = [...L.on.keys()].filter((f) => !featOn.includes(f) && T.why(L.on, f)[0] && T.why(L.on, f)[0].did === did);
+    const offs = uniq(opts.flatMap((o) => o.off || []));
+    const does = uniq(opts.flatMap((o) => o.does || []));
+    const na = uniq(opts.flatMap((o) => o.makesNA || []));
+    const lic = uniq(opts.map((o) => o.licence).filter(Boolean));
+    const warn = uniq(opts.map((o) => o.warn).filter(Boolean));
+    const unv = uniq(opts.flatMap((o) => o.unverified || []));
+    const src = uniq(opts.flatMap((o) => o.sources || []));
+    const fchip = (id, why) => { const f = idx.f.get(id) || { name: id }; return `<span class="chip" title="${esc(why || f.where || '')}">${esc(f.name)} ${ui.lock(f)}${ui.licence(f)}</span>`; };
+    const row = (label, html) => (html ? `<div class="feed-row"><span class="feed-label">${label}</span><div class="feed-val">${html}</div></div>` : '');
+    return `<div class="feeds conseq">
+      ${row('Turns on', featOn.length ? `<div class="chips">${featOn.map((f) => fchip(f)).join('')}</div>` : '')}
+      ${row('Also on', also.length ? `<div class="chips">${also.map((f) => fchip(f, T.whyText(L.on, f))).join('')}</div>` : '')}
+      ${row('Leaves off', offs.length ? `<div class="chips">${offs.map((f) => fchip(f)).join('')}</div>` : '')}
+      ${row('Setup', does.length ? `<ul class="does">${does.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : '')}
+      ${row('Not needed', na.length ? `<div class="chips">${na.map((x) => `<a class="chip" href="#/tracker/decisions/${x}"><b>${x}</b> ${esc(idx.d.get(x).decides)}</a>`).join('')}</div>` : '')}
+      ${row('Licence', lic.map((x) => `<div>${esc(x)}</div>`).join(''))}
+      ${row('Warning', warn.map((x) => `<div class="bad-text">${esc(x)}</div>`).join(''))}
+      ${row('To confirm', unv.length ? `<ul class="does">${unv.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : '')}
+      ${src.length ? `<div class="feed-row"><span class="feed-label"></span><div class="feed-val">${ui.sources(src)}</div></div>` : ''}
+    </div>`;
+  };
+
   // ======================= question editor =======================
   T.qEditor = function (qid, opts) {
     opts = opts || {};
@@ -28,22 +137,25 @@
     const a = store.state.answers[qid] || {};
     const status = a.status || 'Not started';
     const decisions = idx.qDecisions.get(qid) || [];
-    const layers = idx.qLayers.get(qid) || [];
+    const layers = idx.qSteps.get(qid) || [];
     const scoping = idx.qScoping.get(qid) || [];
     const prework = idx.qPrework.get(qid) || [];
     const interviews = (a.interviewIds || []).map((id) => store.state.interviews.find((i) => i.id === id)).filter(Boolean);
 
+    // Decisions with answer options are answered right here, while the client is talking.
+    const decRow = (did) => {
+      const d = idx.d.get(did);
+      const head = `<a class="chip" href="#/tracker/decisions/${did}" title="${esc(d.nsSetting || '')}">${ui.dot(T.dStatus(store.state, did))}<b>${did}</b> ${esc(d.decides)} ${ui.rev(d.reversibility)}</a>`;
+      return d.input ? `<div class="dec-pick">${head}${T.picker(did, { compact: true })}</div>` : head;
+    };
     const feeds = [
-      decisions.length ? `<div class="feed-row"><span class="feed-label">Decides</span><div class="chips">${decisions.map((did) => {
-        const d = idx.d.get(did); const ds = (store.state.decisions[did] || {}).status || 'Not started';
-        return `<a class="chip" href="#/tracker/decisions/${did}" title="${esc(d.nsSetting || '')}">${ui.dot(ds)}<b>${did}</b> ${esc(d.decides)} ${ui.rev(d.reversibility)}</a>`;
-      }).join('')}</div></div>` : '',
+      decisions.length ? `<div class="feed-row"><span class="feed-label">Decides</span><div class="chips dec-picks">${decisions.map(decRow).join('')}</div></div>` : '',
       scoping.length && scoping.length < 10 ? `<div class="feed-row"><span class="feed-label">Quote check</span><div class="chips">${scoping.map((mid) => `<a class="chip" href="#/tracker/scoping/${mid}"><b>${mid}</b> ${esc(idx.m.get(mid).ask)}</a>`).join('')}</div></div>` : '',
       prework.length ? `<div class="feed-row"><span class="feed-label">Prework</span><div class="chips">${prework.map((pid) => {
         const p = B.prework.dataDocuments.find((x) => x.id === pid); const pd = store.state.prework.data[pid] || {};
         return `<a class="chip" href="#/tracker/prework/data" title="Prework item that prepares this question">${pd['data-readiness'] ? ui.badge(pd['data-readiness']) : ''}<b>${pid}</b> ${esc(p.item)}</a>`;
       }).join('')}</div></div>` : '',
-      layers.length ? `<div class="feed-row"><span class="feed-label">Layers</span><div class="chips">${layers.map((l) => `<a class="chip" href="#/tracker/layers">${l}</a>`).join('')}</div></div>` : '',
+      layers.length ? `<div class="feed-row"><span class="feed-label">Steps</span><div class="chips">${layers.map((l) => `<a class="chip" href="#/tracker/guide" title="${esc(T.stepName(l))}">${l}</a>`).join('')}</div></div>` : '',
     ].join('');
 
     const el = ui.el(`<div class="qed${opts.big ? ' big' : ''}">
@@ -83,6 +195,12 @@
       prevOwner = id;
       store.setAnswer(qid, 'ownerId', id, opts.interviewId);
     });
+    T.wirePickers(el, () => {
+      el.querySelectorAll('.dec-pick > a.chip .dot').forEach((dot) => {
+        const did = dot.closest('.dec-pick').querySelector('[data-picker-for]').dataset.pickerFor;
+        dot.outerHTML = ui.dot(T.dStatus(store.state, did));
+      });
+    });
     ui.growAll(el);
     return el;
   };
@@ -91,17 +209,20 @@
   T.dEditor = function (did) {
     const d = idx.d.get(did);
     const s = store.state.decisions[did] || {};
-    const status = s.status || 'Not started';
+    const status = T.dStatus(store.state, did);
     const inp = T.inputs(store.state, d);
     const doors = (idx.dDoors.get(did) || []).map((n) => idx.door.get(n));
+    const steps = d.decideBy === d.buildIn ? `Step ${esc(d.decideBy)}` : `Decide by ${esc(d.decideBy)} &middot; build in ${esc(d.buildIn)}`;
     const el = ui.el(`<div class="ded">
-      <div class="qed-meta">${ui.rev(d.reversibility)} ${ui.tier(d.tier1)} <span>${esc(d.area)} &middot; Layer ${esc(d.layer)}</span></div>
+      <div class="qed-meta">${ui.rev(d.reversibility)} ${ui.tier(d.tier1)} <span>${esc(d.area)} &middot; ${steps}</span></div>
       <dl class="kv">
         <dt>NetSuite setting</dt><dd>${esc(d.nsSetting || '-')}</dd>
         <dt>Blocks / notes</dt><dd>${esc(d.notes || '-')}</dd>
         ${d.pseudoRefs && d.pseudoRefs.length ? `<dt>Also fed by</dt><dd>${esc(d.pseudoRefs.join(', '))}</dd>` : ''}
+        ${(d.unverified || []).length ? `<dt>To confirm</dt><dd>${d.unverified.map(esc).join('<br>')}</dd>` : ''}
       </dl>
-      ${doors.length ? `<div class="doors">${doors.map((o) => `<div class="door${o.isOneWay ? '' : ' not'}"><div class="door-head">${o.isOneWay ? 'One-way door' : 'Not a one-way door'} #${o.num} <span class="fine">${esc(o.confidence)}${o.mappedBy === 'heuristic' ? ' &middot; link not yet confirmed' : ''}</span></div><div>${esc(o.constraint)}</div>${o.why ? `<div class="fine">${esc(o.why)}</div>` : ''}</div>`).join('')}</div>` : ''}
+      ${ui.sources(d.sources)}
+      ${doors.length ? `<div class="doors">${doors.map((o) => `<div class="door${T.doorLocks(o.kind) ? '' : ' not'}"><div class="door-head">${esc(T.doorKind(o.kind))} #${o.num} <span class="fine">${esc(o.confidence)}${o.mappedBy === 'heuristic' ? ' &middot; link not yet confirmed' : ''}</span></div><div>${esc(o.constraint)}</div>${o.why ? `<div class="fine">${esc(o.why)}</div>` : ''}${ui.sources(o.sources)}</div>`).join('')}</div>` : ''}
       <h4 class="sub-h">Discovery inputs <span class="fine">${inp.done} of ${inp.total} answered</span></h4>
       <div class="inputs">${d.questionIds.map((qid) => {
         const q = idx.q.get(qid); const a = store.state.answers[qid] || {};
@@ -110,8 +231,9 @@
           ${a.answer ? `<div class="input-q-answer">${esc(a.answer)}</div>` : '<div class="input-q-answer empty">No answer yet</div>'}
         </div>`;
       }).join('') || '<p class="fine">No discovery question is linked to this decision.</p>'}</div>
+      ${d.input ? `<div class="field"><span>Answer</span>${T.picker(did)}</div><div class="conseq-slot">${T.consequences(did)}</div>` : ''}
       <div class="field"><span>Status</span>${segmented(T.enums.decisionStatus, status, 'data-status')}</div>
-      <label class="field"><span>Decision</span><textarea class="grow" data-f="decision" rows="3" placeholder="What we will configure, in one or two sentences">${esc(s.decision || '')}</textarea></label>
+      <label class="field"><span>${d.input ? 'Decision notes' : 'Decision'}</span><textarea class="grow" data-f="decision" rows="${d.input ? 2 : 3}" placeholder="${d.input ? 'Anything the answer above does not say' : 'What we will configure, in one or two sentences'}">${esc(s.decision || '')}</textarea></label>
       <label class="field"><span>Why (evidence and reasoning)</span><textarea class="grow" data-f="rationale" rows="3" placeholder="Which answers drove it, what was ruled out and why">${esc(s.rationale || '')}</textarea></label>
       <div class="field-row">
         <label class="field"><span>Owner (theirs)</span>${ui.personSelect(s.ownerId, 'data-f="ownerId"')}</label>
@@ -133,6 +255,14 @@
       if (id == null) return;
       prevOwner = id;
       store.setDecision(did, 'ownerId', id);
+    });
+    T.wirePickers(el, () => {
+      const slot = el.querySelector('.conseq-slot');
+      if (slot) slot.innerHTML = T.consequences(did);
+      const st = T.dStatus(store.state, did);
+      el.querySelectorAll('[data-status]').forEach((x) => { x.classList.toggle('on', x.dataset.status === st); x.setAttribute('aria-checked', x.dataset.status === st); });
+      const dt = el.querySelector('[data-f="decidedAt"]');
+      if (!dt.value && store.state.decisions[did] && store.state.decisions[did].decidedAt) dt.value = store.state.decisions[did].decidedAt;
     });
     ui.growAll(el);
     return el;
@@ -168,7 +298,7 @@
         B.prework.processes.forEach((p) => { const r = (st.prework.processes[p.id] || {})['current-state-clarity'] || 'Not filled in'; clarity[r] = (clarity[r] || 0) + 1; });
         const countList = (obj, order) => order.concat(['Not filled in']).filter((k) => obj[k]).map((k) => `<div class="count-row">${k === 'Not filled in' ? '<span class="badge tone-muted">Not filled in</span>' : ui.badge(k)}<b>${obj[k]}</b></div>`).join('');
 
-        const byPart = ['P1', 'P2', 'P3'].map((p) => {
+        const byPart = B.meta.parts.map((x) => x.id).map((p) => {
           const secs = m.sections.filter((s) => s.part === p);
           const done = secs.reduce((n, s) => n + s.done, 0); const total = secs.reduce((n, s) => n + s.total, 0);
           return `<div class="part-block"><div class="part-head"><b>${esc(idx.partName[p])}</b><span class="fine">${done} / ${total}</span></div>
@@ -182,13 +312,13 @@
             ${gate('Tier 1 questions answered', m.tier1QDone, m.tier1QTotal, 'Answer before contract signature', m.tier1QDone === m.tier1QTotal, '#/tracker/questions')}
             ${gate('Tier 1 decisions open', m.tier1DOpen, m.tier1DTotal, m.tier1DOpen ? 'Must reach 0 before signing' : 'Clear to sign', m.tier1DOpen === 0, '#/tracker/decisions')}
             ${gate('Module scoping confirmed', m.scopingDone, m.scopingTotal, 'Check the quote against the business', m.scopingDone === m.scopingTotal, '#/tracker/scoping')}
-            ${gate('One-way decisions open', m.oneWayOpen, m.oneWayTotal, m.oneWayOpen ? 'Must reach 0 before L0 / L2 setup' : 'Clear to configure', m.oneWayOpen === 0, '#/tracker/layers')}
+            ${gate('One-way decisions open', m.oneWayOpen, m.oneWayTotal, m.oneWayOpen ? 'Must reach 0 before L0 / L2 setup' : 'Clear to configure', m.oneWayOpen === 0, '#/tracker/guide')}
           </div>
           <div class="grid-2">
             <section class="card"><div class="card-head"><h2>Discovery</h2><span class="fine">${m.qDone} of ${m.qTotal} done${m.qHelp ? ' &middot; ' + m.qHelp + ' need help' : ''}</span></div>${byPart}</section>
-            <section class="card"><div class="card-head"><h2>Build layers</h2><span class="fine">${m.dDone} of ${m.dTotal} decisions made</span></div>
-              ${m.layers.map((l) => { const L = idx.layer.get(l.code); return `<a class="layer-row" href="#/tracker/layers"><span class="layer-code">${l.code}</span><span class="layer-name">${esc(L.decides.split(':')[0])}</span>${ui.bar(l.done, l.total)}<span class="sec-num">${l.done}/${l.total}${l.oneWayOpen ? ` <span class="badge tone-bad" title="One-way decisions open">${l.oneWayOpen}</span>` : ''}</span></a>`; }).join('')}
-              <p class="fine">Each layer assumes everything above it is settled. Red counts are one-way decisions still open.</p>
+            <section class="card"><div class="card-head"><h2>Implementation steps</h2><span class="fine">${m.dDone} of ${m.dTotal} decisions made</span></div>
+              ${m.steps.filter((l) => l.total).map((l) => `<a class="layer-row" href="#/tracker/guide/${l.code}"><span class="layer-code">${l.code}</span><span class="layer-name">${esc(T.stepName(l.code))}</span>${ui.bar(l.done, l.total)}<span class="sec-num">${l.done}/${l.total}${l.oneWayOpen ? ` <span class="badge tone-bad" title="One-way decisions open">${l.oneWayOpen}</span>` : ''}</span></a>`).join('')}
+              <p class="fine">Decisions by the step they must be made in. Red counts are one-way decisions still open.</p>
             </section>
           </div>
           <div class="grid-2">
@@ -280,57 +410,62 @@
 
   // ======================= Decisions =======================
   V.decisions = {
-    defaults: () => ({ text: '', layer: '', area: '', rev: '', tier: '', status: '', inputs: '' }),
+    defaults: () => ({ text: '', step: '', area: '', rev: '', tier: '', status: '', inputs: '' }),
     filters: null,
     render(root, r) {
       const f = (this.filters = this.filters || this.defaults());
       root.innerHTML = `
-        <div class="page-head"><div><p class="lead">What each discovery answer decides in NetSuite, grouped by build layer. One-way decisions cannot be undone once configured.</p></div></div>
+        <div class="page-head"><div><p class="lead">What each discovery answer decides in NetSuite, grouped by the step it must be decided in. One-way decisions cannot be undone once configured.</p></div></div>
         <div class="filters">
           <input type="search" data-k="text" placeholder="Filter by ID, words or setting" value="${esc(f.text)}">
-          <select data-k="layer">${ui.options(T.enums.layer, f.layer, 'All layers')}</select>
+          <select data-k="step">${ui.options(T.enums.step, f.step, 'All steps')}</select>
           <select data-k="area">${ui.options(T.enums.decisionArea, f.area, 'All areas')}</select>
           <select data-k="rev">${ui.options(T.enums.reversibility, f.rev, 'Any reversibility')}</select>
           <select data-k="tier"><option value="">All tiers</option><option value="1"${f.tier === '1' ? ' selected' : ''}>Tier 1 only</option></select>
           <select data-k="status">${ui.options(T.enums.decisionStatus, f.status, 'Any status')}</select>
           <select data-k="inputs"><option value="">Any inputs</option><option value="ready"${f.inputs === 'ready' ? ' selected' : ''}>Inputs answered</option><option value="waiting"${f.inputs === 'waiting' ? ' selected' : ''}>Waiting on answers</option></select>
           <button class="btn subtle" data-clear>Clear</button>
+          <button class="btn subtle" data-review title="Markdown of the decisions shown, with every option, setup step, feature and source">Export for review</button>
           <span class="fine count" id="dcount"></span>
         </div>
         <div class="table-wrap"><table class="grid rows-click"><thead><tr><th class="narrow"></th><th>ID</th><th>What the answer decides</th><th>Area</th><th>Reversibility</th><th>Inputs</th><th>Status</th></tr></thead><tbody id="dbody"></tbody></table></div>`;
       const body = root.querySelector('#dbody');
+      let shown = [];
       const draw = () => {
         const st = store.state;
         const text = f.text.trim().toLowerCase();
         const rows = B.decisions.filter((d) => {
           const s = st.decisions[d.id] || {};
-          if (f.layer && d.layer !== f.layer) return false;
+          const a = T.answer(st, d.id);
+          if (f.step && d.decideBy !== f.step) return false;
           if (f.area && d.area !== f.area) return false;
           if (f.rev && d.reversibility !== f.rev) return false;
           if (f.tier && !d.tier1) return false;
-          if (f.status && (s.status || 'Not started') !== f.status) return false;
+          if (f.status && a.status !== f.status) return false;
           if (f.inputs) { const ready = T.inputs(st, d).ready; if ((f.inputs === 'ready') !== ready) return false; }
-          if (text && !(d.id.toLowerCase().includes(text) || d.decides.toLowerCase().includes(text) || (d.nsSetting || '').toLowerCase().includes(text) || (s.decision || '').toLowerCase().includes(text))) return false;
+          if (text && !(d.id.toLowerCase().includes(text) || d.decides.toLowerCase().includes(text) || (d.nsSetting || '').toLowerCase().includes(text) || (s.decision || '').toLowerCase().includes(text) || a.labels.join(' ').toLowerCase().includes(text))) return false;
           return true;
         });
+        shown = rows;
         root.querySelector('#dcount').textContent = `Showing ${rows.length} of ${B.decisions.length}`;
         let html = '';
-        T.enums.layer.forEach((code) => {
-          const inLayer = rows.filter((d) => d.layer === code);
-          if (!inLayer.length) return;
-          const L = idx.layer.get(code);
-          html += `<tr class="group"><td colspan="7"><b>${code}</b> ${esc(L.decides)}</td></tr>`;
-          html += inLayer.map((d) => {
+        T.enums.step.forEach((code) => {
+          const inStep = rows.filter((d) => d.decideBy === code);
+          if (!inStep.length) return;
+          const L = idx.step.get(code);
+          html += `<tr class="group"><td colspan="7"><b>${code}</b> ${esc(L.title)}</td></tr>`;
+          html += inStep.map((d) => {
             const s = st.decisions[d.id] || {};
+            const a = T.answer(st, d.id);
             const inp = T.inputs(st, d);
             return `<tr data-d="${d.id}"${r && r.id === d.id ? ' class="sel"' : ''}>
-              <td class="narrow">${ui.dot(s.status)}</td>
+              <td class="narrow">${ui.dot(a.status)}</td>
               <td class="mono nowrap">${d.id} ${d.tier1 ? '<span class="t1" title="Tier 1">T1</span>' : ''}</td>
-              <td><div class="clamp">${esc(d.decides)}</div><div class="clamp fine">${esc(s.decision || d.nsSetting || '')}</div></td>
+              <td><div class="clamp">${esc(d.decides)}</div>${T.answerLine(a, s.decision || d.nsSetting || '')}</td>
               <td class="nowrap fine">${esc(d.area)}</td>
               <td>${ui.rev(d.reversibility)}</td>
               <td class="nowrap"><div class="mini">${ui.bar(inp.done, inp.total)}<span class="fine">${inp.done}/${inp.total}</span></div></td>
-              <td class="nowrap">${ui.badge(s.status || 'Not started')}</td></tr>`;
+              <td class="nowrap">${ui.badge(a.status)}</td></tr>`;
           }).join('');
         });
         body.innerHTML = html || '<tr><td colspan="7" class="empty">No decisions match these filters.</td></tr>';
@@ -339,6 +474,7 @@
       ui.on(root, 'change', 'select[data-k]', (e, el) => { f[el.dataset.k] = el.value; draw(); });
       ui.on(root, 'click', '[data-clear]', () => { this.filters = null; T.rerender(); });
       ui.on(root, 'click', 'tr[data-d]', (e, tr) => { location.hash = '#/tracker/decisions/' + tr.dataset.d; });
+      ui.on(root, 'click', '[data-review]', () => T.download('decision-review-' + T.today() + '.md', T.reviewMarkdown(shown), 'text/markdown'));
       draw();
       T.live(root, draw, ['decisions', 'answers', 'reload']);
       this.select(r);
@@ -349,59 +485,199 @@
     },
   };
 
-  // ======================= Build layers =======================
-  V.layers = {
-    render(root) {
+  // ======================= Implementation guide =======================
+  // One model, two renderings (page and Markdown export): every step in order, what is decided
+  // there, what to configure from the answers, the features to enable, one-way warnings, the
+  // quote checklist and the data load order.
+  T.answerLine = (a, fallback) => {
+    if (a.na) return `<div class="clamp fine">Not applicable (${a.na.map((x) => x.did).join(', ')})</div>`;
+    if (a.labels.length) return `<div class="clamp answer-line">${esc(a.labels.join(', '))}${a.forced ? ' <span class="badge tone-muted">set by NetSuite</span>' : ''}</div>`;
+    return fallback ? `<div class="clamp fine">${esc(fallback)}</div>` : '';
+  };
+
+  T.guideModel = function (state) {
+    const L = T.logic(state);
+    const answers = new Map(B.decisions.map((d) => [d.id, T.answer(state, d.id)]));
+    const ctrl = (fid) => { const p = T.why(L.on, fid); return p.length ? p[0].did : null; };
+    const features = [...L.on.keys()].map((id) => idx.f.get(id) || { id, name: id, where: '', lock: {}, licence: {} })
+      .sort((a, b) => T.natCmp(a.where || '', b.where || '') || T.natCmp(a.name, b.name))
+      .map((f) => ({ f, why: T.whyText(L.on, f.id), did: ctrl(f.id) }));
+    const featuresOrdered = T.orderFeatures(features);
+    const off = [...L.off.entries()].map(([id, did]) => ({ f: idx.f.get(id) || { id, name: id }, did }));
+    const conflicts = L.conflicts.map(([a, b]) => ({ a: idx.f.get(a), b: idx.f.get(b), whyA: T.whyText(L.on, a), whyB: T.whyText(L.on, b) }));
+    const quote = [];
+    features.forEach(({ f, why }) => { if (f.licence && f.licence.kind && f.licence.kind !== 'included') quote.push({ name: f.name, text: f.licence.text || '', confirm: f.licence.kind === 'unverified', why }); });
+    B.decisions.forEach((d) => {
+      const a = answers.get(d.id);
+      if (a.na || !idx.opt.has(d.id)) return;
+      a.values.forEach((v) => { const o = idx.opt.get(d.id).get(v); if (o.licence) quote.push({ name: o.label, did: d.id, text: o.licence, confirm: false }); });
+    });
+    const scopingOpen = B.moduleScoping.filter((m) => !T.mDone((state.scoping[m.id] || {}).status));
+    return B.steps.map((s) => {
+      const decide = B.decisions.filter((d) => d.decideBy === s.code).map((d) => ({ d, a: answers.get(d.id) }));
+      const build = T.orderBuild(B.decisions.filter((d) => d.buildIn === s.code).map((d) => ({ d, a: answers.get(d.id) }))
+        .filter(({ a }) => !a.na && a.values.length))
+        .map(({ d, a }) => ({ d, a, lines: idx.opt.has(d.id) ? [...new Set(a.values.flatMap((v) => idx.opt.get(d.id).get(v).does || []))] : [] }));
+      const waiting = B.decisions.filter((d) => d.buildIn === s.code && d.decideBy !== s.code).filter((d) => !T.dDone(answers.get(d.id).status));
+      const doorNums = new Set(decide.flatMap(({ d }) => idx.dDoors.get(d.id) || []));
+      const doors = B.oneWayDoors.filter((o) => doorNums.has(o.num));
+      const fed = s.fedByQuestionIds;
+      return {
+        s, decide, build, waiting, doors,
+        done: decide.filter(({ a }) => T.dDone(a.status)).length,
+        oneWayOpen: decide.filter(({ d, a }) => d.reversibility === 'One-way' && !T.dDone(a.status)).length,
+        features: s.code === 'L0' ? { on: featuresOrdered, off, conflicts } : null,
+        quote: s.code === 'SCOPE' ? { items: quote, scopingOpen } : null,
+        load: B.loadOrder.filter((l) => l.step === s.code),
+        fed: fed.length, fedDone: fed.filter((qid) => T.qDone((state.answers[qid] || {}).status)).length,
+      };
+    });
+  };
+
+  T.download = (name, text, type) => {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([text], { type }));
+    link.download = name;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  };
+
+  // The bank content behind a set of decisions, for someone to read and check line by line:
+  // every option with its setup, features, warnings, to-confirm notes and sources.
+  T.reviewMarkdown = function (decisions) {
+    const fn = (id) => (idx.f.get(id) || { name: id }).name;
+    const src = (ids) => (ids || []).map((id) => idx.src.get(id)).filter(Boolean).map((s) => `[${s.title}](${s.url})`).join('; ');
+    const out = [`# Decision review - ${decisions.length} decisions`, '', `Exported ${T.today()} from the implementation tracker. Tick each line once checked.`, ''];
+    T.enums.step.forEach((code) => {
+      const inStep = decisions.filter((d) => d.decideBy === code);
+      if (!inStep.length) return;
+      out.push(`## ${code} ${T.stepName(code)}`, '');
+      inStep.forEach((d) => {
+        out.push(`### ${d.id} ${d.decides}`, '', `${d.area} - ${d.reversibility} - decide by ${d.decideBy}, build in ${d.buildIn}${d.tier1 ? ' - Tier 1' : ''} - answer: ${d.input.type}${d.input.forceable === false ? ' (never forced)' : ''}`, '');
+        if (d.nsSetting) out.push(`- [ ] NetSuite setting: ${d.nsSetting}`);
+        if (d.notes) out.push(`- [ ] Notes: ${d.notes}`);
+        if (d.questionIds.length) out.push(`- [ ] Fed by: ${d.questionIds.join(', ')}`);
+        (d.unverified || []).forEach((u) => out.push(`- [ ] To confirm: ${u}`));
+        if ((d.sources || []).length) out.push(`- Sources: ${src(d.sources)}`);
+        (d.input.options || []).forEach((o) => {
+          out.push('', `**${o.label}** (\`${o.value}\`)`, '');
+          (o.does || []).forEach((x) => out.push(`- [ ] ${x}`));
+          if ((o.features || []).length) out.push(`- [ ] Turns on: ${o.features.map(fn).join(', ')}`);
+          if ((o.off || []).length) out.push(`- [ ] Leaves off: ${o.off.map(fn).join(', ')}`);
+          if ((o.makesNA || []).length) out.push(`- [ ] Makes not applicable: ${o.makesNA.join(', ')}`);
+          if (o.licence) out.push(`- [ ] Licence: ${o.licence}`);
+          if (o.warn) out.push(`- [ ] Warning: ${o.warn}`);
+          (o.unverified || []).forEach((u) => out.push(`- [ ] To confirm: ${u}`));
+          if ((o.sources || []).length) out.push(`- Sources: ${src(o.sources)}`);
+        });
+        out.push('');
+      });
+    });
+    return out.join('\n');
+  };
+
+  T.guideMarkdown = function (state) {
+    const model = T.guideModel(state);
+    const out = [`# ${state.tracker.name || 'NetSuite implementation'} - implementation guide`, '', `Generated ${T.today()} from the implementation tracker.`, ''];
+    const cell = (x) => String(x == null ? '' : x).replace(/\|/g, '/').replace(/\n/g, ' ');
+    model.forEach((g) => {
+      out.push(`## ${g.s.code} ${g.s.title}`, '', g.s.what, '');
+      if (g.decide.length) {
+        out.push('| Decision | Answer | Status |', '|---|---|---|');
+        g.decide.forEach(({ d, a }) => out.push(`| ${d.id} ${cell(d.decides)} | ${cell(a.na ? 'Not applicable' : a.labels.join(', ') + (a.forced ? ' (set by NetSuite)' : ''))} | ${a.status} |`));
+        out.push('');
+      }
+      if (g.quote && (g.quote.items.length || g.quote.scopingOpen.length)) {
+        out.push('### Confirm with the quote', '');
+        g.quote.items.forEach((q) => out.push(`- ${q.did ? q.did + ' ' : ''}${q.name}${q.text ? ': ' + q.text : ''}${q.confirm ? ' (licence to confirm)' : ''}`));
+        g.quote.scopingOpen.forEach((m) => out.push(`- ${m.id} ${m.ask}`));
+        out.push('');
+      }
+      if (g.features && g.features.on.length) {
+        out.push('### Enable features', '', '| Feature | Where | Why |', '|---|---|---|');
+        g.features.on.forEach(({ f, why }) => out.push(`| ${cell(f.name)} | ${cell(f.where)} | ${cell(why)} |`));
+        out.push('');
+        if (g.features.off.length) out.push('Leave off: ' + g.features.off.map(({ f, did }) => `${f.name} (${did})`).join(', '), '');
+        g.features.conflicts.forEach((c) => out.push(`- CONFLICT: ${c.a.name} and ${c.b.name} cannot both be on.`));
+      }
+      if (g.build.length) {
+        out.push('### Configure', '');
+        g.build.forEach(({ d, a, lines }) => { out.push(`**${d.id} ${a.labels.join(', ')}** - ${d.decides}`); lines.forEach((l) => out.push(`- ${l}`)); out.push(''); });
+      }
+      if (g.waiting.length) out.push('Waiting on: ' + g.waiting.map((d) => `${d.id} (decide by ${d.decideBy})`).join(', '), '');
+      if (g.doors.length) {
+        out.push('### Watch out', '');
+        g.doors.forEach((o) => out.push(`- ${T.doorKind(o.kind)}: ${o.constraint}`));
+        out.push('');
+      }
+      if (g.load.length) {
+        out.push('### Data load order', '', '| # | What | Method | Notes |', '|---|---|---|---|');
+        g.load.forEach((l) => out.push(`| ${l.order} | ${cell(l.what)} | ${cell(l.method)} | ${cell(l.notes)} |`));
+        out.push('');
+      }
+    });
+    return out.join('\n');
+  };
+
+  V.guide = {
+    open: new Set(),
+    render(root, r) {
+      const self = this;
       const draw = () => {
         const st = store.state;
-        const m = T.metrics(st);
+        const model = T.guideModel(st);
+        const ans = (a) => (a.na ? '<span class="badge tone-na">Not applicable</span>' : a.labels.length ? `${esc(a.labels.join(', '))}${a.forced ? ' <span class="badge tone-muted">set by NetSuite</span>' : ''}` : '<span class="fine">Open</span>');
         root.innerHTML = `
-          <div class="page-head"><div><p class="lead">The account is built top to bottom. Each layer assumes everything above it is settled; changing an upper layer later means rework below it.</p></div></div>
-          <div class="layers">${B.layers.map((L) => {
-            const lm = m.layers.find((x) => x.code === L.code);
-            const ds = B.decisions.filter((d) => d.layer === L.code);
-            const fed = L.fedByQuestionIds;
-            const fedDone = fed.filter((qid) => T.qDone((st.answers[qid] || {}).status)).length;
-            return `<details class="layer card">
+          <div class="page-head"><div><p class="lead">Every step from scoping to go-live, built from the answers: what to decide, what to configure and what to watch.</p></div>
+            <div class="btn-row"><button class="btn" data-print>Print</button><button class="btn" data-md>Export Markdown</button></div></div>
+          <div class="layers">${model.map((g) => {
+            const s = g.s;
+            return `<details class="layer card" data-step="${s.code}"${self.open.has(s.code) ? ' open' : ''}>
               <summary>
-                <span class="layer-code big">${L.code}</span>
-                <span class="layer-main"><span class="layer-title">${esc(L.decides)}</span><span class="fine">Cost of changing later: ${esc(L.costOfChange)}</span></span>
+                <span class="layer-code big">${s.code}</span>
+                <span class="layer-main"><span class="layer-title">${esc(s.title)}</span><span class="fine">${esc(s.what)}</span></span>
                 <span class="layer-stats">
-                  <span><b>${lm.done}/${lm.total}</b> decided</span>
-                  <span><b>${lm.inputsReady}</b> ready to decide</span>
-                  ${lm.oneWayOpen ? `<span class="badge tone-bad">${lm.oneWayOpen} one-way open</span>` : ''}
+                  ${g.decide.length ? `<span><b>${g.done}/${g.decide.length}</b> decided</span>` : ''}
+                  ${g.oneWayOpen ? `<span class="badge tone-bad">${g.oneWayOpen} one-way open</span>` : ''}
+                  ${g.features && g.features.conflicts.length ? `<span class="badge tone-bad">${g.features.conflicts.length} conflict${g.features.conflicts.length > 1 ? 's' : ''}</span>` : ''}
                 </span>
-                <span class="layer-bar">${ui.bar(lm.done, lm.total)}</span>
+                <span class="layer-bar">${g.decide.length ? ui.bar(g.done, g.decide.length) : ''}</span>
               </summary>
               <div class="layer-body">
-                ${L.notes ? `<p class="fine">${esc(L.notes)}</p>` : ''}
-                <table class="grid rows-click compact"><tbody>${ds.map((d) => {
-                  const s = st.decisions[d.id] || {}; const inp = T.inputs(st, d);
-                  return `<tr data-d="${d.id}"><td class="narrow">${ui.dot(s.status)}</td><td class="mono nowrap">${d.id}</td><td>${esc(d.decides)}</td><td>${ui.rev(d.reversibility)}</td><td class="nowrap fine">inputs ${inp.done}/${inp.total}</td><td class="nowrap">${ui.badge(s.status || 'Not started')}</td></tr>`;
-                }).join('')}</tbody></table>
-                <p class="fine">Fed by ${fed.length} discovery questions, ${fedDone} answered.${L.fedByRaw ? ' Source: ' + esc(L.fedByRaw) : ''}</p>
+                ${s.costOfChange ? `<p class="fine">Cost of changing later: ${esc(s.costOfChange)}</p>` : ''}
+                ${g.decide.length ? `<h4 class="sub-h">Decide</h4><table class="grid rows-click compact"><tbody>${g.decide.map(({ d, a }) => `<tr data-d="${d.id}"><td class="narrow">${ui.dot(a.status)}</td><td class="mono nowrap">${d.id}</td><td>${esc(d.decides)}</td><td>${ans(a)}</td><td>${ui.rev(d.reversibility)}</td><td class="nowrap">${ui.badge(a.status)}</td></tr>`).join('')}</tbody></table>` : ''}
+                ${g.quote && (g.quote.items.length || g.quote.scopingOpen.length) ? `<h4 class="sub-h">Confirm with the quote</h4><table class="grid compact"><tbody>
+                  ${g.quote.items.map((q) => `<tr><td>${q.did ? decLink(q.did) + ' ' : ''}${esc(q.name)}</td><td>${esc(q.text)}</td><td>${q.confirm ? '<span class="badge tone-warn">Licence: confirm</span>' : ''}</td></tr>`).join('')}
+                  ${g.quote.scopingOpen.map((m) => `<tr><td><a class="idlink" href="#/tracker/scoping/${m.id}">${m.id}</a> ${esc(m.ask)}</td><td></td><td>${ui.badge((st.scoping[m.id] || {}).status || 'Not started')}</td></tr>`).join('')}
+                </tbody></table>` : ''}
+                ${g.features ? `<h4 class="sub-h">Enable features <span class="fine">${g.features.on.length} on</span></h4>
+                  ${g.features.conflicts.map((c) => `<div class="door"><div class="door-head">Conflict</div><div>${esc(c.a.name)} and ${esc(c.b.name)} cannot both be on.</div><div class="fine">${esc(c.whyA)}. ${esc(c.whyB)}.</div></div>`).join('')}
+                  ${g.features.on.length ? `<table class="grid compact"><thead><tr><th>Feature</th><th>Where</th><th>Why it is on</th><th></th></tr></thead><tbody>${g.features.on.map(({ f, why, did }) => `<tr><td>${esc(f.name)}</td><td class="fine">${esc(f.where || '')}</td><td class="fine">${did ? esc(why).replace(did, decLink(did)) : esc(why)}</td><td class="nowrap">${ui.lock(f)} ${ui.licence(f)}</td></tr>`).join('')}</tbody></table>` : '<p class="fine">Nothing turned on yet.</p>'}
+                  ${g.features.off.length ? `<div class="feed-row"><span class="feed-label">Leave off</span><div class="chips">${g.features.off.map(({ f, did }) => `<span class="chip" title="${esc(did)}">${esc(f.name)}</span>`).join('')}</div></div>` : ''}` : ''}
+                ${g.build.length ? `<h4 class="sub-h">Configure</h4>${g.build.map(({ d, a, lines }) => `<div class="cfg"><div class="cfg-head">${decLink(d.id)} <b>${esc(a.labels.join(', '))}</b> <span class="fine">${esc(d.decides)}</span></div>${lines.length ? `<ul class="does">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}</div>`).join('')}` : ''}
+                ${g.waiting.length ? `<div class="feed-row"><span class="feed-label">Waiting on</span><div class="chips">${g.waiting.map((d) => `<a class="chip" href="#/tracker/decisions/${d.id}">${ui.dot(T.dStatus(st, d.id))}<b>${d.id}</b> ${esc(d.decides)}</a>`).join('')}</div></div>` : ''}
+                ${g.doors.length ? `<h4 class="sub-h">Watch out</h4><div class="doors">${g.doors.map((o) => `<div class="door${T.doorLocks(o.kind) ? '' : ' not'}"><div class="door-head">${esc(T.doorKind(o.kind))} <span class="fine">#${o.num} &middot; ${(o.decisionIds || []).join(', ')}</span></div><div>${esc(o.constraint)}</div></div>`).join('')}</div>` : ''}
+                ${g.load.length ? `<h4 class="sub-h">Data load order</h4><table class="grid compact"><thead><tr><th>#</th><th>What</th><th>Method</th><th>Notes</th></tr></thead><tbody>${g.load.map((l) => `<tr><td class="mono">${esc(l.order)}</td><td>${esc(l.what)}</td><td>${esc(l.method)}</td><td class="fine">${esc(l.notes || '')}${(l.unverified || []).length ? ` <span class="badge tone-warn" title="${esc(l.unverified.join(' '))}">to confirm</span>` : ''}</td></tr>`).join('')}</tbody></table>` : ''}
+                ${g.fed ? `<p class="fine">Fed by ${g.fed} discovery questions, ${g.fedDone} answered.</p>` : ''}
               </div></details>`;
-          }).join('')}</div>
-          <h2 class="section-h">One-way doors</h2>
-          <p class="lead">Constraints that cannot be undone (or only through NetSuite Support). Read before enabling anything.</p>
-          <div class="door-grid">${B.oneWayDoors.map((o) => `<div class="door card${o.isOneWay ? '' : ' not'}">
-            <div class="door-head"><span>#${o.num}</span> ${o.isOneWay ? ui.badge('One-way') : '<span class="badge tone-muted">Not a one-way door</span>'} <span class="fine">${esc(o.confidence)}</span></div>
-            <div class="door-text">${esc(o.constraint)}</div>
-            ${o.why ? `<div class="fine">${esc(o.why)}</div>` : ''}
-            ${(o.decisionIds || []).length ? `<div class="chips">${o.decisionIds.map((did) => `<a class="chip" href="#/tracker/decisions/${did}">${ui.dot((st.decisions[did] || {}).status)}<b>${did}</b> ${esc(idx.d.get(did).decides)}</a>`).join('')}</div>` : ''}
-            ${o.source ? `<div class="fine">Source: ${esc(o.source)}</div>` : ''}
-          </div>`).join('')}</div>`;
+          }).join('')}</div>`;
+        root.querySelectorAll('details.layer').forEach((el) => el.addEventListener('toggle', () => { if (el.open) self.open.add(el.dataset.step); else self.open.delete(el.dataset.step); }));
       };
+      if (r && r.id && idx.step.has(r.id)) this.open.add(r.id);
       draw();
       ui.on(root, 'click', 'tr[data-d]', (e, tr) => T.openDecision(tr.dataset.d));
-      // keep open/closed state of layer cards across redraws
-      T.live(root, () => {
-        const open = [...root.querySelectorAll('details.layer')].map((d) => d.open);
-        draw();
-        root.querySelectorAll('details.layer').forEach((d, i) => { d.open = open[i]; });
-      }, ['decisions', 'answers', 'reload']);
+      ui.on(root, 'click', '[data-print]', () => {
+        const was = new Set(self.open);
+        root.querySelectorAll('details.layer').forEach((d) => { d.open = true; });
+        window.print();
+        root.querySelectorAll('details.layer').forEach((d) => { d.open = was.has(d.dataset.step); });
+      });
+      ui.on(root, 'click', '[data-md]', () => T.download(T.slug(store.state.tracker.name || 'netsuite') + '-implementation-guide-' + T.today() + '.md', T.guideMarkdown(store.state), 'text/markdown'));
+      T.live(root, draw, ['decisions', 'answers', 'scoping', 'reload']);
+      if (r && r.id) { const el = root.querySelector(`details[data-step="${r.id}"]`); if (el) el.scrollIntoView({ block: 'start' }); }
     },
   };
+  V.layers = V.guide; // old links
 
   // ======================= Module scoping =======================
   V.scoping = {

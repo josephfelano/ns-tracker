@@ -1,26 +1,29 @@
 [
   {
     "id": "M-01",
-    "ask": "Which SuiteSuccess edition is being quoted, and exactly which modules does it include?",
+    "ask": "Which edition (and SuiteSuccess industry package, if any), which service tier, and exactly which modules are being quoted?",
     "drivenByQuestionIds": [],
     "drivenByAllTier1": true,
     "drivenByRaw": "All Tier 1",
-    "why": "The edition sets the baseline. Everything below is either in it or an add-on."
+    "why": "Edition and service tier are separate things (see M-19). Edition names are partner-reported only, so take them from the quote."
   },
   {
     "id": "M-02",
-    "ask": "Is OneWorld included, and what does adding a subsidiary later cost?",
+    "ask": "Is OneWorld included, and what does each additional country / base-currency combination cost?",
     "drivenByQuestionIds": [
       "FIN-1a",
       "FIN-6"
     ],
     "drivenByAllTier1": false,
     "drivenByRaw": "FIN-1a, FIN-6",
-    "why": "Retrofitting OneWorld is a migration. Price the option now even if not exercised."
+    "why": "Subsidiary licensing is based on country and base-currency combinations. Oracle documents an upgrade path to OneWorld, but existing data stays on the root subsidiary, so price the option now.",
+    "features": [
+      "ONEWORLD"
+    ]
   },
   {
     "id": "M-03",
-    "ask": "Advanced Revenue Management: in scope or not?",
+    "ask": "ARM (Essentials): in scope or not?",
     "drivenByQuestionIds": [
       "FIN-5a",
       "O2C-5a",
@@ -28,7 +31,10 @@
     ],
     "drivenByAllTier1": false,
     "drivenByRaw": "FIN-5a, O2C-5a, O2C-5c",
-    "why": "Expensive, one-way. Prepaid plans and gift cards usually force it; charge-on-ship may not."
+    "why": "Licensed as the NetSuite Revenue Management cloud service, and it can't be disabled once enabled. Prepaid plans and gift cards usually force it. Revenue Allocation is a separate question (M-22).",
+    "features": [
+      "ARM_ESSENTIALS"
+    ]
   },
   {
     "id": "M-04",
@@ -43,26 +49,40 @@
   },
   {
     "id": "M-05",
-    "ask": "Advanced Receiving / Landed Cost: included?",
+    "ask": "Is the Inventory Management module included (landed cost, pick/pack/ship, bins, lot and serial, matrix items, reorder-point replenishment)?",
     "drivenByQuestionIds": [
       "FIN-4c",
       "P2P-5f",
       "P2P-9",
-      "P2P-10"
+      "P2P-10",
+      "ITM-3a",
+      "ITM-12"
     ],
     "drivenByAllTier1": false,
-    "drivenByRaw": "P2P-5f, FIN-4c, P2P-9, P2P-10",
-    "why": "Sets when costing posts and whether freight and duty reach item cost."
+    "drivenByRaw": "P2P-5f, FIN-4c, P2P-9, P2P-10, ITM-3a, ITM-12",
+    "why": "These are listed capabilities of the Inventory Management cloud service. Advanced Receiving carries no licence note (inferred standard).",
+    "features": [
+      "LANDED_COST",
+      "PICK_PACK_SHIP",
+      "BINS",
+      "ADV_BIN_NUMBERED",
+      "LOT_TRACKING",
+      "SERIALIZED",
+      "MATRIX_ITEMS"
+    ]
   },
   {
     "id": "M-06",
-    "ask": "SuiteTax or legacy Advanced Taxes, and is a tax partner (Avalara etc.) needed?",
+    "ask": "SuiteTax or legacy tax (Advanced Taxes is already on in OneWorld), and which tax engine per nexus - the native SuiteTax Engine (no cost) or a partner engine (separate cost)?",
     "drivenByQuestionIds": [
       "FIN-3c"
     ],
     "drivenByAllTier1": false,
     "drivenByRaw": "FIN-3c",
-    "why": "One-way, and it touches every sales transaction."
+    "why": "SuiteTax is account-wide and can't be disabled, and it touches every sales transaction.",
+    "features": [
+      "SUITETAX"
+    ]
   },
   {
     "id": "M-07",
@@ -78,13 +98,17 @@
   },
   {
     "id": "M-08",
-    "ask": "Fixed Assets Management: needed?",
+    "ask": "Fixed Assets Management (including lease accounting): needed?",
     "drivenByQuestionIds": [
-      "FIN-5c"
+      "FIN-5c",
+      "FIN-12"
     ],
     "drivenByAllTier1": false,
-    "drivenByRaw": "FIN-5c",
-    "why": "Separately licensed."
+    "drivenByRaw": "FIN-5c, FIN-12",
+    "why": "Add-on module. It includes lease accounting, so leases can force it even with no asset register. It does not produce parallel books on its own.",
+    "features": [
+      "FAM"
+    ]
   },
   {
     "id": "M-09",
@@ -98,13 +122,16 @@
   },
   {
     "id": "M-10",
-    "ask": "NetSuite Planning & Budgeting vs native budgets?",
+    "ask": "NetSuite Planning and Budgeting (EPM) vs native budgets?",
     "drivenByQuestionIds": [
       "FIN-7a"
     ],
     "drivenByAllTier1": false,
     "drivenByRaw": "FIN-7a",
-    "why": "Native budgets are included and cover most budget-vs-actual needs."
+    "why": "NSPB is a business process of Oracle NetSuite EPM, a separate named-user subscription. Native Budgets and Multiple Budgets are inside NetSuite; that they carry no cost is not stated by Oracle.",
+    "features": [
+      "EPM_PLANNING"
+    ]
   },
   {
     "id": "M-11",
@@ -137,18 +164,22 @@
     ],
     "drivenByAllTier1": false,
     "drivenByRaw": "ITM-4b",
-    "why": "Not native. If customers mandate it, it is unscoped work."
+    "why": "Not in core. The FEFO Lot Assignments SuiteApp enforces required shelf life by item and by customer-item; confirm its cost and fit. If it does not fit and customers mandate it, it is custom work.",
+    "features": [
+      "FEFO_LOT_ASSIGNMENTS"
+    ]
   },
   {
     "id": "M-14",
-    "ask": "How many full user licenses vs Employee / Customer / Vendor Center, and what does each cost?",
+    "ask": "How many Full users vs Employee Center, Specialized (View and Approve, WMS) and Retail licences, plus Customer and Vendor Center access - and what does each cost?",
     "drivenByQuestionIds": [
       "SYS-5",
-      "ORG-7"
+      "ORG-7",
+      "ORG-8"
     ],
     "drivenByAllTier1": false,
-    "drivenByRaw": "ORG-7, SYS-5",
-    "why": "Licensing is per unique login by role. This is a recurring cost that compounds."
+    "drivenByRaw": "ORG-7, ORG-8, SYS-5",
+    "why": "The roles assigned to a user decide the licence it consumes; one full-licensed role makes it a Full licence. Core Suite includes five Employee Center users."
   },
   {
     "id": "M-15",
@@ -159,7 +190,7 @@
     ],
     "drivenByAllTier1": false,
     "drivenByRaw": "SYS-5, ORG-6",
-    "why": "Roughly 10% of subscription for standard, ~20% for premium. Needed for item-load dry runs."
+    "why": "Get the quoted price; Oracle publishes no sandbox price. A refresh overwrites the sandbox, so one sandbox serves either dry-run loads or development at a time. Needed for item-load dry runs."
   },
   {
     "id": "M-16",
@@ -192,5 +223,202 @@
     "drivenByAllTier1": false,
     "drivenByRaw": "-",
     "why": "Not a discovery question, but the one most often left unasked before signature."
+  },
+  {
+    "id": "M-19",
+    "ask": "Which service tier is quoted (Standard / Premium / Enterprise / Ultimate), and how many SuiteCloud Plus licences?",
+    "drivenByQuestionIds": [
+      "SYS-5",
+      "SYS-9",
+      "SYS-11",
+      "SYS-4"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "SYS-5, SYS-9, SYS-11, SYS-4",
+    "why": "The tier caps users, File Cabinet storage and monthly transaction lines (averaged over six months). Integration concurrency is 5 / 15 / 20 / 20 by tier, plus 10 per SuiteCloud Plus licence."
+  },
+  {
+    "id": "M-20",
+    "ask": "Which non-production accounts are included - sandbox(es) and development account(s) - and who requests the Release Preview account each release?",
+    "drivenByQuestionIds": [
+      "PRJ-2",
+      "PRJ-4",
+      "PRJ-5"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "PRJ-2, PRJ-4, PRJ-5",
+    "why": "Development accounts hold no production data and are fixed at concurrency 5. The Release Preview account is offered twice a year before each release."
+  },
+  {
+    "id": "M-21",
+    "ask": "Is the Procurement module needed: requisitions, request for quote, purchase contracts, blanket purchase orders?",
+    "drivenByQuestionIds": [
+      "P2P-1a",
+      "P2P-1e",
+      "P2P-3",
+      "P2P-2b"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "P2P-1a, P2P-1e, P2P-3, P2P-2b",
+    "why": "These four are the listed capabilities of the Procurement cloud service. Purchase Requests is a separate feature.",
+    "features": [
+      "REQUISITIONS",
+      "REQUEST_FOR_QUOTE",
+      "PURCHASE_CONTRACTS",
+      "BLANKET_PO"
+    ]
+  },
+  {
+    "id": "M-22",
+    "ask": "Is ARM (Revenue Allocation) needed for multi-element allocation - and if so, are the add-on (private- or public-company version) and the sandbox it requires on the quote?",
+    "drivenByQuestionIds": [
+      "FIN-5a",
+      "O2C-5a",
+      "O2C-5c"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "FIN-5a, O2C-5a, O2C-5c",
+    "why": "Revenue Allocation is a separate add-on whose prerequisites include the Sandbox Environment cloud service. It can't be disabled once enabled.",
+    "features": [
+      "ARM_REVENUE_ALLOCATION"
+    ]
+  },
+  {
+    "id": "M-23",
+    "ask": "EPM: is NetSuite Account Reconciliation, or Close Management and Consolidation, needed?",
+    "drivenByQuestionIds": [
+      "CLS-1",
+      "CLS-6",
+      "CLS-11"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "CLS-1, CLS-6, CLS-11",
+    "why": "Separate EPM subscriptions. Standard EPM allows one business process (Planning and Budgeting or Account Reconciliation); Close Management and Consolidation is Premium only.",
+    "features": [
+      "EPM_ACCOUNT_RECONCILIATION",
+      "EPM_CLOSE_CONSOLIDATION"
+    ]
+  },
+  {
+    "id": "M-24",
+    "ask": "If subscription state moves into NetSuite: is SuiteBilling on the quote?",
+    "drivenByQuestionIds": [
+      "O2C-5a",
+      "O2C-5e",
+      "O2C-12"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "O2C-5a, O2C-5e, O2C-12",
+    "why": "SuiteBilling is provisioned by Oracle and cannot be enabled while Employee Commissions is on.",
+    "features": [
+      "SUITEBILLING"
+    ]
+  },
+  {
+    "id": "M-25",
+    "ask": "Rebate Management: needed for customer, vendor or third-party rebates and trade promotions?",
+    "drivenByQuestionIds": [
+      "O2C-4d",
+      "O2C-1f",
+      "P2P-7f"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "O2C-4d, O2C-1f, P2P-7f",
+    "why": "The Rebate Management cloud service covers rebate and trade promotion agreements with accruals and settlements. It requires OneWorld or Subsidiary Management, and is included in the Food & Beverage SuiteSuccess editions read; otherwise an add-on.",
+    "features": [
+      "REBATE_MANAGEMENT"
+    ]
+  },
+  {
+    "id": "M-26",
+    "ask": "NetSuite Connector: which storefronts, marketplaces or 3PLs, and is each connector priced?",
+    "drivenByQuestionIds": [
+      "O2C-6a",
+      "O2C-6c",
+      "CSH-2"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "O2C-6a, O2C-6c, CSH-2",
+    "why": "Connectors are licensed per connector under Connectors for NetSuite, with a separate agreement with the third party."
+  },
+  {
+    "id": "M-27",
+    "ask": "Multi-Book Accounting: needed, and is the required Professional Services setup priced?",
+    "drivenByQuestionIds": [
+      "FIN-9"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "FIN-9",
+    "why": "OneWorld only; quoted through the sales rep. Setup needs NetSuite Professional Services or a Multi-Book authorized partner.",
+    "features": [
+      "MULTI_BOOK"
+    ]
+  },
+  {
+    "id": "M-28",
+    "ask": "External BI or data warehouse: SuiteAnalytics Connect, NetSuite Analytics Warehouse, or EPM Narrative Reporting?",
+    "drivenByQuestionIds": [
+      "RPT-4"
+    ],
+    "drivenByAllTier1": false,
+    "drivenByRaw": "RPT-4",
+    "why": "Each is a separate purchase. SuiteAnalytics Connect is an add-on not available on Small Business accounts; Analytics Warehouse is a separate subscription; Narrative Reporting needs EPM Premium.",
+    "features": [
+      "SUITEANALYTICS_CONNECT",
+      "NS_ANALYTICS_WAREHOUSE",
+      "EPM_NARRATIVE_REPORTING"
+    ]
+  },
+  {
+    "drivenByAllTier1": false,
+    "id": "M-29",
+    "ask": "Payments: are Advanced Electronic Bank Payments, Intelligent Payment Automation or NetSuite Pay in the edition, or quoted?",
+    "drivenByQuestionIds": [
+      "P2P-7a",
+      "P2P-7c",
+      "O2C-1e",
+      "CSH-2"
+    ],
+    "why": "Advanced EBP is licensed (local-format EBP is free). Intelligent Payment Automation and NetSuite Pay are their own cloud services, included in several SuiteSuccess editions only if purchased or renewed on or after 15 Sep 2026. The HSBC Payment Automation SuiteApp and the AP Automation service are retired.",
+    "features": [
+      "ADVANCED_EBP",
+      "INTELLIGENT_PAYMENT_AUTOMATION",
+      "NETSUITE_PAY"
+    ],
+    "drivenByRaw": "P2P-7a, P2P-7c, O2C-1e, CSH-2"
+  },
+  {
+    "drivenByAllTier1": false,
+    "id": "M-30",
+    "ask": "Receivables: are Advanced Billing (Financial Management cloud service), Electronic Invoicing for more than one country, and the Dunning Letters SuiteApp needed, and priced?",
+    "drivenByQuestionIds": [
+      "O2C-4a",
+      "O2C-4b",
+      "O2C-4f",
+      "O2C-10"
+    ],
+    "why": "Advanced Billing is a capability of the Financial Management cloud service. Electronic Invoicing is free for one country only. Dunning Letters is obtained through the account representative.",
+    "features": [
+      "ADVANCED_BILLING",
+      "ELECTRONIC_INVOICING",
+      "DUNNING"
+    ],
+    "drivenByRaw": "O2C-4a, O2C-4b, O2C-4f, O2C-10"
+  },
+  {
+    "drivenByAllTier1": false,
+    "id": "M-31",
+    "ask": "Vendor bills and POs: are Bill Capture and SuiteProcurement (Oracle Business Network) needed, and how is each licensed?",
+    "drivenByQuestionIds": [
+      "P2P-6a",
+      "P2P-2c",
+      "P2P-8b"
+    ],
+    "why": "The AP Automation service that bundled Bill Capture is retired, so its current licence must come from the quote. SuiteProcurement is a licensed cloud service usable only by Employee Self-Serve users.",
+    "features": [
+      "BILL_CAPTURE",
+      "SUITEPROCUREMENT"
+    ],
+    "drivenByRaw": "P2P-6a, P2P-2c, P2P-8b"
   }
 ]

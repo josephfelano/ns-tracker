@@ -1,0 +1,269 @@
+[
+  {
+    "order": 0,
+    "what": "Enable Features (MLI, lot/serial, MUOM, multiple currencies, pricing features, etc.)",
+    "method": "UI",
+    "step": "L0",
+    "notes": "MLI before items and before the first inventory transaction. Item pricing import needs Multiple Prices, Quantity Pricing or Multiple Currencies enabled.",
+    "needsFeatures": [],
+    "sources": [
+      "S-064",
+      "S-107"
+    ],
+    "unverified": []
+  },
+  {
+    "order": 1,
+    "what": "Subsidiaries (OneWorld)",
+    "method": "UI (not in the CSV supported list)",
+    "step": "L0",
+    "notes": "Set up subsidiaries before importing any data; the Subsidiary field is required on COA, customer, vendor, employee and contact imports.",
+    "needsFeatures": [
+      "ONEWORLD"
+    ],
+    "sources": [
+      "S-107",
+      "S-152"
+    ],
+    "unverified": []
+  },
+  {
+    "order": 2,
+    "what": "Currencies and exchange rates",
+    "method": "Currencies: UI (not listed for CSV); rates: Currency Exchange Rates Import",
+    "step": "L0",
+    "notes": "Before any record with a currency amount.",
+    "needsFeatures": [
+      "MULTICURRENCY"
+    ],
+    "sources": [
+      "S-152"
+    ],
+    "unverified": [
+      "Position is dependency logic, not an Oracle-stated sequence."
+    ]
+  },
+  {
+    "order": 3,
+    "what": "Fiscal calendar and accounting periods",
+    "method": "Set Up Full Year (not CSV)",
+    "step": "L0",
+    "notes": "Periods must exist before any dated transaction; periods with transactions cannot be deleted.",
+    "needsFeatures": [
+      "ACCOUNTING_PERIODS"
+    ],
+    "sources": [
+      "S-110",
+      "S-011"
+    ],
+    "unverified": []
+  },
+  {
+    "order": 4,
+    "what": "Chart of accounts",
+    "method": "CSV, without balances",
+    "step": "L1",
+    "notes": "Don't import account balances until you are ready to go live.",
+    "needsFeatures": [],
+    "sources": [
+      "S-107"
+    ],
+    "unverified": []
+  },
+  {
+    "order": 5,
+    "what": "Classifications: departments, classes, locations (and custom segment values)",
+    "method": "CSV",
+    "step": "L1",
+    "notes": "Locations before items are distributed.",
+    "needsFeatures": [],
+    "sources": [
+      "S-107",
+      "S-064"
+    ],
+    "unverified": []
+  },
+  {
+    "order": 6,
+    "what": "Other lists items reference: units of measure, price levels, terms, tax setup",
+    "method": "UI, or CSV where supported",
+    "step": "L1",
+    "notes": "Items reference these lists. Design units types before items: an item's units type can't change once assigned (door #21). With Standard Costing, create cost categories before items are saved as Standard.",
+    "needsFeatures": [],
+    "sources": [
+      "S-069",
+      "S-117",
+      "S-084"
+    ],
+    "unverified": [
+      "Position is dependency logic, not an Oracle-stated sequence.",
+      "Not in the Oracle CSV FAQ order."
+    ]
+  },
+  {
+    "order": 7,
+    "what": "Entities: employees, vendors, partners, customers, contacts",
+    "method": "CSV",
+    "step": "L2",
+    "notes": "Employees first among entities, because sales rep, supervisor and approver fields reference them. CSV limits: D-128. Carry the legacy key as External ID (D-129).",
+    "needsFeatures": [],
+    "sources": [
+      "S-107"
+    ],
+    "unverified": [
+      "Employees-first within this step is dependency logic, not an Oracle-stated sequence."
+    ]
+  },
+  {
+    "order": 8,
+    "what": "Items (components before assemblies)",
+    "method": "CSV",
+    "step": "L2",
+    "notes": "Oracle lists all item types in one step. Costing method and lot / serial designation are fixed at save (doors #1, #5). CSV limits: D-128. Carry the legacy key as External ID (D-129).",
+    "needsFeatures": [],
+    "sources": [
+      "S-107",
+      "S-058",
+      "S-089"
+    ],
+    "unverified": [
+      "Components-before-assemblies within this step is dependency logic, not an Oracle-stated sequence."
+    ]
+  },
+  {
+    "order": 9,
+    "what": "BOMs, then BOM revisions, then the assembly-BOM link",
+    "method": "BOM Import, BOM Revision Import",
+    "step": "L2",
+    "notes": "The imports exist; the order between them is dependency logic.",
+    "needsFeatures": [
+      "ADV_BOM"
+    ],
+    "sources": [
+      "S-152"
+    ],
+    "unverified": [
+      "Position is dependency logic, not an Oracle-stated sequence."
+    ]
+  },
+  {
+    "order": 10,
+    "what": "Item pricing and vendor pricing",
+    "method": "CSV",
+    "step": "L2",
+    "notes": "Needs the pricing features from step 0.",
+    "needsFeatures": [],
+    "sources": [
+      "S-107"
+    ],
+    "unverified": []
+  },
+  {
+    "order": 11,
+    "what": "Roles and user access",
+    "method": "UI or SDF (roles); access on the employee record",
+    "step": "L4",
+    "notes": "Before UAT and before integration users. Two-factor authentication is mandatory on privileged roles.",
+    "needsFeatures": [],
+    "sources": [
+      "S-125"
+    ],
+    "unverified": []
+  },
+  {
+    "order": 12,
+    "what": "Opening GL balances as of the cutover period end",
+    "method": "Enter Opening Balances page, or Journal Entry import (max 10,000 lines per journal)",
+    "step": "L7",
+    "notes": "Exclude balances that the open transactions in steps 13-14 recreate.",
+    "needsFeatures": [],
+    "sources": [
+      "S-107",
+      "S-128",
+      "S-130",
+      "S-126",
+      "S-153"
+    ],
+    "unverified": []
+  },
+  {
+    "order": 13,
+    "what": "Open AR invoices, open AP bills, open credits",
+    "method": "Invoice, Vendor Bill, Credit Memo and Vendor Credit imports",
+    "step": "L7",
+    "notes": "Import invoices before payments; use external IDs to link them. Date them the last day of the period before go-live (partner practice). CSV limits: D-128.",
+    "needsFeatures": [],
+    "sources": [
+      "S-152",
+      "S-131",
+      "S-154",
+      "S-153"
+    ],
+    "unverified": [
+      "Dating open AR and AP the last day of the prior period is partner practice (Secondary)."
+    ]
+  },
+  {
+    "order": 14,
+    "what": "Opening inventory by location (and lot)",
+    "method": "Inventory Adjustment import (lot and serial items) or Inventory Worksheet (other active items)",
+    "step": "L7",
+    "notes": "Worksheets exclude lot numbered, serialized and inactive items, and Group Average items cannot use the worksheet. MLI must be on before the first inventory transaction. In OneWorld, initial on-hand can't be entered on the item record; use an inventory adjustment.",
+    "needsFeatures": [
+      "INVENTORY"
+    ],
+    "sources": [
+      "S-155",
+      "S-156",
+      "S-064",
+      "S-085",
+      "S-002"
+    ],
+    "unverified": [
+      "The rule that no inventory transaction can be dated before the MLI enable date was not found on a current Oracle page (door #3)."
+    ]
+  },
+  {
+    "order": 15,
+    "what": "Open POs, SOs, work orders, transfer orders, return authorizations",
+    "method": "PO, SO, Work Order, Transfer Order and Return Authorization imports",
+    "step": "L7",
+    "notes": "Remaining quantities only. CSV limits: D-128.",
+    "needsFeatures": [],
+    "sources": [
+      "S-152",
+      "S-157",
+      "S-158",
+      "S-159",
+      "S-160"
+    ],
+    "unverified": [
+      "Loading remaining quantities only is partner practice (Secondary)."
+    ]
+  },
+  {
+    "order": 16,
+    "what": "Outstanding bank items for the first reconciliation",
+    "method": "Checks and deposits dated as of cutover",
+    "step": "L7",
+    "notes": "Reconciliation matches transactions that are in the system.",
+    "needsFeatures": [],
+    "sources": [
+      "S-161",
+      "S-153"
+    ],
+    "unverified": []
+  },
+  {
+    "order": 17,
+    "what": "Historical transactions, only if D-023 says so",
+    "method": "CSV or web services",
+    "step": "L7",
+    "notes": "Oracle advises balances, not full history, for OneWorld.",
+    "needsFeatures": [],
+    "sources": [
+      "S-126"
+    ],
+    "unverified": []
+  }
+]

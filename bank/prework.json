@@ -495,6 +495,31 @@
       "id": "PW-P23",
       "area": "Controls",
       "process": "Transaction approvals / segregation of duties"
+    },
+    {
+      "id": "PW-P24",
+      "area": "Finance",
+      "process": "Sales tax filing"
+    },
+    {
+      "id": "PW-P25",
+      "area": "Finance",
+      "process": "Payroll and the payroll journal"
+    },
+    {
+      "id": "PW-P26",
+      "area": "Finance",
+      "process": "Intercompany and consolidation"
+    },
+    {
+      "id": "PW-P27",
+      "area": "Finance",
+      "process": "Fixed assets and depreciation"
+    },
+    {
+      "id": "PW-P28",
+      "area": "Procure to Pay",
+      "process": "Employee expenses and corporate cards"
     }
   ],
   "processesTemplate": [
