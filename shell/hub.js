@@ -251,8 +251,36 @@
   const folder = (Hub.folder = { mode: null, handle: null, label: '' }); // mode: 'folder' | 'browser'
   const canPick = () => typeof window.showDirectoryPicker === 'function';
   const recentFolders = async () => { try { return (await idb.get('recent')) || []; } catch (e) { return []; } };
+  // What a folder holds, for the recent list: a browser never reveals a folder's full path, so
+  // each entry says which apps' data it holds and when it was last opened instead.
+  async function holdingsOf(dir) {
+    const out = [];
+    for (const [file, label] of Object.entries(DATA_MARKERS)) {
+      if (await Hub.fs.hasFile(dir, file)) { out.push(label); continue; }
+      const sub = DATA_FOLDERS[file] ? await Hub.fs.sub(dir, DATA_FOLDERS[file]) : null;
+      if (sub && (await Hub.fs.hasFile(sub, file))) out.push(label);
+    }
+    return out;
+  }
+  const ago = (t) => {
+    const m = Math.round((Date.now() - t) / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return m + ' min ago';
+    if (m < 1440) return Math.round(m / 60) + ' h ago';
+    const d = Math.round(m / 1440);
+    return d < 31 ? d + (d === 1 ? ' day ago' : ' days ago') : new Date(t).toLocaleDateString();
+  };
+  async function forgetFolder(i) {
+    const list = await recentFolders();
+    const gone = list.splice(i, 1)[0];
+    await idb.set('recent', list);
+    const saved = await idb.get('folder').catch(() => null);
+    try { if (gone && saved && (await saved.handle.isSameEntry(gone.handle))) await idb.set('folder', null); } catch (e) { /* stale handle */ }
+  }
   async function rememberFolder(handle, label) {
-    const entry = { handle, label };
+    let holds = [];
+    try { holds = await holdingsOf(handle); } catch (e) { /* unreadable: leave it blank */ }
+    const entry = { handle, label, at: Date.now(), holds };
     await idb.set('folder', entry);
     const kept = [];
     for (const r of await recentFolders()) {
@@ -270,6 +298,8 @@
   // Every app's marker, so a page never sets one app up inside another app's data folder, even
   // when only one app is loaded. Add a line here when a new app joins (both copies of the shell).
   const DATA_MARKERS = { 'mission-control.json': 'Mission Control', 'tracker.json': 'NS tracker' };
+  // Where each app keeps its data inside a company folder (the same names as each app's data.folder).
+  const DATA_FOLDERS = { 'mission-control.json': 'mission-control', 'tracker.json': 'ns-tracker' };
   async function otherAppFolder(m, dir) {
     const markers = Object.assign({}, DATA_MARKERS);
     modules.forEach((x) => { if (x.data) markers[x.data.marker] = x.label; });
@@ -342,7 +372,7 @@
         <div class="brand-mark big">${esc(mark)}</div>
         <h1>${esc(APP_TITLE)}</h1>
         <p class="lead">Choose the folder your data lives in. A folder that already holds the data opens straight away; otherwise each app sets up its own folder inside it.</p>
-        ${recent.length ? `<div class="recent"><div class="nav-sep">Recent</div>${recent.map((r, i) => `<button class="recent-item" data-recent="${i}"><span>${esc(r.label)}</span><span class="fine mono">${esc(r.handle.name)}</span></button>`).join('')}</div>` : ''}
+        ${recent.length ? `<div class="recent"><div class="nav-sep">Recent</div>${recent.map((r, i) => `<div class="recent-row"><button class="recent-item" data-recent="${i}"><span class="recent-name">${esc(r.label)}${r.label !== r.handle.name ? ` <span class="fine mono">${esc(r.handle.name)}</span>` : ''}</span><span class="fine">${esc([r.holds ? (r.holds.length ? r.holds.join(', ') : 'No app data yet') : '', r.at ? 'opened ' + ago(r.at) : ''].filter(Boolean).join(' - '))}</span></button><button class="recent-forget" data-forget="${i}" aria-label="Remove ${esc(r.label)} from the list">&times;</button></div>`).join('')}</div>` : ''}
         <div class="connect-actions">
           ${restored ? `<button class="btn primary" data-reconnect>Reconnect to "${esc(restored.label)}"</button>` : ''}
           ${canPick() ? `<button class="btn${restored ? '' : ' primary'}" data-pick>Choose folder...</button>` : ''}
@@ -369,6 +399,11 @@
       if (!t) return;
       try {
         if (t.matches('[data-recent]')) { const r = recent[Number(t.dataset.recent)]; return await useFolder(r.handle, r.label); }
+        if (t.matches('[data-forget]')) {
+          await forgetFolder(Number(t.dataset.forget));
+          const saved = await idb.get('folder').catch(() => null);
+          return connectScreen(Object.assign({}, opts, { restored: restored && saved ? restored : null }));
+        }
         if (t.matches('[data-reconnect]')) return await useFolder(restored.handle, restored.label);
         if (t.matches('[data-pick]')) {
           const picked = await window.showDirectoryPicker({ id: 'hub-data', mode: 'readwrite' });
