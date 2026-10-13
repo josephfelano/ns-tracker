@@ -68,6 +68,9 @@
   ui.grow = (ta) => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 2 + 'px'; };
   ui.growAll = (root) => requestAnimationFrame(() => root.querySelectorAll('textarea.grow').forEach(ui.grow));
   document.addEventListener('input', (e) => { if (e.target.matches && e.target.matches('textarea.grow')) ui.grow(e.target); });
+  // Column widths follow the window, so wrapped text changes height on resize.
+  let growTimer = 0;
+  window.addEventListener('resize', () => { clearTimeout(growTimer); growTimer = setTimeout(() => ui.growAll(document), 120); });
 
   // The shell's drawer, plus auto-growing the textareas the tracker's editors put in it.
   ui.drawer = {
@@ -79,8 +82,20 @@
   // ---------- editable table ----------
   // columns: [{key, label, enum?, person?, readonly?, long?, width?}]
   // rows: [{_key, ...values}]   onEdit(rowKey, colKey, value)   onRemove(rowKey) optional
+  // The table fits its container (fixed layout): columns get proportional widths and long text
+  // wraps inside its cell, so there is no sideways scrolling.
   ui.editTable = ({ columns, rows, onEdit, onRemove, empty }) => {
-    const head = columns.map((c) => `<th${c.width ? ` style="min-width:${c.width}px"` : ''}>${esc(c.label)}</th>`).join('') + (onRemove ? '<th class="narrow"></th>' : '');
+    // Dropdown columns are sized to the longest value they hold (a select cannot wrap), as a
+    // share of a 1340px table so they scale with the window; text columns share what is left
+    // and wrap. Dropdowns together take at most 70%.
+    const longest = (c) => Math.max(0, ...rows.map((r) => String((c.person ? T.store.personName(r[c.key]) : r[c.key]) || '').length));
+    const pick = (c) => !c.width && (c.enum || c.person);
+    const px = columns.map((c) => (pick(c) ? Math.min(230, Math.max(92, Math.round(longest(c) * 7.2 + 46))) : 0));
+    const pctTotal = px.reduce((a, b) => a + b, 0) / 1340 * 100;
+    const scale = pctTotal > 70 ? 70 / pctTotal : 1;
+    const colW = (c, i) => (c.width ? c.width + 'px' : pick(c) ? (px[i] / 1340 * 100 * scale).toFixed(2) + '%' : 'auto');
+    const colgroup = '<colgroup>' + columns.map((c, i) => `<col style="width:${colW(c, i)}">`).join('') + (onRemove ? '<col style="width:36px">' : '') + '</colgroup>';
+    const head = columns.map((c) => `<th>${esc(c.label)}</th>`).join('') + (onRemove ? '<th class="narrow"></th>' : '');
     const body = rows.length
       ? rows.map((r) => {
           const cells = columns.map((c) => {
@@ -95,7 +110,7 @@
           return `<tr>${cells}${onRemove ? `<td class="narrow"><button class="icon-btn subtle" data-remove="${esc(r._key)}" title="Remove row" aria-label="Remove row">&times;</button></td>` : ''}</tr>`;
         }).join('')
       : `<tr><td class="empty" colspan="${columns.length + (onRemove ? 1 : 0)}">${esc(empty || 'No rows yet.')}</td></tr>`;
-    const el = ui.el(`<div class="table-wrap"><table class="grid edit"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`);
+    const el = ui.el(`<div class="table-wrap"><table class="grid edit">${colgroup}<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`);
     const prev = new WeakMap();
     el.addEventListener('focusin', (e) => { if (e.target.matches('select.person')) prev.set(e.target, e.target.value); });
     ui.on(el, 'input', 'textarea[data-row]', (e, t) => onEdit(t.dataset.row, t.dataset.col, t.value));

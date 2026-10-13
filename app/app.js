@@ -99,6 +99,24 @@
     navTimer = setTimeout(Hub.refreshNav, 250);
   }
 
+  // A page's tabs stick to the top while it scrolls, and table headers stick just under them.
+  // --tabs-h (the tabs' height) and --stick-pad (the scroller's top padding) set the offsets
+  // (styles.css: .sticky-tabs).
+  let tabsObserver = null;
+  function stickyTabs(root) {
+    if (tabsObserver) { tabsObserver.disconnect(); tabsObserver = null; }
+    const tabs = root.querySelector(':scope > .tabs');
+    root.classList.toggle('sticky-tabs', !!tabs);
+    if (!tabs) return;
+    const set = () => {
+      root.style.setProperty('--stick-pad', getComputedStyle(root.parentElement).paddingTop);
+      root.style.setProperty('--tabs-h', tabs.getBoundingClientRect().height + 'px');
+    };
+    set();
+    tabsObserver = new ResizeObserver(set);
+    tabsObserver.observe(tabs);
+  }
+
   // Re-render only while a tracker page is the one on screen.
   T.rerender = () => { const r = Hub.currentRoute(); if (r && r.module && r.module.key === KEY) Hub.rerender(); };
   T.go = (hash) => Hub.go(hash);
@@ -132,6 +150,7 @@
       const view = T.views[r.page];
       if (!view) { root.innerHTML = '<p class="fine">No such page.</p>'; return; }
       view.render(root, toView(r));
+      stickyTabs(root);
     },
     select(r) {
       const view = T.views[r.page];

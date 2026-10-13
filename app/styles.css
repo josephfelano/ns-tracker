@@ -32,6 +32,21 @@
 .rows-click tbody tr[data-q], .rows-click tbody tr[data-d] { cursor: pointer; }
 .rows-click tbody tr[data-q]:hover, .rows-click tbody tr[data-d]:hover { background: var(--surface-2); }
 .add-row { margin-top: 8px; }
+/* Pages built on editable tables use the full window width; the table fits it (see ui.editTable). */
+.hub-content > .view-tracker-prework, .hub-content > .view-tracker-collect, .hub-content > .view-tracker-people { max-width: none; }
+table.grid.edit { table-layout: fixed; }
+.grid.edit th { white-space: normal; overflow-wrap: break-word; }
+.grid.edit td { overflow-wrap: break-word; }
+.grid.edit textarea.cell { min-width: 0; }
+.grid.edit select { width: 100%; max-width: none; text-overflow: ellipsis; }
+/* Sticky tabs and table headers (app.js stickyTabs). The tabs stick to the very top of the
+   page scroller, covering its top padding (--stick-pad), and table headers stick flush under
+   them. A fitted table's wrap clips instead of scrolling, so its header sticks to the page
+   scroller rather than to the wrap. */
+.sticky-tabs > .tabs { position: sticky; top: calc(-1 * var(--stick-pad, 0px)); z-index: 4; background: var(--bg); padding-top: var(--stick-pad, 0px); margin-top: calc(-1 * var(--stick-pad, 0px)); margin-bottom: 0; }
+.sticky-tabs > .tabs + * { margin-top: 16px; }
+.sticky-tabs .table-wrap:has(> table.grid.edit) { overflow: clip; }
+.sticky-tabs .grid.edit th { top: calc(var(--tabs-h, 0px) - var(--stick-pad, 0px)); z-index: 3; }
 .table-intro { margin-bottom: 12px; max-width: 900px; color: var(--text-2); }
 .example summary { cursor: pointer; color: var(--text-3); font-size: 12.5px; }
 .example .kv { margin-top: 6px; }
