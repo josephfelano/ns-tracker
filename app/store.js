@@ -303,13 +303,29 @@
   store.personName = (id) => { const p = store.person(id); return p ? p.name || p.id : ''; };
 
   store.addInterview = function (fields) {
-    const n = store.state.interviews.length + 1;
+    // Ids are never reused: the activity log still names deleted interviews.
+    const used = store.state.interviews.map((i) => i.id).concat(store.state.activity.map((x) => x.ref).filter((r) => /^I-\d+$/.test(r)));
+    const n = used.reduce((m, id) => Math.max(m, parseInt(String(id).replace(/\D/g, ''), 10) || 0), 0) + 1;
     const iv = Object.assign({ id: 'I-' + String(n).padStart(3, '0'), date: T.today(), personIds: [], title: '', notes: '', createdAt: T.now() }, fields);
     store.state.interviews.push(iv);
     store.touch('interviews');
     store.log('interview-add', iv.id, 'Interview ' + iv.id + (iv.title ? ': ' + iv.title : '') + ' started');
     emit('interviews');
     return iv;
+  };
+
+  // Answers captured in the interview stay; only their link to it is removed.
+  store.linkedAnswers = (id) => Object.keys(store.state.answers).filter((q) => (store.state.answers[q].interviewIds || []).includes(id));
+  store.removeInterview = function (id) {
+    const iv = store.state.interviews.find((i) => i.id === id);
+    if (!iv) return;
+    const linked = store.linkedAnswers(id);
+    linked.forEach((q) => { const a = store.state.answers[q]; a.interviewIds = a.interviewIds.filter((x) => x !== id); });
+    store.state.interviews = store.state.interviews.filter((i) => i.id !== id);
+    store.touch('interviews');
+    if (linked.length) store.touch('answers');
+    store.log('interview-delete', id, 'Interview ' + id + (iv.title ? ': ' + iv.title : '') + ' deleted');
+    emit('interviews');
   };
 
   // ---------- export / import (a full snapshot as one JSON file) ----------

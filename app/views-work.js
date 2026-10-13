@@ -130,6 +130,7 @@
         title: iv ? 'Edit interview ' + iv.id : 'New interview',
         body,
         actions: [
+          ...(iv ? [{ label: 'Delete', danger: true, onClick: () => { this.deleteInterview(iv); } }] : []),
           { label: 'Cancel' },
           { label: iv ? 'Save' : 'Start interview', primary: true, onClick: () => {
             const fields = {
@@ -142,6 +143,18 @@
           } },
         ],
       });
+    },
+
+    async deleteInterview(iv) {
+      const n = store.linkedAnswers(iv.id).length;
+      const ok = await ui.confirm({
+        title: 'Delete interview ' + iv.id,
+        message: n ? `${n} answer${n === 1 ? ' was' : 's were'} captured in this interview. The answers stay; their link to this interview is removed.` : 'Delete this interview and its notes?',
+        confirmLabel: 'Delete', danger: true,
+      });
+      if (!ok) return;
+      store.removeInterview(iv.id);
+      location.hash = '#/tracker/interview';
     },
   };
 
