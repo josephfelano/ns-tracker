@@ -32,8 +32,8 @@
 .rows-click tbody tr[data-q], .rows-click tbody tr[data-d] { cursor: pointer; }
 .rows-click tbody tr[data-q]:hover, .rows-click tbody tr[data-d]:hover { background: var(--surface-2); }
 .add-row { margin-top: 8px; }
-/* Pages built on editable tables use the full window width; the table fits it (see ui.editTable). */
-.hub-content > .view-tracker-prework, .hub-content > .view-tracker-collect, .hub-content > .view-tracker-people { max-width: none; }
+/* Every tracker page uses the full window width; editable tables fit it (see ui.editTable). */
+.hub-content > .view.view-tracker { max-width: none; }
 table.grid.edit { table-layout: fixed; }
 .grid.edit th { white-space: normal; overflow-wrap: break-word; }
 .grid.edit td { overflow-wrap: break-word; }
