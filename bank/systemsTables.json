@@ -10,6 +10,7 @@
       "description": "Every system, tool, portal and shared spreadsheet used to run the business. Include named spreadsheets, not just software. The column that matters most is \"Data held nowhere else\" - that is what has to be migrated or replaced. Include your A/P platform, A/R or collections tool, TMS or freight system, ecommerce platform, marketplace seller accounts, EDI provider, 3PL and warehouse portals, payroll, expense and card systems, forecasting models, and quality or specification systems.",
       "columns": [
         "System / file name",
+        "Link",
         "What it's used for",
         "Who owns it",
         "Who else touches it",
@@ -78,6 +79,7 @@
       "description": "The ten spreadsheets the business could least afford to lose. The key column is \"Logic that exists nowhere else\" - allocation rules, cost buildups, accrual estimates, tiered pricing, commission splits, yield assumptions.",
       "columns": [
         "Spreadsheet",
+        "Link",
         "Who built it",
         "Still here?",
         "Who else understands it",
@@ -137,6 +139,7 @@
     "description": "Everything produced on a schedule, including anything assembled by hand in Excel. Add rows as needed. Delete the grey example row once you start.",
     "columns": [
       "Report name",
+      "Link",
       "Who receives it",
       "Frequency",
       "Format",

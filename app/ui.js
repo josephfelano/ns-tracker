@@ -92,10 +92,13 @@
   };
 
   // ---------- editable table ----------
-  // columns: [{key, label, enum?, person?, readonly?, long?, width?, link?}]
+  // columns: [{key, label, enum?, person?, readonly?, long?, width?, link?, filter?, owner?}]
   // link: the cell holds a link or path (key) and optional display text (key + '-text'). It shows
   // the text, as a truncated link when the value is a URL; the pencil edits both in a small form.
+  // filter: a text column that gets a dropdown in the filter bar (enum and person columns always
+  // do). owner: a text column holding a person's name; it also drives the Department dropdown.
   // rows: [{_key, ...values}]   onEdit(rowKey, colKey, value)   onRemove(rowKey) optional
+  // id: optional key for the table's saved filters (default: the page's hash)
   // The table fits its container (fixed layout): columns get proportional widths and long text
   // wraps inside its cell, so there is no sideways scrolling.
   ui.isUrl = (v) => /^(https?:\/\/|www\.)\S+$/i.test(String(v || '').trim());
@@ -123,7 +126,60 @@
       });
       body.addEventListener('keydown', (e) => { if (e.key === 'Enter') { answer = read(); m.close(); } });
     });
-  ui.editTable = ({ columns, rows, onEdit, onRemove, empty }) => {
+  // The team (department) of an owner value: a person id, or a name typed in a text column
+  // matched to People by name. '' when there is no owner, no match or no team.
+  ui.teamOf = (v) => {
+    const s = String(v || '').trim();
+    if (!s) return '';
+    const people = T.store.state.people;
+    const p = people.find((x) => x.id === s) || people.find((x) => String(x.name || '').trim().toLowerCase() === s.toLowerCase());
+    return p ? String(p.team || '').trim() : '';
+  };
+  ui.teams = () => [...new Set(T.store.state.people.map((p) => String(p.team || '').trim()).filter(Boolean))].sort(T.natCmp);
+  ui.NONE = '__none';
+
+  // Each editable table's filters, kept across re-renders (key: the page's hash, or opts.id).
+  const tableFilters = new Map();
+  // The filter bar: a search over every value in the row, then a dropdown for each enum and
+  // person column and each text column marked filter or owner, and Department when the table has
+  // an owner. Dropdowns list the values present; one with fewer than two choices is left out.
+  const filterBar = (columns, rows, state) => {
+    const blank = (v) => String(v == null ? '' : v).trim() === '';
+    const selects = [];
+    columns.filter((c) => c.enum || c.person || c.filter || c.owner).forEach((c) => {
+      const seen = new Map();
+      rows.forEach((r) => {
+        const v = String(r[c.key] == null ? '' : r[c.key]).trim();
+        if (v && !seen.has(v.toLowerCase())) seen.set(v.toLowerCase(), v);
+      });
+      let vals = [...seen.values()];
+      if (c.enum) { const order = T.enums[c.enum] || []; vals.sort((a, b) => ((order.indexOf(a) + 1) || 999) - ((order.indexOf(b) + 1) || 999)); }
+      const label = (v) => (c.person ? T.store.personName(v) || v : v);
+      if (!c.enum) vals.sort((a, b) => T.natCmp(label(a), label(b)));
+      const opts = vals.map((v) => [v, label(v)]);
+      if (rows.some((r) => blank(r[c.key]))) opts.push([ui.NONE, 'Not filled in']);
+      if (opts.length >= 2) selects.push({ key: c.key, label: c.label, opts });
+    });
+    const owners = columns.filter((c) => c.person || c.owner);
+    if (owners.length) {
+      const teams = new Set();
+      let none = false;
+      rows.forEach((r) => owners.forEach((c) => { const t = ui.teamOf(r[c.key]); if (t) teams.add(t); else none = true; }));
+      const opts = [...teams].sort(T.natCmp).map((t) => [t, t]);
+      if (none) opts.push([ui.NONE, 'No department']);
+      if (opts.length >= 2) selects.push({ key: '_dept', label: 'Department', opts });
+    }
+    // A saved choice that is no longer offered would hide rows with no visible control.
+    Object.keys(state).forEach((k) => { if (k !== 'text' && !selects.some((s) => s.key === k && s.opts.some((o) => o[0] === state[k]))) delete state[k]; });
+    return `<div class="filters">
+      <input type="search" data-fk="text" placeholder="Search" value="${esc(state.text || '')}">
+      ${selects.map((s) => `<select data-fk="${esc(s.key)}" title="${esc(s.label)}"><option value="">${esc(s.label)}</option>${s.opts.map(([v, l]) => `<option value="${esc(v)}"${state[s.key] === v ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>`).join('')}
+      <button class="btn subtle" data-fclear>Clear</button>
+      <span class="fine count" data-fcount></span>
+    </div>`;
+  };
+
+  ui.editTable = ({ columns, rows, onEdit, onRemove, empty, id }) => {
     // Dropdown columns are sized to the longest value they hold (a select cannot wrap), as a
     // share of a 1340px table so they scale with the window; text columns share what is left
     // and wrap. Dropdowns together take at most 70%.
@@ -147,35 +203,83 @@
             if (c.link) return `<td class="link-cell" ${a}>${ui.linkView(v, r[c.key + '-text'])}</td>`;
             return `<td><textarea class="cell grow" rows="1" ${a} placeholder="${esc(c.placeholder || '')}">${esc(v)}</textarea></td>`;
           }).join('');
-          return `<tr>${cells}${onRemove ? `<td class="narrow"><button class="icon-btn subtle" data-remove="${esc(r._key)}" title="Remove row" aria-label="Remove row">&times;</button></td>` : ''}</tr>`;
+          return `<tr data-key="${esc(r._key)}">${cells}${onRemove ? `<td class="narrow"><button class="icon-btn subtle" data-remove="${esc(r._key)}" title="Remove row" aria-label="Remove row">&times;</button></td>` : ''}</tr>`;
         }).join('')
       : `<tr><td class="empty" colspan="${columns.length + (onRemove ? 1 : 0)}">${esc(empty || 'No rows yet.')}</td></tr>`;
-    const el = ui.el(`<div class="table-wrap"><table class="grid edit">${colgroup}<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`);
+    const fkey = id || location.hash;
+    const fstate = tableFilters.get(fkey) || {};
+    tableFilters.set(fkey, fstate);
+    const el = ui.el(`<div class="edit-table">${rows.length ? filterBar(columns, rows, fstate) : ''}<div class="table-wrap"><table class="grid edit">${colgroup}<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></div>`);
+    // The table keeps its own copy of each row current, so filtering reads what is on screen.
+    const byKey = new Map(rows.map((r) => [r._key, r]));
+    const edit = (key, col, v) => { const r = byKey.get(key); if (r) r[col] = v; onEdit(key, col, v); };
+
+    // Filtering hides rows instead of re-rendering, so focus and edits are kept. A row with
+    // every column blank (one just added) always shows.
+    const SKIP = new Set(['_key', 'id', 'createdAt', 'updatedAt', 'preset']);
+    const haystack = (r) => Object.keys(r).filter((k) => !SKIP.has(k)).map((k) => [].concat(r[k] == null ? [] : r[k]).join(' '))
+      .concat(columns.filter((c) => c.person).map((c) => T.store.personName(r[c.key]))).join(' ').toLowerCase();
+    const owners = columns.filter((c) => c.person || c.owner);
+    const val = (r, k) => String(r[k] == null ? '' : r[k]).trim();
+    const matches = (r) => {
+      if (columns.every((c) => !val(r, c.key))) return true;
+      const text = String(fstate.text || '').trim().toLowerCase();
+      if (text && !haystack(r).includes(text)) return false;
+      return Object.keys(fstate).every((k) => {
+        const want = fstate[k];
+        if (k === 'text' || !want) return true;
+        if (k === '_dept') return owners.some((c) => (ui.teamOf(r[c.key]) || ui.NONE) === want);
+        const v = val(r, k);
+        return want === ui.NONE ? !v : v.toLowerCase() === want.toLowerCase();
+      });
+    };
+    const tbody = el.querySelector('tbody');
+    const noMatch = ui.el(`<table><tbody><tr class="no-match" hidden><td class="empty" colspan="${columns.length + (onRemove ? 1 : 0)}">No rows match these filters.</td></tr></tbody></table>`).querySelector('tr');
+    if (rows.length) tbody.appendChild(noMatch);
+    const applyFilters = () => {
+      if (!rows.length) return;
+      let n = 0;
+      tbody.querySelectorAll('tr[data-key]').forEach((tr) => {
+        const show = matches(byKey.get(tr.dataset.key) || {});
+        tr.hidden = !show;
+        if (show) n++;
+      });
+      noMatch.hidden = n > 0;
+      el.querySelector('[data-fcount]').textContent = `Showing ${n} of ${rows.length}`;
+      ui.growAll(tbody); // textareas in hidden rows measure 0 tall
+    };
+    ui.on(el, 'input', 'input[data-fk]', (e, t) => { fstate[t.dataset.fk] = t.value; applyFilters(); });
+    ui.on(el, 'change', 'select[data-fk]', (e, t) => { fstate[t.dataset.fk] = t.value; applyFilters(); });
+    ui.on(el, 'click', '[data-fclear]', () => {
+      Object.keys(fstate).forEach((k) => delete fstate[k]);
+      el.querySelectorAll('[data-fk]').forEach((c) => { c.value = ''; });
+      applyFilters();
+    });
+    applyFilters();
+
     const prev = new WeakMap();
     el.addEventListener('focusin', (e) => { if (e.target.matches('select.person')) prev.set(e.target, e.target.value); });
-    ui.on(el, 'input', 'textarea[data-row]', (e, t) => onEdit(t.dataset.row, t.dataset.col, t.value));
+    ui.on(el, 'input', 'textarea[data-row]', (e, t) => edit(t.dataset.row, t.dataset.col, t.value));
     ui.on(el, 'change', 'select[data-row]', async (e, t) => {
       if (t.classList.contains('person')) {
-        const id = await ui.resolvePerson(t, prev.get(t));
-        if (id == null) return;
-        onEdit(t.dataset.row, t.dataset.col, id);
+        const pid = await ui.resolvePerson(t, prev.get(t));
+        if (pid == null) return;
+        edit(t.dataset.row, t.dataset.col, pid);
       } else {
         ui.recolor(t);
-        onEdit(t.dataset.row, t.dataset.col, t.value);
+        edit(t.dataset.row, t.dataset.col, t.value);
       }
     });
     if (onRemove) ui.on(el, 'click', '[data-remove]', (e, t) => onRemove(t.dataset.remove));
     // Link cells: the pencil (or a click anywhere in the cell but the link) opens the editor.
-    const linkVals = new Map(rows.map((r) => [r._key, r]));
     ui.on(el, 'click', 'td.link-cell', async (e, td) => {
       if (e.target.closest('a')) return;
-      const row = linkVals.get(td.dataset.row) || {};
+      const row = byKey.get(td.dataset.row) || {};
       const col = td.dataset.col;
       const got = await ui.editLink({ text: row[col + '-text'], link: row[col] });
       if (!got) return;
-      row[col] = got.link; row[col + '-text'] = got.text;
-      onEdit(td.dataset.row, col, got.link);
-      onEdit(td.dataset.row, col + '-text', got.text);
+      edit(td.dataset.row, col, got.link);
+      edit(td.dataset.row, col + '-text', got.text);
       td.innerHTML = ui.linkView(got.link, got.text);
     });
     ui.growAll(el);

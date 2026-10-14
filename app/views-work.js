@@ -164,6 +164,8 @@
     key: T.slug(c.column), label: c.column, enum: c.enum || undefined,
     readonly: readonlyLabels.includes(c.column), person: personLabels.includes(c.column),
     link: /^(file \/ link|link \/ notes)$/i.test(c.column) || undefined,
+    filter: c.column === 'Area' || undefined,
+    owner: c.column === 'Business owner' || undefined,
   }));
 
   V.prework = {
@@ -303,6 +305,12 @@
   }
 
   // ======================= Systems & files (discovery tables) =======================
+  // Columns of the discovery tables that get a dropdown in the filter bar. Owner columns hold
+  // a person's name and also drive the Department dropdown.
+  const TABLE_OWNERS = ['Who owns it', 'Who built it', 'Who runs it', 'Who builds it', 'Who decides when systems disagree'];
+  const TABLE_FILTERS = ['Could we turn it off afterward?', 'Still here?', 'Report, or a system holding data?', 'Native connector, iPaaS, or custom?',
+    'How often', 'Frequency', 'Format', 'Source', 'Destination'];
+
   V.collect = {
     render(root, r) {
       const st = store.state;
@@ -318,7 +326,7 @@
       if (tab === 'files') {
         host.appendChild(ui.el(`<p class="fine">${filesDone} of ${B.fileChecklist.length} collected. Choose representative documents, including one that went wrong.</p>`));
         const cols = [
-          { key: 'category', label: 'Category', readonly: true },
+          { key: 'category', label: 'Category', readonly: true, filter: true },
           { key: 'file', label: 'File', readonly: true, width: 260, render: (row) => `<b>${esc(row.file)}</b>${row._notes ? `<div class="fine">${esc(row._notes)}</div>` : ''}${row._cov ? `<div class="fine">Covered by prework ${esc(row._cov)}</div>` : ''}` },
           { key: 'status', label: 'Status', enum: 'fileChecklistStatus' },
           { key: 'link', label: 'Filename / link', placeholder: 'Path or URL', link: true },
@@ -334,7 +342,10 @@
         st.tables[t.key] = (t.presetDataTypes || []).map((p) => ({ id: T.uid('R'), [T.slug(t.columns[0])]: p, preset: true }));
         if (st.tables[t.key].length) store.touch('tables');
       }
-      const cols = t.columns.map((c, i) => ({ key: T.slug(c), label: c, width: i === 0 ? 180 : undefined, readonly: i === 0 && t.presetDataTypes ? (row) => row.preset : false }));
+      const cols = t.columns.map((c, i) => ({
+        key: T.slug(c), label: c, width: i === 0 ? 180 : undefined, readonly: i === 0 && t.presetDataTypes ? (row) => row.preset : false,
+        owner: TABLE_OWNERS.includes(c) || undefined, filter: TABLE_FILTERS.includes(c) || undefined, link: c === 'Link' || undefined,
+      }));
       host.appendChild(ui.el(`<div class="table-intro"><p>${esc(t.description || '')}</p><p class="fine">Answers ${t.questionIds.map((q) => ui.peekLink(q)).join(', ')}</p>
         ${t.example ? `<details class="example"><summary>Example row</summary><dl class="kv">${Object.entries(t.example).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></details>` : ''}</div>`));
       host.appendChild(freeTable(st.tables[t.key], cols, 'tables', 'No rows yet.'));
@@ -353,7 +364,7 @@
         { key: 'id', label: 'ID', readonly: true },
         { key: 'name', label: 'Name', width: 160 },
         { key: 'role', label: 'Role', width: 160 },
-        { key: 'team', label: 'Team' },
+        { key: 'team', label: 'Team', filter: true },
         { key: 'notes', label: 'Notes', width: 220 },
         { key: '_stats', label: 'Owns', readonly: true, render: (r) => `<span class="fine nowrap">${owned(r._key)} questions &middot; ${decs(r._key)} decisions &middot; ${ivs(r._key)} interviews</span>` },
       ];

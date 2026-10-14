@@ -72,7 +72,7 @@ Plain HTML, CSS and JavaScript with no build step and no dependencies. Classic `
 | `shell/` | The shared shell (frame, data folder, themes, shared components). Mission Control keeps an identical copy; change both and run `node tools/check-shell.js ../mission-control` (see `shell/README.md`) |
 | `app/core.js` | Utilities, bank indexes (question -> decisions, steps, scoping, prework), status semantics, the decision logic (features on, forced answers, not applicable, conflicts), derived metrics and gates |
 | `app/store.js` | Instance state, adapters, debounced saves, outside-edit detection, activity log, mutations |
-| `app/ui.js` | Tracker helpers: badges, status selects, people pickers, editable table; re-exports the shell's toast, modal, drawer and tabs |
+| `app/ui.js` | Tracker helpers: badges, status selects, people pickers, editable table and its filter bar (search, a dropdown per pick-list, owner and marked column, Department from the owner's Team); re-exports the shell's toast, modal, drawer and tabs |
 | `app/views-core.js` | Overview, Questions, Decisions, Implementation guide (page, print, Markdown export), Module scoping, question and decision editors, the answer picker |
 | `app/xlsx.js` | Minimal .xlsx reader (zip + XML, browser built-ins only) |
 | `app/import-prework.js` | Prework workbook import: plan (no writes), then apply |

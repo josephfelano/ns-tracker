@@ -30,6 +30,8 @@
 .rows-click tbody tr[data-q], .rows-click tbody tr[data-d] { cursor: pointer; }
 .rows-click tbody tr[data-q]:hover, .rows-click tbody tr[data-d]:hover { background: var(--surface-2); }
 .add-row { margin-top: 8px; }
+/* Filter bars (ui.editTable and the list pages): a long value must not stretch its dropdown. */
+.filters select { max-width: 240px; text-overflow: ellipsis; }
 /* Every tracker page uses the full window width; editable tables fit it (see ui.editTable). */
 .hub-content > .view.view-tracker { max-width: none; }
 table.grid.edit { table-layout: fixed; }

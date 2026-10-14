@@ -342,13 +342,22 @@
     },
   };
 
+  // Owner and Department filters, shared by the Questions and Decisions pages. Department is
+  // the owner's Team on the People page.
+  const ownerFilter = (cur) => `<select data-k="owner"><option value="">Any owner</option><option value="__none"${cur === '__none' ? ' selected' : ''}>No owner</option>${store.state.people.map((p) => `<option value="${p.id}"${cur === p.id ? ' selected' : ''}>${esc(p.name)}</option>`).join('')}</select>`;
+  const deptFilter = (cur) => `<select data-k="dept"><option value="">Any department</option>${ui.teams().map((t) => `<option value="${esc(t)}"${cur === t ? ' selected' : ''}>${esc(t)}</option>`).join('')}<option value="__none"${cur === '__none' ? ' selected' : ''}>No department</option></select>`;
+  const ownerMatch = (f, ownerId) => {
+    if (f.owner === '__none' ? ownerId : f.owner && ownerId !== f.owner) return false;
+    if (f.dept && (ui.teamOf(ownerId) || '__none') !== f.dept) return false;
+    return true;
+  };
+
   // ======================= Questions =======================
   V.questions = {
-    defaults: () => ({ text: '', part: '', section: '', tier: '', status: '', owner: '' }),
+    defaults: () => ({ text: '', part: '', section: '', tier: '', status: '', owner: '', dept: '' }),
     filters: null,
     render(root, r) {
       const f = (this.filters = this.filters || this.defaults());
-      const people = store.state.people;
       root.innerHTML = `
         <div class="page-head"><div><p class="lead">The discovery question bank. Click a row to answer it.</p></div></div>
         <div class="filters">
@@ -357,7 +366,8 @@
           <select data-k="section">${ui.options(idx.sections.map((s) => s.name), f.section, 'All sections')}</select>
           <select data-k="tier"><option value="">All tiers</option><option value="1"${f.tier === '1' ? ' selected' : ''}>Tier 1 only</option></select>
           <select data-k="status">${ui.options(T.enums.questionStatus, f.status, 'Any status')}</select>
-          <select data-k="owner"><option value="">Any owner</option><option value="__none"${f.owner === '__none' ? ' selected' : ''}>No owner</option>${people.map((p) => `<option value="${p.id}"${f.owner === p.id ? ' selected' : ''}>${esc(p.name)}</option>`).join('')}</select>
+          ${ownerFilter(f.owner)}
+          ${deptFilter(f.dept)}
           <button class="btn subtle" data-clear>Clear</button>
           <span class="fine count" id="qcount"></span>
         </div>
@@ -374,8 +384,7 @@
           if (f.section && q.section !== f.section) return false;
           if (f.tier && !q.tier1) return false;
           if (f.status && (a.status || 'Not started') !== f.status) return false;
-          if (f.owner === '__none' && a.ownerId) return false;
-          if (f.owner && f.owner !== '__none' && a.ownerId !== f.owner) return false;
+          if (!ownerMatch(f, a.ownerId)) return false;
           if (text && !(q.id.toLowerCase().includes(text) || q.text.toLowerCase().includes(text) || (a.answer || '').toLowerCase().includes(text))) return false;
           return true;
         });
@@ -410,7 +419,7 @@
 
   // ======================= Decisions =======================
   V.decisions = {
-    defaults: () => ({ text: '', step: '', area: '', rev: '', tier: '', status: '', inputs: '' }),
+    defaults: () => ({ text: '', step: '', area: '', rev: '', tier: '', status: '', inputs: '', owner: '', dept: '' }),
     filters: null,
     render(root, r) {
       const f = (this.filters = this.filters || this.defaults());
@@ -424,6 +433,8 @@
           <select data-k="tier"><option value="">All tiers</option><option value="1"${f.tier === '1' ? ' selected' : ''}>Tier 1 only</option></select>
           <select data-k="status">${ui.options(T.enums.decisionStatus, f.status, 'Any status')}</select>
           <select data-k="inputs"><option value="">Any inputs</option><option value="ready"${f.inputs === 'ready' ? ' selected' : ''}>Inputs answered</option><option value="waiting"${f.inputs === 'waiting' ? ' selected' : ''}>Waiting on answers</option></select>
+          ${ownerFilter(f.owner)}
+          ${deptFilter(f.dept)}
           <button class="btn subtle" data-clear>Clear</button>
           <button class="btn subtle" data-review title="Markdown of the decisions shown, with every option, setup step, feature and source">Export for review</button>
           <span class="fine count" id="dcount"></span>
@@ -443,6 +454,7 @@
           if (f.tier && !d.tier1) return false;
           if (f.status && a.status !== f.status) return false;
           if (f.inputs) { const ready = T.inputs(st, d).ready; if ((f.inputs === 'ready') !== ready) return false; }
+          if (!ownerMatch(f, s.ownerId)) return false;
           if (text && !(d.id.toLowerCase().includes(text) || d.decides.toLowerCase().includes(text) || (d.nsSetting || '').toLowerCase().includes(text) || (s.decision || '').toLowerCase().includes(text) || a.labels.join(' ').toLowerCase().includes(text))) return false;
           return true;
         });
@@ -476,7 +488,7 @@
       ui.on(root, 'click', 'tr[data-d]', (e, tr) => { location.hash = '#/tracker/decisions/' + tr.dataset.d; });
       ui.on(root, 'click', '[data-review]', () => T.download('decision-review-' + T.today() + '.md', T.reviewMarkdown(shown), 'text/markdown'));
       draw();
-      T.live(root, draw, ['decisions', 'answers', 'reload']);
+      T.live(root, draw, ['decisions', 'answers', 'reload', 'people']);
       this.select(r);
     },
     select(r) {
