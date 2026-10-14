@@ -18,6 +18,18 @@
     const route = kind || (id.startsWith('D-') ? 'decisions' : id.startsWith('M-') ? 'scoping' : 'questions');
     return `<a class="idlink" href="${T.href(route + '/' + encodeURIComponent(id))}">${esc(id)}</a>`;
   };
+  // An id link that opens the question or decision in the side panel and keeps the page where it
+  // is, so a list of references can be read one after another. A modified click still navigates.
+  ui.peekLink = (id) => ui.idLink(id).replace('<a ', `<a data-peek="${esc(id)}" `);
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest && e.target.closest('a[data-peek]');
+    if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const id = a.dataset.peek;
+    const open = id.startsWith('D-') ? T.openDecision : id.startsWith('M-') ? null : T.openQuestion;
+    if (!open) return;
+    e.preventDefault();
+    open(id);
+  });
   ui.bar = (done, total, tone) => {
     const p = T.pct(done, total);
     return `<div class="bar" title="${done} of ${total}"><div class="bar-fill tone-${tone || (p === 100 ? 'ok' : 'accent')}" style="width:${p}%"></div></div>`;
@@ -81,16 +93,36 @@
 
   // ---------- editable table ----------
   // columns: [{key, label, enum?, person?, readonly?, long?, width?, link?}]
-  // link: a value starting http(s):// or www. shows as a truncated link; the pencil edits it.
+  // link: the cell holds a link or path (key) and optional display text (key + '-text'). It shows
+  // the text, as a truncated link when the value is a URL; the pencil edits both in a small form.
   // rows: [{_key, ...values}]   onEdit(rowKey, colKey, value)   onRemove(rowKey) optional
   // The table fits its container (fixed layout): columns get proportional widths and long text
   // wraps inside its cell, so there is no sideways scrolling.
   ui.isUrl = (v) => /^(https?:\/\/|www\.)\S+$/i.test(String(v || '').trim());
-  ui.linkView = (v) => {
+  ui.linkView = (v, text) => {
     const u = String(v || '').trim();
+    const label = String(text || '').trim() || u;
     const href = /^www\./i.test(u) ? 'https://' + u : u;
-    return `<span class="link-view"><a href="${esc(href)}" target="_blank" rel="noopener" title="${esc(u)}">${esc(u)}</a><button type="button" class="icon-btn subtle" data-edit-link title="Edit link" aria-label="Edit link">&#9998;</button></span>`;
+    const shown = !label ? '<span class="link-empty">-</span>'
+      : ui.isUrl(u) ? `<a href="${esc(href)}" target="_blank" rel="noopener" title="${esc(u)}">${esc(label)}</a>`
+      : `<span class="link-text" title="${esc(label)}">${esc(label)}</span>`;
+    return `<span class="link-view">${shown}<button type="button" class="icon-btn subtle" data-edit-link title="Edit link" aria-label="Edit link">&#9998;</button></span>`;
   };
+  // Edit a link cell: display text + link or path. Resolves { text, link }, or null on cancel.
+  ui.editLink = ({ text, link }) =>
+    new Promise((res) => {
+      let answer = null;
+      const body = ui.el(`<div>
+        <label class="field"><span>Display text</span><input type="text" data-text value="${esc(text || '')}"></label>
+        <label class="field"><span>Link or path</span><input type="text" data-link value="${esc(link || '')}" placeholder="https://..."></label></div>`);
+      const read = () => ({ text: body.querySelector('[data-text]').value.trim(), link: body.querySelector('[data-link]').value.trim() });
+      const m = ui.modal({
+        title: 'Edit link', body,
+        actions: [{ label: 'Cancel' }, { label: 'Save', primary: true, onClick: () => { answer = read(); } }],
+        onClose: () => res(answer),
+      });
+      body.addEventListener('keydown', (e) => { if (e.key === 'Enter') { answer = read(); m.close(); } });
+    });
   ui.editTable = ({ columns, rows, onEdit, onRemove, empty }) => {
     // Dropdown columns are sized to the longest value they hold (a select cannot wrap), as a
     // share of a 1340px table so they scale with the window; text columns share what is left
@@ -112,9 +144,8 @@
             if (ro) return `<td class="ro">${c.render ? c.render(r) : esc(v)}</td>`;
             if (c.enum) return `<td><select class="status tone-${T.tone(v)}" ${a}>${ui.options(T.enums[c.enum], v, '-')}</select></td>`;
             if (c.person) return `<td>${ui.personSelect(v, a, '-')}</td>`;
-            const ta = `<textarea class="cell grow" rows="1" ${a} placeholder="${esc(c.placeholder || '')}">${esc(v)}</textarea>`;
-            if (c.link) return `<td class="link-cell${ui.isUrl(v) ? ' as-link' : ''}">${ui.linkView(v)}${ta}</td>`;
-            return `<td>${ta}</td>`;
+            if (c.link) return `<td class="link-cell" ${a}>${ui.linkView(v, r[c.key + '-text'])}</td>`;
+            return `<td><textarea class="cell grow" rows="1" ${a} placeholder="${esc(c.placeholder || '')}">${esc(v)}</textarea></td>`;
           }).join('');
           return `<tr>${cells}${onRemove ? `<td class="narrow"><button class="icon-btn subtle" data-remove="${esc(r._key)}" title="Remove row" aria-label="Remove row">&times;</button></td>` : ''}</tr>`;
         }).join('')
@@ -134,18 +165,18 @@
       }
     });
     if (onRemove) ui.on(el, 'click', '[data-remove]', (e, t) => onRemove(t.dataset.remove));
-    // Link cells: the pencil swaps the link for its text box; leaving the box shows the link again.
-    ui.on(el, 'click', '[data-edit-link]', (e, t) => {
-      const td = t.closest('td');
-      td.classList.remove('as-link');
-      const ta = td.querySelector('textarea');
-      ui.grow(ta);
-      ta.focus();
-    });
-    ui.on(el, 'focusout', '.link-cell textarea', (e, t) => {
-      const td = t.closest('td');
-      td.querySelector('.link-view').outerHTML = ui.linkView(t.value);
-      td.classList.toggle('as-link', ui.isUrl(t.value));
+    // Link cells: the pencil (or a click anywhere in the cell but the link) opens the editor.
+    const linkVals = new Map(rows.map((r) => [r._key, r]));
+    ui.on(el, 'click', 'td.link-cell', async (e, td) => {
+      if (e.target.closest('a')) return;
+      const row = linkVals.get(td.dataset.row) || {};
+      const col = td.dataset.col;
+      const got = await ui.editLink({ text: row[col + '-text'], link: row[col] });
+      if (!got) return;
+      row[col] = got.link; row[col + '-text'] = got.text;
+      onEdit(td.dataset.row, col, got.link);
+      onEdit(td.dataset.row, col + '-text', got.text);
+      td.innerHTML = ui.linkView(got.link, got.text);
     });
     ui.growAll(el);
     return el;

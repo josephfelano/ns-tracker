@@ -37,12 +37,14 @@ table.grid.edit { table-layout: fixed; }
 .grid.edit td { overflow-wrap: break-word; }
 .grid.edit textarea.cell { min-width: 0; }
 .grid.edit select { width: 100%; max-width: none; text-overflow: ellipsis; }
-/* Link cells (ui.editTable link columns): a URL shows as one truncated link with an edit pencil. */
-.link-cell .link-view { display: none; align-items: center; gap: 4px; min-width: 0; }
-.link-cell.as-link .link-view { display: flex; }
-.link-cell.as-link textarea { display: none; }
+/* Link cells (ui.editTable link columns): the text or a truncated link, and an edit pencil. */
+.link-cell { cursor: pointer; }
+.link-view { display: flex; align-items: center; gap: 4px; min-width: 0; }
 .link-view a { flex: 1; min-width: 0; padding: 4px 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.link-view .icon-btn { flex: none; }
+.link-view .link-text { flex: 1; min-width: 0; padding: 4px 6px; overflow-wrap: anywhere; }
+.link-view .link-empty { flex: 1; padding: 4px 6px; color: var(--text-3); }
+.link-view .icon-btn { flex: none; opacity: 0; }
+.link-cell:hover .link-view .icon-btn, .link-view .icon-btn:focus-visible { opacity: 1; }
 /* Sticky tabs and table headers (app.js stickyTabs). The tabs stick to the very top of the
    page scroller, covering its top padding (--stick-pad), and table headers stick flush under
    them. A fitted table's wrap clips instead of scrolling, so its header sticks to the page

@@ -163,6 +163,7 @@
   const tplColumns = (tpl, readonlyLabels, personLabels) => tpl.map((c) => ({
     key: T.slug(c.column), label: c.column, enum: c.enum || undefined,
     readonly: readonlyLabels.includes(c.column), person: personLabels.includes(c.column),
+    link: /^(file \/ link|link \/ notes)$/i.test(c.column) || undefined,
   }));
 
   V.prework = {
@@ -224,7 +225,7 @@
           .filter((c) => c.label !== 'Good enough before day one');
         const item = cols.find((c) => c.label === 'What to have ready');
         item.width = 240;
-        item.render = (row) => `<b>${esc(row['what-to-have-ready'])}</b><div class="fine">${esc(row._good)}</div>${row._prepares.length ? `<div class="chips small">Prepares ${row._prepares.map((q) => ui.idLink(q)).join('')}</div>` : ''}`;
+        item.render = (row) => `<b>${esc(row['what-to-have-ready'])}</b><div class="fine">${esc(row._good)}</div>${row._prepares.length ? `<div class="chips small">Prepares ${row._prepares.map((q) => ui.peekLink(q)).join('')}</div>` : ''}`;
         const rows = B.prework.dataDocuments.map((p) => Object.assign({}, pw.data[p.id] || {}, { _key: p.id, area: p.area, 'what-to-have-ready': p.item, _good: p.goodEnough, _prepares: p.preparesQuestionIds || [] }));
         host.appendChild(ui.editTable({
           columns: cols, rows,
@@ -334,7 +335,7 @@
         if (st.tables[t.key].length) store.touch('tables');
       }
       const cols = t.columns.map((c, i) => ({ key: T.slug(c), label: c, width: i === 0 ? 180 : undefined, readonly: i === 0 && t.presetDataTypes ? (row) => row.preset : false }));
-      host.appendChild(ui.el(`<div class="table-intro"><p>${esc(t.description || '')}</p><p class="fine">Answers ${t.questionIds.map((q) => ui.idLink(q)).join(', ')}</p>
+      host.appendChild(ui.el(`<div class="table-intro"><p>${esc(t.description || '')}</p><p class="fine">Answers ${t.questionIds.map((q) => ui.peekLink(q)).join(', ')}</p>
         ${t.example ? `<details class="example"><summary>Example row</summary><dl class="kv">${Object.entries(t.example).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></details>` : ''}</div>`));
       host.appendChild(freeTable(st.tables[t.key], cols, 'tables', 'No rows yet.'));
     },

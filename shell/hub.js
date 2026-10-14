@@ -217,6 +217,20 @@
       if (!silent && cb) cb();
     },
   };
+  // A click outside the drawer closes it, when the drawer is the top layer (a modal or confirm
+  // over it takes the click instead). A click that opens another drawer or changes the page
+  // (e.g. picking the next row) is left to do that.
+  let outside = null;
+  document.addEventListener('pointerdown', (e) => {
+    const d = ui.drawer;
+    outside = d.el && layers[layers.length - 1] === d.layer && !d.el.contains(e.target) ? { el: d.el, hash: location.hash } : null;
+  }, true);
+  document.addEventListener('click', (e) => {
+    const o = outside;
+    outside = null;
+    if (!o || ui.drawer.el !== o.el || location.hash !== o.hash || !e.target.isConnected || o.el.contains(e.target)) return;
+    ui.drawer.close();
+  });
 
   ui.tabs = (items, active, hrefFor) =>
     `<nav class="tabs">${items.map((t) => `<a class="tab${t.key === active ? ' active' : ''}" href="${hrefFor(t.key)}">${esc(t.label)}${t.count != null ? ` <span class="count">${t.count}</span>` : ''}</a>`).join('')}</nav>`;
@@ -532,6 +546,7 @@
   }
   function firstPage(m) { const p = pagesOf(m)[0]; return Hub.href(m.key, p ? p.key : 'home'); }
   function route() {
+    if (!$('hub-nav-items')) return; // the folder screen is showing, not the app frame
     const r = parse();
     if (!r || !r.page) {
       location.replace(r ? firstPage(r.module) : multi() ? HOME_HASH : firstPage(modules[0]));
