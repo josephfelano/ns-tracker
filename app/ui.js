@@ -80,10 +80,17 @@
   };
 
   // ---------- editable table ----------
-  // columns: [{key, label, enum?, person?, readonly?, long?, width?}]
+  // columns: [{key, label, enum?, person?, readonly?, long?, width?, link?}]
+  // link: a value starting http(s):// or www. shows as a truncated link; the pencil edits it.
   // rows: [{_key, ...values}]   onEdit(rowKey, colKey, value)   onRemove(rowKey) optional
   // The table fits its container (fixed layout): columns get proportional widths and long text
   // wraps inside its cell, so there is no sideways scrolling.
+  ui.isUrl = (v) => /^(https?:\/\/|www\.)\S+$/i.test(String(v || '').trim());
+  ui.linkView = (v) => {
+    const u = String(v || '').trim();
+    const href = /^www\./i.test(u) ? 'https://' + u : u;
+    return `<span class="link-view"><a href="${esc(href)}" target="_blank" rel="noopener" title="${esc(u)}">${esc(u)}</a><button type="button" class="icon-btn subtle" data-edit-link title="Edit link" aria-label="Edit link">&#9998;</button></span>`;
+  };
   ui.editTable = ({ columns, rows, onEdit, onRemove, empty }) => {
     // Dropdown columns are sized to the longest value they hold (a select cannot wrap), as a
     // share of a 1340px table so they scale with the window; text columns share what is left
@@ -105,7 +112,9 @@
             if (ro) return `<td class="ro">${c.render ? c.render(r) : esc(v)}</td>`;
             if (c.enum) return `<td><select class="status tone-${T.tone(v)}" ${a}>${ui.options(T.enums[c.enum], v, '-')}</select></td>`;
             if (c.person) return `<td>${ui.personSelect(v, a, '-')}</td>`;
-            return `<td><textarea class="cell grow" rows="1" ${a} placeholder="${esc(c.placeholder || '')}">${esc(v)}</textarea></td>`;
+            const ta = `<textarea class="cell grow" rows="1" ${a} placeholder="${esc(c.placeholder || '')}">${esc(v)}</textarea>`;
+            if (c.link) return `<td class="link-cell${ui.isUrl(v) ? ' as-link' : ''}">${ui.linkView(v)}${ta}</td>`;
+            return `<td>${ta}</td>`;
           }).join('');
           return `<tr>${cells}${onRemove ? `<td class="narrow"><button class="icon-btn subtle" data-remove="${esc(r._key)}" title="Remove row" aria-label="Remove row">&times;</button></td>` : ''}</tr>`;
         }).join('')
@@ -125,6 +134,19 @@
       }
     });
     if (onRemove) ui.on(el, 'click', '[data-remove]', (e, t) => onRemove(t.dataset.remove));
+    // Link cells: the pencil swaps the link for its text box; leaving the box shows the link again.
+    ui.on(el, 'click', '[data-edit-link]', (e, t) => {
+      const td = t.closest('td');
+      td.classList.remove('as-link');
+      const ta = td.querySelector('textarea');
+      ui.grow(ta);
+      ta.focus();
+    });
+    ui.on(el, 'focusout', '.link-cell textarea', (e, t) => {
+      const td = t.closest('td');
+      td.querySelector('.link-view').outerHTML = ui.linkView(t.value);
+      td.classList.toggle('as-link', ui.isUrl(t.value));
+    });
     ui.growAll(el);
     return el;
   };

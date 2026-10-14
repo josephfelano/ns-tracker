@@ -6,10 +6,8 @@
 
 /* ---------- overview ---------- */
 .gates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
-.gate { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; color: var(--text); text-decoration: none !important; border-top: 3px solid var(--border-strong); }
+.gate { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; color: var(--text); text-decoration: none !important; }
 .gate:hover { border-color: var(--border-strong); }
-.gate.tone-bad { border-top-color: var(--bad); }
-.gate.tone-ok { border-top-color: var(--ok); }
 .gate-title { font-size: 12.5px; font-weight: 600; color: var(--text-2); }
 .gate-num { font-size: 32px; font-weight: 700; letter-spacing: -.02em; margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
 .gate-num span, .big-num span { font-size: 16px; color: var(--text-3); font-weight: 500; }
@@ -39,6 +37,12 @@ table.grid.edit { table-layout: fixed; }
 .grid.edit td { overflow-wrap: break-word; }
 .grid.edit textarea.cell { min-width: 0; }
 .grid.edit select { width: 100%; max-width: none; text-overflow: ellipsis; }
+/* Link cells (ui.editTable link columns): a URL shows as one truncated link with an edit pencil. */
+.link-cell .link-view { display: none; align-items: center; gap: 4px; min-width: 0; }
+.link-cell.as-link .link-view { display: flex; }
+.link-cell.as-link textarea { display: none; }
+.link-view a { flex: 1; min-width: 0; padding: 4px 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.link-view .icon-btn { flex: none; }
 /* Sticky tabs and table headers (app.js stickyTabs). The tabs stick to the very top of the
    page scroller, covering its top padding (--stick-pad), and table headers stick flush under
    them. A fitted table's wrap clips instead of scrolling, so its header sticks to the page

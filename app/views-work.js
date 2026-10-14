@@ -320,7 +320,7 @@
           { key: 'category', label: 'Category', readonly: true },
           { key: 'file', label: 'File', readonly: true, width: 260, render: (row) => `<b>${esc(row.file)}</b>${row._notes ? `<div class="fine">${esc(row._notes)}</div>` : ''}${row._cov ? `<div class="fine">Covered by prework ${esc(row._cov)}</div>` : ''}` },
           { key: 'status', label: 'Status', enum: 'fileChecklistStatus' },
-          { key: 'link', label: 'Filename / link', placeholder: 'Path or URL' },
+          { key: 'link', label: 'Filename / link', placeholder: 'Path or URL', link: true },
           { key: 'notes', label: 'Notes' },
         ];
         const rows = B.fileChecklist.map((f) => Object.assign({}, st.files[f.id] || {}, { _key: f.id, category: f.category, file: f.file, _notes: f.notes, _cov: f.coveredByPreworkId }));

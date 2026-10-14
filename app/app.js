@@ -40,11 +40,11 @@
 
   function saveStatus() {
     if (!store.adapter) return;
-    const where = store.adapter.kind === 'folder' ? 'folder "' + store.adapter.label + '"' : 'this browser only';
+    // Where the data is saved is shown in the header (folder button), so a finished save shows nothing.
     const map = {
       pending: ['Unsaved changes...', ''],
       saving: ['Saving...', ''],
-      saved: ['Saved to ' + where, store.adapter.kind === 'folder' ? 'ok' : 'warn'],
+      saved: ['', ''],
       error: ['Save failed: ' + (store.lastError ? store.lastError.message : ''), 'bad'],
       idle: ['', ''],
     };
