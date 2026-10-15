@@ -56,6 +56,13 @@ table.grid.edit { table-layout: fixed; }
 .sticky-tabs .table-wrap:has(> table.grid.edit) { overflow: clip; }
 .sticky-tabs .grid.edit th { top: calc(var(--tabs-h, 0px) - var(--stick-pad, 0px)); z-index: 3; }
 .table-intro { margin-bottom: 12px; max-width: 900px; color: var(--text-2); }
+/* How it runs: every flow's steps table on the same column widths, so they line up down the page. */
+.runs table.grid { table-layout: fixed; }
+.runs .grid th:nth-child(1) { width: 44px; }
+.runs .grid th:nth-child(2) { width: 34%; }
+.runs .grid th:nth-child(3), .runs .grid th:nth-child(5) { width: 14%; }
+.runs .grid th:nth-child(4) { width: 16%; }
+.runs .grid td { overflow-wrap: break-word; }
 .example summary { cursor: pointer; color: var(--text-3); font-size: 12.5px; }
 .example .kv { margin-top: 6px; }
 .idlink { font-family: var(--mono); font-size: 12.5px; }

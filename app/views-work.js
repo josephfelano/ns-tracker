@@ -158,6 +158,51 @@
     },
   };
 
+  // ======================= How it runs =======================
+  // The company's flows step by step, from how-it-runs.md in the data folder. The file is written
+  // from walkthrough notes outside the app (its format is in a comment at its top); this page only
+  // reads it. Tracker ids in the text link to their records.
+  const RUNS_FILE = 'how-it-runs.md';
+  const runsLink = (id) => {
+    if (idx.q.has(id) || idx.d.has(id)) return ui.peekLink(id);
+    if (idx.m.has(id)) return ui.idLink(id, 'scoping');
+    const link = (path, title) => `<a class="idlink" href="${T.href(path)}"${title ? ` title="${esc(title)}"` : ''}>${esc(id)}</a>`;
+    const st = store.state;
+    if (st.interviews.some((i) => i.id === id)) return link('interview/' + id);
+    const p = st.people.find((x) => x.id === id);
+    if (p) return link('people', p.name + (p.role ? ' - ' + p.role : ''));
+    const f = B.fileChecklist.find((x) => x.id === id);
+    if (f) return link('collect/files', f.file);
+    if (B.prework.dataDocuments.some((x) => x.id === id)) return link('prework/data');
+    if (B.prework.processes.some((x) => x.id === id)) return link('prework/processes');
+    return id;
+  };
+  const runsHtml = (text) => (text == null
+    ? `<p class="fine">No ${RUNS_FILE} in this tracker's data folder.</p>`
+    : `<div class="md runs">${Hub.md(text, { inline: (t) => t.replace(/\b[A-Z][A-Z0-9]*-[A-Z]?\d+[a-z]?\b/g, runsLink) })}</div>`);
+
+  V['how-it-runs'] = {
+    root: null,
+    text: undefined,
+    async render(root) {
+      this.root = root;
+      try {
+        this.text = await store.readText(RUNS_FILE);
+        if (root.isConnected) root.innerHTML = runsHtml(this.text);
+      } catch (e) {
+        root.innerHTML = `<div class="error-box"><pre>${esc(e.message)}</pre></div>`;
+      }
+    },
+    // Back in the window after the file was edited: show the new text in place, keeping the scroll.
+    async refresh() {
+      const root = this.root;
+      if (!root || !root.isConnected) return;
+      const text = await store.readText(RUNS_FILE).catch(() => this.text);
+      if (text !== this.text && root.isConnected) { this.text = text; root.innerHTML = runsHtml(text); }
+    },
+  };
+  window.addEventListener('focus', () => V['how-it-runs'].refresh());
+
   // ======================= Prework =======================
   // Columns come from the bank's templates; values are stored under slug(column label).
   const tplColumns = (tpl, readonlyLabels, personLabels) => tpl.map((c) => ({

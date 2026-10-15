@@ -13,6 +13,7 @@
   const NAV = [
     { key: 'overview', label: 'Overview', icon: 'M3 12l9-8 9 8M5 10v10h14V10' },
     { key: 'interview', label: 'Interview', icon: 'M4 5h16v10H8l-4 4z' },
+    { key: 'how-it-runs', label: 'How it runs', icon: 'M3 5h6v5H3zM15 14h6v5h-6zM6 10v6.5h9' },
     { key: 'questions', label: 'Questions', icon: 'M9 9a3 3 0 1 1 4 2.8c-.6.3-1 .9-1 1.6V14M12 17.5v.01M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z' },
     { key: 'decisions', label: 'Decisions', icon: 'M6 3v18M6 5h11l-2 4 2 4H6' },
     { key: 'guide', label: 'Implementation guide', icon: 'M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5M3 17l9 5 9-5' },
@@ -35,7 +36,10 @@
       scoping: `${m.scopingDone}/${m.scopingTotal}`,
       people: store.state.people.length || '',
     };
-    return NAV.map((n) => (counts[n.key] ? Object.assign({ count: counts[n.key] }, n) : n));
+    // "How <company> runs": the folder that was picked is normally the company's.
+    const company = store.adapter && store.adapter.kind === 'folder' ? store.adapter.label : '';
+    return NAV.map((n) => (n.key === 'how-it-runs' && company ? Object.assign({}, n, { label: `How ${company} runs` }) : n))
+      .map((n) => (counts[n.key] ? Object.assign({ count: counts[n.key] }, n) : n));
   }
 
   function saveStatus() {

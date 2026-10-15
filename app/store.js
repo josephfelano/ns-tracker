@@ -75,6 +75,15 @@
       throw new Error(name + '.json is not valid JSON (' + e.message + '). Fix or remove the file, then reload.');
     }
   };
+  // A text file in the data folder that is not a collection (how-it-runs.md); undefined if missing.
+  FolderAdapter.prototype.readText = async function (file) {
+    try {
+      return await (await (await this.handle.getFileHandle(file)).getFile()).text();
+    } catch (e) {
+      if (e.name === 'NotFoundError') return undefined;
+      throw e;
+    }
+  };
   FolderAdapter.prototype.write = async function (name, data) {
     const fh = await this.handle.getFileHandle(name + '.json', { create: true });
     const before = await fh.getFile();
@@ -121,6 +130,7 @@
     localStorage.setItem(LS + name, JSON.stringify(data));
   };
   BrowserAdapter.prototype.changedOnDisk = async function () { return []; };
+  BrowserAdapter.prototype.readText = async function () { return undefined; }; // no files here
 
   // ---------- the store ----------
   const store = (T.store = {
@@ -135,6 +145,7 @@
   });
 
   store.onChange = (fn) => { store.listeners.add(fn); return () => store.listeners.delete(fn); };
+  store.readText = (file) => (store.adapter ? store.adapter.readText(file) : Promise.resolve(undefined));
   const emit = (what) => store.listeners.forEach((fn) => { try { fn(what); } catch (e) { console.error(e); } });
 
   store.loadAll = async function (adapter, status) {

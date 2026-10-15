@@ -39,6 +39,75 @@
   // An icon is an SVG path ("M3 12l9-8...") or inner SVG markup ("<circle .../>").
   const icon = (Hub.icon = (d) => `<svg class="hub-ico" viewBox="0 0 24 24" aria-hidden="true">${String(d || '').trim().startsWith('<') ? d : `<path d="${esc(d)}"/>`}</svg>`);
 
+  // Markdown text from a data file, as written, in a safe subset: "#" headings, "- " and "1. "
+  // lists (indented lines continue the item above), "|" tables, other lines paragraphs. Inline:
+  // `code`, **bold**, [label](link) - a web link opens, any other link (a file path) shows the
+  // label. HTML comments are dropped; everything is escaped first, then formatted.
+  // opts.inline(text) -> html adds an app's own links (e.g. record ids) to plain text only.
+  // Wrap the result in an element with class "md" (hub.css).
+  Hub.md = (s, opts) => {
+    const hook = opts && opts.inline;
+    const inline = (t) => {
+      const html = esc(t)
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\[([^\]]+)\]\(([^)\s]*)\)/g, (m, label, href) => (/^(https?:|mailto:)/i.test(href)
+          ? `<a href="${href}" target="_blank" rel="noopener">${label}</a>`
+          : label));
+      if (!hook) return html;
+      let inside = 0; // within <a> or <code>: leave the text alone
+      return html.split(/(<[^>]+>)/).map((part) => {
+        if (part.startsWith('<')) {
+          if (/^<(a|code)[\s>]/.test(part)) inside++;
+          else if (/^<\/(a|code)>/.test(part)) inside--;
+          return part;
+        }
+        return inside ? part : hook(part);
+      }).join('');
+    };
+    const isRow = (l) => /^\s*\|/.test(l || '');
+    const isRule = (l) => /^[\s|:-]+$/.test(l || '') && /-/.test(l) && /\|/.test(l);
+    const cells = (l) => l.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim());
+    const lines = String(s == null ? '' : s).replace(/<!--[\s\S]*?-->/g, '').split(/\r?\n/);
+    const blocks = [];
+    let list = null;
+    for (let i = 0; i < lines.length; i++) {
+      const raw = lines[i];
+      if (!raw.trim()) { list = null; continue; }
+      const head = /^(#{1,6})\s+(.*)$/.exec(raw);
+      const item = /^\s?(?:[-*]|(\d+)[.)])\s+(.*)$/.exec(raw);
+      if (isRow(raw) && isRule(lines[i + 1])) {
+        list = null;
+        const table = { cols: cells(raw), rows: [] };
+        for (i += 2; isRow(lines[i]); i++) table.rows.push(cells(lines[i]));
+        i--;
+        blocks.push(table);
+      } else if (head) {
+        list = null;
+        blocks.push({ tag: 'h' + head[1].length, text: head[2] });
+      } else if (item) {
+        const tag = item[1] ? 'ol' : 'ul';
+        if (!list || list.tag !== tag) { list = { tag, start: item[1], items: [] }; blocks.push(list); }
+        list.items.push([item[2]]);
+      } else if (list && /^\s/.test(raw)) {
+        list.items[list.items.length - 1].push(raw.trim());
+      } else {
+        list = null;
+        blocks.push({ tag: 'p', text: raw.trim() });
+      }
+    }
+    return blocks.map((b) => {
+      if (b.cols) {
+        return `<div class="table-wrap"><table class="grid"><thead><tr>${b.cols.map((c) => `<th>${inline(c)}</th>`).join('')}</tr></thead>`
+          + `<tbody>${b.rows.map((r) => `<tr>${b.cols.map((c, j) => `<td>${inline(r[j] || '')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      }
+      if (b.items) {
+        return `<${b.tag}${b.start > 1 ? ` start="${b.start}"` : ''}>${b.items.map((it) => `<li>${it.map(inline).join('<br>')}</li>`).join('')}</${b.tag}>`;
+      }
+      return `<${b.tag}>${inline(b.text)}</${b.tag}>`;
+    }).join('');
+  };
+
   // ---------- themes ----------
   // A theme is a tokens-only stylesheet in shell/themes/. One is linked at a time.
   Hub.themes = [{ key: 'light', label: 'Light' }, { key: 'dark', label: 'Dark' }];
